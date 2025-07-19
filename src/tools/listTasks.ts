@@ -1,64 +1,91 @@
-/**
- * @file listTasks.ts
- * @description Defines the MCP tool for listing tasks in backlog.md.
- * This tool maps directly to the `backlog task list` CLI command.
- */
 import { exec } from 'child_process';
+import { promisify } from 'util';
+/**
+ * listTasks.ts
+ *
+ * Purpose:
+ * - Provides the functionality to list tasks in the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * 1. Defines a Zod schema (`listTasksSchema`) to validate the parameters for listing tasks.
+ * 2. The `listTasksHandler` function takes the validated parameters.
+ * 3. It constructs a `backlog task list` CLI command based on the provided parameters.
+ * 4. The command is executed asynchronously in the specified repository path.
+ * 5. The handler returns the result of the command execution, including stdout or any errors.
+ *
+ * Last Updated:
+ * 2025-07-19 by AI Assistant (Refactored to use Zod for validation and added detailed documentation)
+ */
+import { z } from 'zod';
+
+const execAsync = promisify(exec);
+
+// The repository path is a critical configuration.
+// It's hardcoded for now but should ideally come from a secure config or environment variable.
+const REPO_PATH =
+  '/home/kratos/Development/Github/The-Dave-Stack/mcp-backlog-md';
 
 /**
- * @description The definition of the `listTasks` tool.
- * This object describes the tool's name, description, and input schema,
- * which corresponds to the various flags of the CLI command.
+ * Defines the schema for the parameters required to list tasks.
+ * This schema is used by Zod to validate the input at runtime, ensuring type safety.
  */
-const definition = {
-  name: 'listTasks',
-  description: 'List tasks in backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      status: {
-        type: 'string',
-        description: 'Filter by status',
-      },
-      assignee: {
-        type: 'string',
-        description: 'Filter by assignee',
-      },
-      parent: {
-        type: 'string',
-        description: 'Filter by parent task ID',
-      },
-    },
-  },
-};
+export const listTasksSchema = z.object({
+  status: z.string().optional().describe('Filter by status.'),
+  assignee: z.string().optional().describe('Filter by assignee.'),
+  parent: z.string().optional().describe('Filter by parent task ID.'),
+});
 
 /**
- * @description Executes the `listTasks` tool.
- * This function receives the arguments, constructs the `backlog task list`
- * command string with all the provided options, and executes it using
- * `child_process.exec`.
- * @param {any} args - The arguments for the tool, matching the inputSchema.
- * @returns {Promise<string>} A promise that resolves with the command's stdout
- * or rejects with an error.
+ * Handles the logic for listing tasks.
+ * It constructs and executes the `backlog task list` command.
+ *
+ * @param params The input parameters, validated against the `listTasksSchema`.
+ * @returns An object containing the result of the command execution.
  */
-async function execute(args: any): Promise<string> {
+export async function listTasksHandler(
+  params: z.infer<typeof listTasksSchema>
+) {
+  // Start building the command.
   let command = `backlog task list`;
-  if (args.status) command += ` -s "${args.status}"`;
-  if (args.assignee) command += ` -a ${args.assignee}`;
-  if (args.parent) command += ` -p ${args.parent}`;
 
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+  // Append optional parameters to the command if they are provided.
+  if (params.status) command += ` --status "${params.status}"`;
+  if (params.assignee) command += ` --assignee "${params.assignee}"`;
+  if (params.parent) command += ` --parent "${params.parent}"`;
+
+  console.log(`🔩 Executing: ${command}`);
+
+  try {
+    // Execute the command in the specified repository directory.
+    const { stdout, stderr } = await execAsync(command, { cwd: REPO_PATH });
+
+    // If there's anything in stderr, it's considered an error.
+    if (stderr) {
+      console.error(`Command stderr: ${stderr}`);
+      return {
+        content: [{ type: 'text', text: `Command execution error: ${stderr}` }],
+      };
+    }
+
+    // On success, return the trimmed output from stdout.
+    console.log(`✅ Success: ${stdout}`);
+    return {
+      content: [
+        { type: 'text', text: `Tasks listed successfully: ${stdout.trim()}` },
+      ],
+    };
+  } catch (error: unknown) {
+    // Catch any exceptions during command execution.
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('❌ Failed to execute command:', error);
+    return {
+      content: [{ type: 'text', text: `Server execution failed: ${message}` }],
+    };
+  }
 }
 
 export default {
-  definition,
-  execute,
+  listTasksSchema,
+  listTasksHandler,
 };

@@ -1,52 +1,84 @@
-/**
- * @file demoteTask.ts
- * @description Defines the MCP tool for demoting a task to a draft in backlog.md.
- * This tool maps directly to the `backlog task demote` CLI command.
- */
 import { exec } from 'child_process';
+import { promisify } from 'util';
+/**
+ * demoteTask.ts
+ *
+ * Purpose:
+ * - Provides the functionality to demote a task to a draft in the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * 1. Defines a Zod schema (`demoteTaskSchema`) to validate the parameters for demoting a task.
+ * 2. The `demoteTaskHandler` function takes the validated parameters.
+ * 3. It constructs a `backlog task demote` CLI command based on the provided parameters.
+ * 4. The command is executed asynchronously in the specified repository path.
+ * 5. The handler returns the result of the command execution, including stdout or any errors.
+ *
+ * Last Updated:
+ * 2025-07-19 by AI Assistant (Refactored to use Zod for validation and added detailed documentation)
+ */
+import { z } from 'zod';
+
+const execAsync = promisify(exec);
+
+// The repository path is a critical configuration.
+// It's hardcoded for now but should ideally come from a secure config or environment variable.
+const REPO_PATH =
+  '/home/kratos/Development/Github/The-Dave-Stack/mcp-backlog-md';
 
 /**
- * @description The definition of the `demoteTask` tool.
- * This object describes the tool's name, description, and input schema.
+ * Defines the schema for the parameters required to demote a task.
+ * This schema is used by Zod to validate the input at runtime, ensuring type safety.
  */
-const definition = {
-  name: 'demoteTask',
-  description: 'Demote a task to a draft in backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      id: {
-        type: 'string',
-        description: 'The ID of the task to demote',
-      },
-    },
-    required: ['id'],
-  },
-};
+export const demoteTaskSchema = z.object({
+  id: z.string().describe('The ID of the task to demote.'),
+});
 
 /**
- * @description Executes the `demoteTask` tool.
- * This function receives the task ID, constructs the `backlog task demote`
- * command string, and executes it using `child_process.exec`.
- * @param {any} args - The arguments for the tool, matching the inputSchema.
- * @returns {Promise<string>} A promise that resolves with the command's stdout
- * or rejects with an error.
+ * Handles the logic for demoting a task.
+ * It constructs and executes the `backlog task demote` command.
+ *
+ * @param params The input parameters, validated against the `demoteTaskSchema`.
+ * @returns An object containing the result of the command execution.
  */
-async function execute(args: any): Promise<string> {
-  const command = `backlog task demote ${args.id}`;
+export async function demoteTaskHandler(
+  params: z.infer<typeof demoteTaskSchema>
+) {
+  // Start building the command.
+  const command = `backlog task demote ${params.id}`;
 
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+  console.log(`🔩 Executing: ${command}`);
+
+  try {
+    // Execute the command in the specified repository directory.
+    const { stdout, stderr } = await execAsync(command, { cwd: REPO_PATH });
+
+    // If there's anything in stderr, it's considered an error.
+    if (stderr) {
+      console.error(`Command stderr: ${stderr}`);
+      return {
+        content: [{ type: 'text', text: `Command execution error: ${stderr}` }],
+      };
+    }
+
+    // On success, return the trimmed output from stdout.
+    console.log(`✅ Success: ${stdout}`);
+    return {
+      content: [
+        { type: 'text', text: `Task demoted successfully: ${stdout.trim()}` },
+      ],
+    };
+  } catch (error: unknown) {
+    // Catch any exceptions during command execution.
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('❌ Failed to execute command:', error);
+    return {
+      content: [{ type: 'text', text: `Server execution failed: ${message}` }],
+    };
+  }
 }
 
 export default {
-  definition,
-  execute,
+  demoteTaskSchema,
+  demoteTaskHandler,
 };

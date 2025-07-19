@@ -1,45 +1,79 @@
-/**
- * @file viewBoard.ts
- * @description Defines the MCP tool for viewing the Kanban board in backlog.md.
- * This tool maps directly to the `backlog board` CLI command.
- */
 import { exec } from 'child_process';
+import { promisify } from 'util';
+/**
+ * viewBoard.ts
+ *
+ * Purpose:
+ * - Provides the functionality to view the Kanban board in the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * 1. The `viewBoardHandler` function takes no parameters.
+ * 2. It constructs a `backlog view board` CLI command.
+ * 3. The command is executed asynchronously in the specified repository path.
+ * 4. The handler returns the result of the command execution, including stdout or any errors.
+ *
+ * Last Updated:
+ * 2025-07-19 by AI Assistant (Refactored to use Zod for validation and added detailed documentation)
+ */
+import { z } from 'zod';
+
+const execAsync = promisify(exec);
+
+// The repository path is a critical configuration.
+// It's hardcoded for now but should ideally come from a secure config or environment variable.
+const REPO_PATH =
+  '/home/kratos/Development/Github/The-Dave-Stack/mcp-backlog-md';
 
 /**
- * @description The definition of the `viewBoard` tool.
- * This object describes the tool's name, description, and input schema.
+ * Defines the schema for the parameters required to view the board.
+ * This schema is used by Zod to validate the input at runtime, ensuring type safety.
  */
-const definition = {
-  name: 'viewBoard',
-  description: 'View the Kanban board in backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {},
-  },
-};
+export const viewBoardSchema = z.object({});
 
 /**
- * @description Executes the `viewBoard` tool.
- * This function constructs and executes the `backlog board` command string
- * using `child_process.exec`.
- * @returns {Promise<string>} A promise that resolves with the command's stdout
- * or rejects with an error.
+ * Handles the logic for viewing the board.
+ * It constructs and executes the `backlog view board` command.
+ *
+ * @param params The input parameters, validated against the `viewBoardSchema`.
+ * @returns An object containing the result of the command execution.
  */
-async function execute(): Promise<string> {
-  const command = `backlog board`;
+export async function viewBoardHandler() {
+  // Start building the command.
+  const command = `backlog view board`;
 
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+  console.log(`🔩 Executing: ${command}`);
+
+  try {
+    // Execute the command in the specified repository directory.
+    const { stdout, stderr } = await execAsync(command, { cwd: REPO_PATH });
+
+    // If there's anything in stderr, it's considered an error.
+    if (stderr) {
+      console.error(`Command stderr: ${stderr}`);
+      return {
+        content: [{ type: 'text', text: `Command execution error: ${stderr}` }],
+      };
+    }
+
+    // On success, return the trimmed output from stdout.
+    console.log(`✅ Success: ${stdout}`);
+    return {
+      content: [
+        { type: 'text', text: `Board viewed successfully: ${stdout.trim()}` },
+      ],
+    };
+  } catch (error: unknown) {
+    // Catch any exceptions during command execution.
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('❌ Failed to execute command:', error);
+    return {
+      content: [{ type: 'text', text: `Server execution failed: ${message}` }],
+    };
+  }
 }
 
 export default {
-  definition,
-  execute,
+  viewBoardSchema,
+  viewBoardHandler,
 };

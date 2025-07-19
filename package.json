@@ -1,6 +1,7 @@
 {
   "name": "mcp-backlog-md",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "clean": "rimraf build",
@@ -15,9 +16,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.16.0"
+    "@modelcontextprotocol/sdk": "^1.16.0",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
     "@types/node": "^24.0.15",
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",

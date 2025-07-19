@@ -36,7 +36,10 @@ const __dirname = path.dirname(__filename);
 
 class BacklogServer {
   private server: Server;
-  private tools: any[] = [];
+  private tools: {
+    definition: { name: string };
+    execute: (args: unknown) => Promise<unknown>;
+  }[] = [];
 
   constructor() {
     this.server = new Server(
@@ -63,7 +66,8 @@ class BacklogServer {
     const toolsDir = path.join(__dirname, 'tools');
     const files = await readdir(toolsDir);
     for (const file of files) {
-      if (file.endsWith('.js')) { // After compilation, files will be .js
+      if (file.endsWith('.js')) {
+        // After compilation, files will be .js
         const toolModule = await import(path.join(toolsDir, file));
         if (toolModule.default) {
           this.tools.push(toolModule.default);
@@ -74,11 +78,13 @@ class BacklogServer {
 
   private setupToolHandlers() {
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools: this.tools.map(t => t.definition),
+      tools: this.tools.map((t) => t.definition),
     }));
 
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-      const tool = this.tools.find(t => t.definition.name === request.params.name);
+      const tool = this.tools.find(
+        (t) => t.definition.name === request.params.name
+      );
       if (!tool) {
         throw new McpError(
           ErrorCode.MethodNotFound,
@@ -96,12 +102,13 @@ class BacklogServer {
             },
           ],
         };
-      } catch (error: any) {
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error);
         return {
           content: [
             {
               type: 'text',
-              text: error.message,
+              text: message,
             },
           ],
           isError: true,
