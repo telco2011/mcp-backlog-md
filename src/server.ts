@@ -7,9 +7,26 @@ import {
   McpError,
 } from '@modelcontextprotocol/sdk/types.js';
 
+/**
+ * server.ts
+ *
+ * Purpose:
+ * - Initializes and runs the MCP server for backlog.md.
+ * - Dynamically loads all tool definitions from the `src/tools` directory.
+ * - Handles MCP requests for listing and calling tools.
+ *
+ * Logic Overview:
+ * 1. Initializes the MCP Server instance.
+ * 2. Scans the `src/tools` directory to discover all available tool modules.
+ * 3. Registers request handlers for `ListTools` and `CallTool`.
+ * 4. The `CallTool` handler delegates execution to the appropriate tool module.
+ * 5. Connects to the transport layer (Stdio) to communicate with the client.
+ *
+ * Last Updated:
+ * 2025-07-19 by Cline.bot (Initial creation)
+ */
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { exec } from 'child_process';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { readdir } from 'fs/promises';

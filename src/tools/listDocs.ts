@@ -1,5 +1,14 @@
+/**
+ * @file listDocs.ts
+ * @description Defines the MCP tool for listing documents in backlog.md.
+ * This tool maps directly to the `backlog doc list` CLI command.
+ */
 import { exec } from 'child_process';
 
+/**
+ * @description The definition of the `listDocs` tool.
+ * This object describes the tool's name, description, and input schema.
+ */
 const definition = {
   name: 'listDocs',
   description: 'List documents in backlog.md',
@@ -9,6 +18,13 @@ const definition = {
   },
 };
 
+/**
+ * @description Executes the `listDocs` tool.
+ * This function constructs and executes the `backlog doc list`
+ * command string using `child_process.exec`.
+ * @returns {Promise<string>} A promise that resolves with the command's stdout
+ * or rejects with an error.
+ */
 async function execute(): Promise<string> {
   const command = `backlog doc list`;
 
