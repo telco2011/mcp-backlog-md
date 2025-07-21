@@ -7,6 +7,13 @@ import {
   McpError,
 } from '@modelcontextprotocol/sdk/types.js';
 
+import { Server } from '@modelcontextprotocol/sdk/server/index.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { ZodSchema } from 'zod';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { readdir } from 'fs/promises';
+
 /**
  * server.ts
  *
@@ -16,30 +23,33 @@ import {
  * - Handles MCP requests for listing and calling tools.
  *
  * Logic Overview:
- * 1. Initializes the MCP Server instance.
+ * 1. Initializes the MCP Server instance with a central error handler.
  * 2. Scans the `src/tools` directory to discover all available tool modules.
  * 3. Registers request handlers for `ListTools` and `CallTool`.
- * 4. The `CallTool` handler delegates execution to the appropriate tool module.
+ * 4. The `CallTool` handler validates input against the tool's Zod schema,
+ *    delegates execution, and formats the response.
  * 5. Connects to the transport layer (Stdio) to communicate with the client.
  *
  * Last Updated:
- * 2025-07-19 by Cline.bot (Initial creation)
+ * 2025-07-21 by Cline (Refactored for new tool structure and simplified logic)
  */
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { fileURLToPath } from 'url';
-import path from 'path';
-import { readdir } from 'fs/promises';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Define a more specific type for our tools
+interface McpTool {
+  definition: {
+    name: string;
+    description: string;
+    input_schema: ZodSchema;
+  };
+  execute: (args: unknown) => Promise<string>;
+}
+
 class BacklogServer {
   private server: Server;
-  private tools: {
-    definition: { name: string };
-    execute: (args: unknown) => Promise<unknown>;
-  }[] = [];
+  private tools: McpTool[] = [];
 
   constructor() {
     this.server = new Server(
@@ -77,6 +87,7 @@ class BacklogServer {
   }
 
   private setupToolHandlers() {
+    // The `ListTools` handler now correctly returns the full tool definitions.
     this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
       tools: this.tools.map((t) => t.definition),
     }));
@@ -92,28 +103,33 @@ class BacklogServer {
         );
       }
 
-      try {
-        const result = await tool.execute(request.params.arguments);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: result,
-            },
-          ],
-        };
-      } catch (error: unknown) {
-        const message = error instanceof Error ? error.message : String(error);
-        return {
-          content: [
-            {
-              type: 'text',
-              text: message,
-            },
-          ],
-          isError: true,
-        };
+      // Validate the arguments against the tool's specific Zod schema.
+      const validationResult = tool.definition.input_schema.safeParse(
+        request.params.arguments
+      );
+
+      if (!validationResult.success) {
+        throw new McpError(
+          ErrorCode.InvalidParams,
+          `Invalid parameters for tool ${
+            request.params.name
+          }: ${validationResult.error.toString()}`
+        );
       }
+
+      // The tool's `execute` function now handles its own logic and erroring.
+      // The central error handler on the server will catch any thrown errors.
+      const resultText = await tool.execute(validationResult.data);
+
+      // Format the successful result into the standard MCP response.
+      return {
+        content: [
+          {
+            type: 'text',
+            text: resultText,
+          },
+        ],
+      };
     });
   }
 

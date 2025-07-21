@@ -1,5 +1,4 @@
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * cleanup.ts
  *
@@ -8,70 +7,27 @@ import { promisify } from 'util';
  * - Exposes this functionality as an MCP tool.
  *
  * Logic Overview:
- * 1. The `cleanupHandler` function takes no parameters.
- * 2. It constructs a `backlog cleanup` CLI command.
- * 3. The command is executed asynchronously in the specified repository path.
- * 4. The handler returns the result of the command execution, including stdout or any errors.
+ * - Defines an empty Zod schema as no parameters are needed.
+ * - The `execute` function constructs a `backlog cleanup` command.
+ * - The command is passed to the centralized `executeCommand` function.
  *
  * Last Updated:
- * 2025-07-19 by AI Assistant (Refactored to use Zod for validation and added detailed documentation)
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
 import { z } from 'zod';
 
-const execAsync = promisify(exec);
+const schema = z.object({});
 
-// The repository path is a critical configuration.
-// It's hardcoded for now but should ideally come from a secure config or environment variable.
-const REPO_PATH =
-  '/home/kratos/Development/Github/The-Dave-Stack/mcp-backlog-md';
-
-/**
- * Defines the schema for the parameters required to cleanup tasks.
- * This schema is used by Zod to validate the input at runtime, ensuring type safety.
- */
-export const cleanupSchema = z.object({});
-
-/**
- * Handles the logic for cleaning up tasks.
- * It constructs and executes the `backlog cleanup` command.
- *
- * @param params The input parameters, validated against the `cleanupSchema`.
- * @returns An object containing the result of the command execution.
- */
-export async function cleanupHandler() {
-  // Start building the command.
+async function execute(): Promise<string> {
   const command = `backlog cleanup`;
-
-  console.log(`🔩 Executing: ${command}`);
-
-  try {
-    // Execute the command in the specified repository directory.
-    const { stdout, stderr } = await execAsync(command, { cwd: REPO_PATH });
-
-    // If there's anything in stderr, it's considered an error.
-    if (stderr) {
-      console.error(`Command stderr: ${stderr}`);
-      return {
-        content: [{ type: 'text', text: `Command execution error: ${stderr}` }],
-      };
-    }
-
-    // On success, return the trimmed output from stdout.
-    console.log(`✅ Success: ${stdout}`);
-    return {
-      content: [{ type: 'text', text: `Cleanup successful: ${stdout.trim()}` }],
-    };
-  } catch (error: unknown) {
-    // Catch any exceptions during command execution.
-    const message = error instanceof Error ? error.message : String(error);
-    console.error('❌ Failed to execute command:', error);
-    return {
-      content: [{ type: 'text', text: `Server execution failed: ${message}` }],
-    };
-  }
+  return executeCommand(command, 'Cleanup successful');
 }
 
 export default {
-  cleanupSchema,
-  cleanupHandler,
+  definition: {
+    name: 'cleanup',
+    description: 'Cleanup done tasks in backlog.md',
+    input_schema: schema,
+  },
+  execute,
 };

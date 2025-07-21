@@ -1,5 +1,4 @@
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * createDoc.ts
  *
@@ -8,86 +7,34 @@ import { promisify } from 'util';
  * - Exposes this functionality as an MCP tool.
  *
  * Logic Overview:
- * 1. Defines a Zod schema (`createDocSchema`) to validate the parameters for creating a document.
- * 2. The `createDocHandler` function takes the validated parameters.
- * 3. It constructs a `backlog doc create` CLI command based on the provided parameters.
- * 4. The command is executed asynchronously in the specified repository path.
- * 5. The handler returns the result of the command execution, including stdout or any errors.
+ * - Defines a Zod schema for input validation.
+ * - The `execute` function constructs a `backlog doc create` command.
+ * - The command is passed to the centralized `executeCommand` function.
  *
  * Last Updated:
- * 2025-07-19 by AI Assistant (Refactored to use Zod for validation and added detailed documentation)
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
 import { z } from 'zod';
 
-const execAsync = promisify(exec);
-
-// The repository path is a critical configuration.
-// It's hardcoded for now but should ideally come from a secure config or environment variable.
-const REPO_PATH =
-  '/home/kratos/Development/Github/The-Dave-Stack/mcp-backlog-md';
-
-/**
- * Defines the schema for the parameters required to create a document.
- * This schema is used by Zod to validate the input at runtime, ensuring type safety.
- */
-export const createDocSchema = z.object({
-  title: z.string().describe('The title of the document.'),
-  path: z.string().optional().describe('The path to create the document in.'),
-  type: z.string().optional().describe('The type of the document.'),
+const schema = z.object({
+  title: z.string().describe('The title of the document'),
+  path: z.string().optional().describe('The path to create the document in'),
+  type: z.string().optional().describe('The type of the document'),
 });
 
-/**
- * Handles the logic for creating a document.
- * It constructs and executes the `backlog doc create` command.
- *
- * @param params The input parameters, validated against the `createDocSchema`.
- * @returns An object containing the result of the command execution.
- */
-export async function createDocHandler(
-  params: z.infer<typeof createDocSchema>
-) {
-  // Start building the command.
+async function execute(params: z.infer<typeof schema>): Promise<string> {
   let command = `backlog doc create "${params.title}"`;
-
-  // Append optional parameters to the command if they are provided.
   if (params.path) command += ` --path "${params.path}"`;
   if (params.type) command += ` --type "${params.type}"`;
 
-  console.log(`🔩 Executing: ${command}`);
-
-  try {
-    // Execute the command in the specified repository directory.
-    const { stdout, stderr } = await execAsync(command, { cwd: REPO_PATH });
-
-    // If there's anything in stderr, it's considered an error.
-    if (stderr) {
-      console.error(`Command stderr: ${stderr}`);
-      return {
-        content: [{ type: 'text', text: `Command execution error: ${stderr}` }],
-      };
-    }
-
-    // On success, return the trimmed output from stdout.
-    console.log(`✅ Success: ${stdout}`);
-    return {
-      content: [
-        {
-          type: 'text',
-          text: `Document created successfully: ${stdout.trim()}`,
-        },
-      ],
-    };
-  } catch (error: unknown) {
-    // Catch any exceptions during command execution.
-    const message = error instanceof Error ? error.message : String(error);
-    console.error('❌ Failed to execute command:', error);
-    return {
-      content: [{ type: 'text', text: `Server execution failed: ${message}` }],
-    };
-  }
+  return executeCommand(command, 'Document created successfully');
 }
 
 export default {
-  createDocSchema,
-  createDocHandler,
+  definition: {
+    name: 'createDoc',
+    description: 'Create a new document in backlog.md',
+    input_schema: schema,
+  },
+  execute,
 };
