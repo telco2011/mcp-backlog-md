@@ -1,5 +1,5 @@
-import browser from './browser';
-import { executeCommand } from '../lib/commandExecutor';
+import browser from '../browser';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 

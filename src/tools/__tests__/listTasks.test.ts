@@ -1,5 +1,5 @@
-import { executeCommand } from '../lib/commandExecutor';
-import listTasks from './listTasks';
+import { executeCommand } from '../../lib/commandExecutor';
+import listTasks from '../listTasks';
 
 jest.mock('../lib/commandExecutor');
 

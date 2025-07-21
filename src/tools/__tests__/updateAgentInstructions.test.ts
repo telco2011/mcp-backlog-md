@@ -1,5 +1,5 @@
-import { executeCommand } from '../lib/commandExecutor';
-import updateAgentInstructions from './updateAgentInstructions';
+import { executeCommand } from '../../lib/commandExecutor';
+import updateAgentInstructions from '../updateAgentInstructions';
 
 jest.mock('../lib/commandExecutor');
 

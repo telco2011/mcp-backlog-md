@@ -1,4 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * createDraft.ts
  *
@@ -16,11 +19,12 @@ import { executeCommand } from '../lib/commandExecutor';
  */
 import { z } from 'zod';
 
-const schema = z.object({
+const schema = {
   title: z.string().describe('The title of the draft'),
-});
+};
+const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof schema>): Promise<string> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   const command = `backlog draft create "${params.title}"`;
   return executeCommand(command, 'Draft created successfully');
 }
@@ -28,8 +32,9 @@ async function execute(params: z.infer<typeof schema>): Promise<string> {
 export default {
   definition: {
     name: 'createDraft',
+    title: changeCase.capitalCase('createDraft'),
     description: 'Create a draft task in backlog.md',
-    input_schema: schema,
+    inputSchema: schema,
   },
   execute,
 };

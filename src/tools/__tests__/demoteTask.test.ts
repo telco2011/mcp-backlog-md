@@ -1,9 +1,9 @@
-import { executeCommand } from '../lib/commandExecutor';
-import viewDoc from './viewDoc';
+import demoteTask from '../demoteTask';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 
-describe('viewDoc', () => {
+describe('demoteTask', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -13,11 +13,11 @@ describe('viewDoc', () => {
       id: '123',
     };
 
-    await viewDoc.execute(args);
+    await demoteTask.execute(args);
 
     expect(executeCommand).toHaveBeenCalledWith(
-      'backlog doc view 123',
-      'Document viewed successfully'
+      'backlog task demote 123',
+      'Task demoted successfully'
     );
   });
 });

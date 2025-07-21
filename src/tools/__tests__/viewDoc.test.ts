@@ -1,9 +1,9 @@
-import archiveTask from './archiveTask';
-import { executeCommand } from '../lib/commandExecutor';
+import { executeCommand } from '../../lib/commandExecutor';
+import viewDoc from '../viewDoc';
 
 jest.mock('../lib/commandExecutor');
 
-describe('archiveTask', () => {
+describe('viewDoc', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -13,11 +13,11 @@ describe('archiveTask', () => {
       id: '123',
     };
 
-    await archiveTask.execute(args);
+    await viewDoc.execute(args);
 
     expect(executeCommand).toHaveBeenCalledWith(
-      'backlog task archive 123',
-      'Task archived successfully'
+      'backlog doc view 123',
+      'Document viewed successfully'
     );
   });
 });

@@ -5,7 +5,6 @@ export default {
   moduleNameMapper: {
     '^../lib/commandExecutor$': '<rootDir>/src/lib/__mocks__/commandExecutor.ts',
     '^../lib/zodSchemas$': '<rootDir>/src/lib/zodSchemas.ts',
-    '^@modelcontextprotocol/sdk/(.*).js$': '<rootDir>/node_modules/@modelcontextprotocol/sdk/$1.js',
-    '^@modelcontextprotocol/sdk/(.*)$': '<rootDir>/node_modules/@modelcontextprotocol/sdk/$1',
+    '^@modelcontextprotocol/sdk/(.*).js$': '<rootDir>/node_modules/@modelcontextprotocol/sdk/$1.js'
   },
 };

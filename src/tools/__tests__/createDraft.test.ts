@@ -1,5 +1,5 @@
-import createDraft from './createDraft';
-import { executeCommand } from '../lib/commandExecutor';
+import createDraft from '../createDraft';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 

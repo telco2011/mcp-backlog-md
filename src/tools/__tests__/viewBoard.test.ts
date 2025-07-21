@@ -1,19 +1,19 @@
-import configList from './configList';
-import { executeCommand } from '../lib/commandExecutor';
+import { executeCommand } from '../../lib/commandExecutor';
+import viewBoard from '../viewBoard';
 
 jest.mock('../lib/commandExecutor');
 
-describe('configList', () => {
+describe('viewBoard', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('should call the executeCommand with the correct arguments', async () => {
-    await configList.execute();
+    await viewBoard.execute();
 
     expect(executeCommand).toHaveBeenCalledWith(
-      'backlog config list',
-      'Configuration listed successfully'
+      'backlog view board',
+      'Board viewed successfully'
     );
   });
 });

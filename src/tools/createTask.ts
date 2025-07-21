@@ -1,5 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
-import { taskSchema } from '../lib/zodSchemas';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * @file createTask.ts
  * @description Defines the MCP tool for creating a new task in backlog.md.
@@ -10,10 +12,27 @@ import { taskSchema } from '../lib/zodSchemas';
  */
 import { z } from 'zod';
 
-// Use the centralized task schema
-const schema = taskSchema;
+const name = 'createTask';
 
-async function execute(params: z.infer<typeof schema>): Promise<string> {
+// Use the centralized task schema
+const schema = {
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().optional(),
+  assignee: z.string().optional(),
+  status: z.string().optional(),
+  labels: z.string().optional(),
+  priority: z.string().optional(),
+  plan: z.string().optional(),
+  ac: z.string().optional(),
+  notes: z.string().optional(),
+  dep: z.string().optional(),
+  parent: z.string().optional(),
+  draft: z.boolean().optional(),
+};
+
+export const zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog task create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
@@ -33,9 +52,10 @@ async function execute(params: z.infer<typeof schema>): Promise<string> {
 
 export default {
   definition: {
-    name: 'createTask',
+    name,
+    title: changeCase.capitalCase(name),
     description: 'Create a new task in backlog.md',
-    input_schema: schema,
+    inputSchema: schema
   },
   execute,
 };

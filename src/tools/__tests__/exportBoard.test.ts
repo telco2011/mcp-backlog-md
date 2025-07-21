@@ -1,5 +1,5 @@
-import { executeCommand } from '../lib/commandExecutor';
-import exportBoard from './exportBoard';
+import { executeCommand } from '../../lib/commandExecutor';
+import exportBoard from '../exportBoard';
 
 jest.mock('../lib/commandExecutor');
 

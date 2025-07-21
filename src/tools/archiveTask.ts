@@ -1,4 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * archiveTask.ts
  *
@@ -16,11 +19,13 @@ import { executeCommand } from '../lib/commandExecutor';
  */
 import { z } from 'zod';
 
-const schema = z.object({
+const schema = {
   id: z.string().describe('The ID of the task to archive'),
-});
+};
 
-async function execute(params: z.infer<typeof schema>): Promise<string> {
+const zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   const command = `backlog task archive ${params.id}`;
   return executeCommand(command, 'Task archived successfully');
 }
@@ -28,8 +33,9 @@ async function execute(params: z.infer<typeof schema>): Promise<string> {
 export default {
   definition: {
     name: 'archiveTask',
+    title: changeCase.capitalCase('archiveTask'),
     description: 'Archive a task in backlog.md',
-    input_schema: schema,
+    inputSchema: schema,
   },
   execute,
 };

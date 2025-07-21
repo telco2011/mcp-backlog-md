@@ -1,5 +1,5 @@
-import createDoc from './createDoc';
-import { executeCommand } from '../lib/commandExecutor';
+import createDoc from '../createDoc';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 

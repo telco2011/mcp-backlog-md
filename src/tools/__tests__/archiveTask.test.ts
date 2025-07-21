@@ -1,9 +1,9 @@
-import { executeCommand } from '../lib/commandExecutor';
-import viewTask from './viewTask';
+import archiveTask from '../archiveTask';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 
-describe('viewTask', () => {
+describe('archiveTask', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -11,14 +11,13 @@ describe('viewTask', () => {
   it('should call the executeCommand with the correct arguments', async () => {
     const args = {
       id: '123',
-      plain: true,
     };
 
-    await viewTask.execute(args);
+    await archiveTask.execute(args);
 
     expect(executeCommand).toHaveBeenCalledWith(
-      'backlog task view 123 --plain',
-      'Task viewed successfully'
+      'backlog task archive 123',
+      'Task archived successfully'
     );
   });
 });

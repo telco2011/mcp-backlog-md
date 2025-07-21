@@ -1,5 +1,5 @@
-import editTask from './editTask';
-import { executeCommand } from '../lib/commandExecutor';
+import editTask from '../editTask';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 

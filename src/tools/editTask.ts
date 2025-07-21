@@ -1,4 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * editTask.ts
  *
@@ -16,7 +19,7 @@ import { executeCommand } from '../lib/commandExecutor';
  */
 import { z } from 'zod';
 
-const schema = z.object({
+const schema = {
   id: z.string().describe('The ID of the task to edit'),
   assignee: z.string().optional().describe('The new assignee of the task'),
   labels: z
@@ -27,9 +30,10 @@ const schema = z.object({
   ac: z.string().optional().describe('New acceptance criteria for the task'),
   notes: z.string().optional().describe('New notes for the task'),
   dep: z.string().optional().describe('Comma-separated list of new dependencies'),
-});
+};
+const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof schema>): Promise<string> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog task edit ${params.id}`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
   if (params.labels) command += ` --labels ${params.labels}`;
@@ -44,8 +48,9 @@ async function execute(params: z.infer<typeof schema>): Promise<string> {
 export default {
   definition: {
     name: 'editTask',
+    title: changeCase.capitalCase('editTask'),
     description: 'Edit an existing task in backlog.md',
-    input_schema: schema,
+    inputSchema: schema,
   },
   execute,
 };

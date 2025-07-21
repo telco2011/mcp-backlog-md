@@ -1,4 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * listDocs.ts
  *
@@ -16,9 +19,10 @@ import { executeCommand } from '../lib/commandExecutor';
  */
 import { z } from 'zod';
 
-const schema = z.object({});
+const schema = {};
+const zSchema = z.object(schema);
 
-async function execute(): Promise<string> {
+async function execute(): Promise<CallToolResult> {
   const command = `backlog doc list`;
   return executeCommand(command, 'Documents listed successfully');
 }
@@ -26,8 +30,9 @@ async function execute(): Promise<string> {
 export default {
   definition: {
     name: 'listDocs',
+    title: changeCase.capitalCase('listDocs'),
     description: 'List documents in backlog.md',
-    input_schema: schema,
+    inputSchema: schema,
   },
   execute,
 };

@@ -1,5 +1,5 @@
-import configSet from './configSet';
-import { executeCommand } from '../lib/commandExecutor';
+import configSet from '../configSet';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 

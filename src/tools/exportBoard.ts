@@ -1,4 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * exportBoard.ts
  *
@@ -16,12 +19,13 @@ import { executeCommand } from '../lib/commandExecutor';
  */
 import { z } from 'zod';
 
-const schema = z.object({
+const schema = {
   file: z.string().optional().describe('The file to export to'),
   force: z.boolean().optional().describe('Force overwrite of existing file'),
-});
+};
+const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof schema>): Promise<string> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog export board`;
   if (params.file) command += ` --file ${params.file}`;
   if (params.force) command += ` --force`;
@@ -32,8 +36,9 @@ async function execute(params: z.infer<typeof schema>): Promise<string> {
 export default {
   definition: {
     name: 'exportBoard',
+    title: changeCase.capitalCase('exportBoard'),
     description: 'Export the Kanban board to a markdown file',
-    input_schema: schema,
+    inputSchema: schema,
   },
   execute,
 };

@@ -1,4 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * viewTask.ts
  *
@@ -16,12 +19,13 @@ import { executeCommand } from '../lib/commandExecutor';
  */
 import { z } from 'zod';
 
-const schema = z.object({
+const schema = {
   id: z.string().describe('The ID of the task to view'),
   plain: z.boolean().optional().describe('View in plain mode for AI'),
-});
+};
+const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof schema>): Promise<string> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog task view ${params.id}`;
   if (params.plain) command += ` --plain`;
 
@@ -31,8 +35,9 @@ async function execute(params: z.infer<typeof schema>): Promise<string> {
 export default {
   definition: {
     name: 'viewTask',
+    title: changeCase.capitalCase('viewTask'),
     description: 'View a task in backlog.md',
-    input_schema: schema,
+    inputSchema: schema,
   },
   execute,
 };

@@ -1,5 +1,5 @@
-import createDecision from './createDecision';
-import { executeCommand } from '../lib/commandExecutor';
+import createDecision from '../createDecision';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 

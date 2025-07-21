@@ -1,18 +1,15 @@
 #!/usr/bin/env node
 
-import {
-  CallToolRequestSchema,
-  ErrorCode,
-  ListToolsRequestSchema,
-  McpError,
-} from '@modelcontextprotocol/sdk/types';
+import * as changeCase from "change-case";
 
-import { Server } from '@modelcontextprotocol/sdk/server/index';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio';
-import { ZodSchema } from 'zod';
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import pckJson from '../package.json' with { type: 'json' };
 import { readdir } from 'fs/promises';
+import { McpTool } from "./lib/types.js";
 
 /**
  * server.ts
@@ -37,42 +34,27 @@ import { readdir } from 'fs/promises';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Define a more specific type for our tools
-interface McpTool {
-  definition: {
-    name: string;
-    description: string;
-    input_schema: ZodSchema;
-  };
-  execute: (args: unknown) => Promise<string>;
-}
-
 export class BacklogServer {
-  private server: Server;
+  private server: McpServer;
   private tools: McpTool[] = [];
 
   constructor() {
-    this.server = new Server(
+    this.server = new McpServer(
       {
-        name: 'mcp-backlog-md',
-        version: '0.1.0',
-      },
-      {
-        capabilities: {
-          resources: {},
-          tools: {},
-        },
+        name: pckJson.name,
+        version: pckJson.version,
+        title: changeCase.capitalCase(pckJson.name)
       }
     );
+    console.log('MCP Server:', this.server);
 
-    this.server.onerror = (error) => console.error('[MCP Error]', error);
     process.on('SIGINT', async () => {
       await this.server.close();
       process.exit(0);
     });
   }
 
-  private async loadTools() {
+  private async registerTools() {
     const toolsDir = path.join(__dirname, 'tools');
     const files = await readdir(toolsDir);
     for (const file of files) {
@@ -84,61 +66,16 @@ export class BacklogServer {
         }
       }
     }
-  }
-
-  private setupToolHandlers() {
-    // The `ListTools` handler now correctly returns the full tool definitions.
-    this.server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools: this.tools.map((t) => t.definition),
-    }));
-
-    this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
-      const tool = this.tools.find(
-        (t) => t.definition.name === request.params.name
-      );
-      if (!tool) {
-        throw new McpError(
-          ErrorCode.MethodNotFound,
-          `Unknown tool: ${request.params.name}`
-        );
-      }
-
-      // Validate the arguments against the tool's specific Zod schema.
-      const validationResult = tool.definition.input_schema.safeParse(
-        request.params.arguments
-      );
-
-      if (!validationResult.success) {
-        throw new McpError(
-          ErrorCode.InvalidParams,
-          `Invalid parameters for tool ${
-            request.params.name
-          }: ${validationResult.error.toString()}`
-        );
-      }
-
-      // The tool's `execute` function now handles its own logic and erroring.
-      // The central error handler on the server will catch any thrown errors.
-      const resultText = await tool.execute(validationResult.data);
-
-      // Format the successful result into the standard MCP response.
-      return {
-        content: [
-          {
-            type: 'text',
-            text: resultText,
-          },
-        ],
-      };
-    });
+    for (const tool of this.tools) {
+      this.server.tool(changeCase.capitalCase(tool.definition.name), tool.definition.description, tool.definition.inputSchema, tool.execute); 
+    }
+    console.log('MCP Server with tools:', this.server.server.getClientCapabilities());
   }
 
   async run() {
-    await this.loadTools();
-    this.setupToolHandlers();
+    await this.registerTools();
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    console.error('Backlog.md MCP server running on stdio');
   }
 }
 

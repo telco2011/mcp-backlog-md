@@ -1,4 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * viewDoc.ts
  *
@@ -16,11 +19,12 @@ import { executeCommand } from '../lib/commandExecutor';
  */
 import { z } from 'zod';
 
-const schema = z.object({
+const schema = {
   id: z.string().describe('The ID of the document to view'),
-});
+};
+const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof schema>): Promise<string> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   const command = `backlog doc view ${params.id}`;
   return executeCommand(command, 'Document viewed successfully');
 }
@@ -28,8 +32,9 @@ async function execute(params: z.infer<typeof schema>): Promise<string> {
 export default {
   definition: {
     name: 'viewDoc',
+    title: changeCase.capitalCase('viewDoc'),
     description: 'View a document in backlog.md',
-    input_schema: schema,
+    inputSchema: schema,
   },
   execute,
 };

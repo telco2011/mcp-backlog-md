@@ -1,19 +1,19 @@
-import cleanup from './cleanup';
-import { executeCommand } from '../lib/commandExecutor';
+import { executeCommand } from '../../lib/commandExecutor';
+import listDocs from '../listDocs';
 
 jest.mock('../lib/commandExecutor');
 
-describe('cleanup', () => {
+describe('listDocs', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('should call the executeCommand with the correct arguments', async () => {
-    await cleanup.execute();
+    await listDocs.execute();
 
     expect(executeCommand).toHaveBeenCalledWith(
-      'backlog cleanup',
-      'Cleanup successful'
+      'backlog doc list',
+      'Documents listed successfully'
     );
   });
 });

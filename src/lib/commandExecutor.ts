@@ -15,6 +15,7 @@
  * Last Updated:
  * 2025-07-21 by Cline (Model: claude-3-opus, Task: Centralized command execution)
  */
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 
@@ -33,7 +34,7 @@ const REPO_PATH =
 export async function executeCommand(
   command: string,
   successMessage: string
-): Promise<string> {
+): Promise<CallToolResult> {
   console.log(`🔩 Executing: ${command}`);
   try {
     const { stdout, stderr } = await execAsync(command, { cwd: REPO_PATH });
@@ -44,7 +45,9 @@ export async function executeCommand(
     }
 
     console.log(`✅ Success: ${stdout}`);
-    return `${successMessage}: ${stdout.trim()}`;
+    return {
+      content: [{ type: 'text', text: `${stdout.trim()}` }]
+    };
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('❌ Failed to execute command:', error);

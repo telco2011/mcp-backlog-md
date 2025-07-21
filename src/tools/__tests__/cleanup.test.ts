@@ -1,19 +1,19 @@
-import { executeCommand } from '../lib/commandExecutor';
-import viewBoard from './viewBoard';
+import cleanup from '../cleanup';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 
-describe('viewBoard', () => {
+describe('cleanup', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('should call the executeCommand with the correct arguments', async () => {
-    await viewBoard.execute();
+    await cleanup.execute();
 
     expect(executeCommand).toHaveBeenCalledWith(
-      'backlog view board',
-      'Board viewed successfully'
+      'backlog cleanup',
+      'Cleanup successful'
     );
   });
 });

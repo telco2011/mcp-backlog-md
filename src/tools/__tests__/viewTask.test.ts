@@ -1,9 +1,9 @@
-import demoteTask from './demoteTask';
-import { executeCommand } from '../lib/commandExecutor';
+import { executeCommand } from '../../lib/commandExecutor';
+import viewTask from '../viewTask';
 
 jest.mock('../lib/commandExecutor');
 
-describe('demoteTask', () => {
+describe('viewTask', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -11,13 +11,14 @@ describe('demoteTask', () => {
   it('should call the executeCommand with the correct arguments', async () => {
     const args = {
       id: '123',
+      plain: true,
     };
 
-    await demoteTask.execute(args);
+    await viewTask.execute(args);
 
     expect(executeCommand).toHaveBeenCalledWith(
-      'backlog task demote 123',
-      'Task demoted successfully'
+      'backlog task view 123 --plain',
+      'Task viewed successfully'
     );
   });
 });

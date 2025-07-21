@@ -1,19 +1,19 @@
-import { executeCommand } from '../lib/commandExecutor';
-import listDocs from './listDocs';
+import configList from '../configList';
+import { executeCommand } from '../../lib/commandExecutor';
 
 jest.mock('../lib/commandExecutor');
 
-describe('listDocs', () => {
+describe('configList', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('should call the executeCommand with the correct arguments', async () => {
-    await listDocs.execute();
+    await configList.execute();
 
     expect(executeCommand).toHaveBeenCalledWith(
-      'backlog doc list',
-      'Documents listed successfully'
+      'backlog config list',
+      'Configuration listed successfully'
     );
   });
 });

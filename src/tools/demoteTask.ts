@@ -1,4 +1,7 @@
-import { executeCommand } from '../lib/commandExecutor';
+import * as changeCase from "change-case";
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * demoteTask.ts
  *
@@ -16,11 +19,12 @@ import { executeCommand } from '../lib/commandExecutor';
  */
 import { z } from 'zod';
 
-const schema = z.object({
+const schema = {
   id: z.string().describe('The ID of the task to demote'),
-});
+};
+const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof schema>): Promise<string> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   const command = `backlog task demote ${params.id}`;
   return executeCommand(command, 'Task demoted successfully');
 }
@@ -28,8 +32,9 @@ async function execute(params: z.infer<typeof schema>): Promise<string> {
 export default {
   definition: {
     name: 'demoteTask',
+    title: changeCase.capitalCase('demoteTask'),
     description: 'Demote a task to a draft in backlog.md',
-    input_schema: schema,
+    inputSchema: schema,
   },
   execute,
 };
