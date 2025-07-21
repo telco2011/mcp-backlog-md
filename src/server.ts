@@ -5,10 +5,10 @@ import {
   ErrorCode,
   ListToolsRequestSchema,
   McpError,
-} from '@modelcontextprotocol/sdk/types.js';
+} from '@modelcontextprotocol/sdk/types';
 
-import { Server } from '@modelcontextprotocol/sdk/server/index.js';
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { Server } from '@modelcontextprotocol/sdk/server/index';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio';
 import { ZodSchema } from 'zod';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -47,7 +47,7 @@ interface McpTool {
   execute: (args: unknown) => Promise<string>;
 }
 
-class BacklogServer {
+export class BacklogServer {
   private server: Server;
   private tools: McpTool[] = [];
 

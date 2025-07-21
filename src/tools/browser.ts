@@ -1,4 +1,4 @@
-import { executeCommand } from '../lib/commandExecutor.js';
+import { executeCommand } from '../lib/commandExecutor';
 /**
  * browser.ts
  *

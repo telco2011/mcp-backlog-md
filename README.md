@@ -17,4 +17,13 @@ This project provides an MCP (Model Context Protocol) server for the `backlog.md
 
 ## Usage
 
+### Testing
+
+To run the tests, use the following command:
+
+```bash
+npm test
+```
+
+
 Once the server is running and configured in your MCP client, you can use the exposed tools to interact with `backlog.md`.

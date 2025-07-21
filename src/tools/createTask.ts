@@ -1,5 +1,5 @@
-import { executeCommand } from '../lib/commandExecutor.js';
-import { taskSchema } from '../lib/zodSchemas.js';
+import { executeCommand } from '../lib/commandExecutor';
+import { taskSchema } from '../lib/zodSchemas';
 /**
  * @file createTask.ts
  * @description Defines the MCP tool for creating a new task in backlog.md.

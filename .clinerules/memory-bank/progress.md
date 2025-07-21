@@ -4,10 +4,11 @@
 
 - All the features are implemented.
 - The MCP server can be started and loads all the tools.
+- Unit tests have been created for all the tools and are passing.
 
 ## What's Left to Build
 
-- The implemented features need to be tested to ensure they work as expected.
+- The integration test for the MCP server is not working and has been removed. This needs to be revisited.
 
 ## Current Status
 
@@ -15,7 +16,7 @@
 
 ## Known Issues
 
-- No known issues at this time.
+- The integration test for the MCP server is failing due to a module resolution issue with the `@modelcontextprotocol/sdk` package.
 
 ## Evolution of Project Decisions
 
