@@ -26,4 +26,14 @@ describe('editTask', () => {
       'Task edited successfully'
     );
   });
+
+  it('should call the executeCommand with only the id', async () => {
+    const args = {
+      id: '123',
+    };
+
+    await editTask.execute(args);
+
+    expect(executeCommand).toHaveBeenCalledWith('backlog task edit 123', 'Task edited successfully');
+  });
 });

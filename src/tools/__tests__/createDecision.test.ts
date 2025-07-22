@@ -18,4 +18,14 @@ describe('createDecision', () => {
 
     expect(executeCommand).toHaveBeenCalledWith('backlog decision create "Test Decision" --status "accepted"', 'Decision created successfully');
   });
+
+  it('should call the executeCommand with only the title', async () => {
+    const args = {
+      title: 'Test Decision',
+    };
+
+    await createDecision.execute(args);
+
+    expect(executeCommand).toHaveBeenCalledWith('backlog decision create "Test Decision"', 'Decision created successfully');
+  });
 });

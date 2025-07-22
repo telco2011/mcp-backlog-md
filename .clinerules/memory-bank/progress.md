@@ -5,6 +5,7 @@
 - All the features are implemented.
 - The MCP server can be started and loads all the tools.
 - Unit tests have been created for all the tools and are passing.
+- The tests have been reviewed and improved to cover more cases.
 
 ## What's Left to Build
 
@@ -17,6 +18,7 @@
 ## Known Issues
 
 - The integration test for the MCP server is failing due to a module resolution issue with the `@modelcontextprotocol/sdk` package.
+- A persistent TypeScript error related to a missing `backlogReInit.ts` file appears when editing test files. This does not seem to affect the tests themselves, but it should be investigated.
 
 ## Evolution of Project Decisions
 

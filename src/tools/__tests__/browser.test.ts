@@ -18,4 +18,35 @@ describe('browser', () => {
 
     expect(executeCommand).toHaveBeenCalledWith('backlog browser --port 8080 --no-open', 'Browser launched successfully');
   });
+
+  it('should call the executeCommand with only the port', async () => {
+    const args = {
+      port: 8080,
+      noOpen: false,
+    };
+
+    await browser.execute(args);
+
+    expect(executeCommand).toHaveBeenCalledWith('backlog browser --port 8080', 'Browser launched successfully');
+  });
+
+  it('should call the executeCommand with only noOpen', async () => {
+    const args = {
+      noOpen: true,
+    };
+
+    await browser.execute(args);
+
+    expect(executeCommand).toHaveBeenCalledWith('backlog browser --no-open', 'Browser launched successfully');
+  });
+
+  it('should call the executeCommand with no arguments', async () => {
+    const args = {
+      noOpen: false,
+    };
+
+    await browser.execute(args);
+
+    expect(executeCommand).toHaveBeenCalledWith('backlog browser', 'Browser launched successfully');
+  });
 });

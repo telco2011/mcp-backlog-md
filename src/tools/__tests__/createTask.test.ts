@@ -31,4 +31,14 @@ describe('createTask', () => {
       'Task created successfully'
     );
   });
+
+  it('should call the executeCommand with only the title', async () => {
+    const args = {
+      title: 'Test Task',
+    };
+
+    await createTask.execute(args);
+
+    expect(executeCommand).toHaveBeenCalledWith('backlog task create "Test Task"', 'Task created successfully');
+  });
 });

@@ -18,4 +18,15 @@ describe('viewTask', () => {
 
     expect(executeCommand).toHaveBeenCalledWith('backlog task view 123 --plain', 'Task viewed successfully');
   });
+
+  it('should call the executeCommand with only the id', async () => {
+    const args = {
+      id: '123',
+      plain: false,
+    };
+
+    await viewTask.execute(args);
+
+    expect(executeCommand).toHaveBeenCalledWith('backlog task view 123', 'Task viewed successfully');
+  });
 });
