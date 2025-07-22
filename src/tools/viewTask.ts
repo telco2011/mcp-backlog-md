@@ -1,4 +1,4 @@
-import * as changeCase from "change-case";
+import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
@@ -21,13 +21,13 @@ import { z } from 'zod';
 
 const schema = {
   id: z.string().describe('The ID of the task to view'),
-  plain: z.boolean().optional().describe('View in plain mode for AI'),
 };
 const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
-  let command = `backlog task view ${params.id}`;
-  if (params.plain) command += ` --plain`;
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  let command = `backlog task view ${params.id} --plain`;
 
   return executeCommand(command, 'Task viewed successfully');
 }

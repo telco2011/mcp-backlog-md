@@ -1,4 +1,4 @@
-import * as changeCase from "change-case";
+import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
@@ -32,7 +32,9 @@ const schema = {
 
 export const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
   let command = `backlog task create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
@@ -55,7 +57,7 @@ export default {
     name,
     title: changeCase.capitalCase(name),
     description: 'Create a new task in backlog.md',
-    inputSchema: schema
+    inputSchema: schema,
   },
   execute,
 };

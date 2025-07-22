@@ -1,4 +1,4 @@
-import * as changeCase from "change-case";
+import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';

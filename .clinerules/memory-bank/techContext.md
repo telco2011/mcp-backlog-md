@@ -12,6 +12,7 @@
 ## Development Setup
 
 The project is intended to be published as an npm package. Currently, for development:
+
 1.  Clone the repository.
 2.  Run `npm install` to install dependencies.
 3.  Run `npm run build` to compile the TypeScript code.

@@ -25,5 +25,4 @@ To run the tests, use the following command:
 npm test
 ```
 
-
 Once the server is running and configured in your MCP client, you can use the exposed tools to interact with `backlog.md`.

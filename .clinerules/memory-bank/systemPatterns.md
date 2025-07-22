@@ -7,13 +7,13 @@ The system is a monolithic MCP server, designed to run as a standalone Node.js p
 - **Entry Point (`src/server.ts`):** Initializes the MCP server.
 - **Tool Loading:** The server reads the `src/tools` directory to discover all available commands.
 - **Tool Interface:** Each file in `src/tools` exports a standardized `McpTool` object containing:
-    - `definition`: An object with `name`, `description`, and an `input_schema` (a Zod schema).
-    - `execute`: An async function that takes the validated arguments and performs the action, typically by calling the `backlog.md` CLI.
+  - `definition`: An object with `name`, `description`, and an `input_schema` (a Zod schema).
+  - `execute`: An async function that takes the validated arguments and performs the action, typically by calling the `backlog.md` CLI.
 - **Request Handling:** The server has a generic `CallTool` handler that:
-    1. Finds the requested tool.
-    2. Validates the incoming arguments against the tool's Zod schema.
-    3. Calls the tool's `execute` method.
-    4. Returns the result or a structured error.
+  1. Finds the requested tool.
+  2. Validates the incoming arguments against the tool's Zod schema.
+  3. Calls the tool's `execute` method.
+  4. Returns the result or a structured error.
 
 This architecture makes the system highly extensible, as adding a new command only requires adding a new file to the `src/tools` directory, with no changes needed to the core server logic.
 

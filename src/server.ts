@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import * as changeCase from "change-case";
+import * as changeCase from 'change-case';
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 
@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import pckJson from '../package.json' with { type: 'json' };
 import { readdir } from 'fs/promises';
-import { McpTool } from "./lib/types.js";
+import { McpTool } from './lib/types.js';
 
 /**
  * server.ts
@@ -39,14 +39,11 @@ export class BacklogServer {
   private tools: McpTool[] = [];
 
   constructor() {
-    this.server = new McpServer(
-      {
-        name: pckJson.name,
-        version: pckJson.version,
-        title: changeCase.capitalCase(pckJson.name)
-      }
-    );
-    console.log('MCP Server:', this.server);
+    this.server = new McpServer({
+      name: pckJson.name,
+      version: pckJson.version,
+      title: changeCase.capitalCase(pckJson.name),
+    });
 
     process.on('SIGINT', async () => {
       await this.server.close();
@@ -67,9 +64,13 @@ export class BacklogServer {
       }
     }
     for (const tool of this.tools) {
-      this.server.tool(changeCase.capitalCase(tool.definition.name), tool.definition.description, tool.definition.inputSchema, tool.execute); 
+      this.server.tool(
+        changeCase.capitalCase(tool.definition.name),
+        tool.definition.description,
+        tool.definition.inputSchema,
+        tool.execute
+      );
     }
-    console.log('MCP Server with tools:', this.server.server.getClientCapabilities());
   }
 
   async run() {

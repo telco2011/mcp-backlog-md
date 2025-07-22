@@ -46,7 +46,7 @@ export async function executeCommand(
 
     console.log(`✅ Success: ${stdout}`);
     return {
-      content: [{ type: 'text', text: `${stdout.trim()}` }]
+      content: [{ type: 'text', text: `${stdout.trim()}` }],
     };
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
