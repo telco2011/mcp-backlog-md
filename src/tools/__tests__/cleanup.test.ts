@@ -11,9 +11,6 @@ describe('cleanup', () => {
   it('should call the executeCommand with the correct arguments', async () => {
     await cleanup.execute();
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog cleanup',
-      'Cleanup successful'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog cleanup', 'Cleanup successful');
   });
 });

@@ -15,9 +15,6 @@ describe('viewDoc', () => {
 
     await viewDoc.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog doc view 123',
-      'Document viewed successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog doc view 123', 'Document viewed successfully');
   });
 });

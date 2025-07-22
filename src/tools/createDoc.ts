@@ -24,11 +24,10 @@ const schema = {
   path: z.string().optional().describe('The path to create the document in'),
   type: z.string().optional().describe('The type of the document'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog doc create "${params.title}"`;
   if (params.path) command += ` --path "${params.path}"`;
   if (params.type) command += ` --type "${params.type}"`;

@@ -16,9 +16,6 @@ describe('createDecision', () => {
 
     await createDecision.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog decision create "Test Decision" --status "accepted"',
-      'Decision created successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog decision create "Test Decision" --status "accepted"', 'Decision created successfully');
   });
 });

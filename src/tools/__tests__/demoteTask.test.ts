@@ -15,9 +15,6 @@ describe('demoteTask', () => {
 
     await demoteTask.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog task demote 123',
-      'Task demoted successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog task demote 123', 'Task demoted successfully');
   });
 });

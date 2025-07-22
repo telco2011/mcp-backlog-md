@@ -15,9 +15,6 @@ describe('archiveTask', () => {
 
     await archiveTask.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog task archive 123',
-      'Task archived successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog task archive 123', 'Task archived successfully');
   });
 });

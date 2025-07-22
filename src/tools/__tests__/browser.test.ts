@@ -16,9 +16,6 @@ describe('browser', () => {
 
     await browser.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog browser --port 8080 --no-open',
-      'Browser launched successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog browser --port 8080 --no-open', 'Browser launched successfully');
   });
 });

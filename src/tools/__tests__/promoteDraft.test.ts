@@ -15,9 +15,6 @@ describe('promoteDraft', () => {
 
     await promoteDraft.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog draft promote 123',
-      'Draft promoted successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog draft promote 123', 'Draft promoted successfully');
   });
 });

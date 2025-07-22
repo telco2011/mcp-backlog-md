@@ -15,9 +15,6 @@ describe('createDraft', () => {
 
     await createDraft.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog draft create "Test Draft"',
-      'Draft created successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog draft create "Test Draft"', 'Draft created successfully');
   });
 });

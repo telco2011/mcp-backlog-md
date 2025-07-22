@@ -11,9 +11,6 @@ describe('configList', () => {
   it('should call the executeCommand with the correct arguments', async () => {
     await configList.execute();
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog config list',
-      'Configuration listed successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog config list', 'Configuration listed successfully');
   });
 });

@@ -16,9 +16,6 @@ describe('viewTask', () => {
 
     await viewTask.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog task view 123 --plain',
-      'Task viewed successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog task view 123 --plain', 'Task viewed successfully');
   });
 });

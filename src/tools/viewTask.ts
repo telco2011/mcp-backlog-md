@@ -21,13 +21,17 @@ import { z } from 'zod';
 
 const schema = {
   id: z.string().describe('The ID of the task to view'),
+  plain: z.boolean().describe('View in plain mode for AI').default(true),
 };
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
-  let command = `backlog task view ${params.id} --plain`;
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+  let command = `backlog task view ${params.id}`;
+  if (params.plain) {
+    command += ' --plain';
+  }
 
   return executeCommand(command, 'Task viewed successfully');
 }

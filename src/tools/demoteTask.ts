@@ -22,11 +22,10 @@ import { z } from 'zod';
 const schema = {
   id: z.string().describe('The ID of the task to demote'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   const command = `backlog task demote ${params.id}`;
   return executeCommand(command, 'Task demoted successfully');
 }

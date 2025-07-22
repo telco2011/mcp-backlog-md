@@ -26,16 +26,12 @@ const schema = {
   plan: z.string().optional().describe('The new plan for the task'),
   ac: z.string().optional().describe('New acceptance criteria for the task'),
   notes: z.string().optional().describe('New notes for the task'),
-  dep: z
-    .string()
-    .optional()
-    .describe('Comma-separated list of new dependencies'),
+  dep: z.string().optional().describe('Comma-separated list of new dependencies'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog task edit ${params.id}`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
   if (params.labels) command += ` --labels ${params.labels}`;

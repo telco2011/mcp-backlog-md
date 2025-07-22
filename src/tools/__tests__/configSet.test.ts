@@ -16,9 +16,6 @@ describe('configSet', () => {
 
     await configSet.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog config set testKey testValue',
-      'Configuration set successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog config set testKey testValue', 'Configuration set successfully');
   });
 });

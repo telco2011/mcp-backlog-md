@@ -64,12 +64,7 @@ export class BacklogServer {
       }
     }
     for (const tool of this.tools) {
-      this.server.tool(
-        changeCase.capitalCase(tool.definition.name),
-        tool.definition.description,
-        tool.definition.inputSchema,
-        tool.execute
-      );
+      this.server.tool(changeCase.capitalCase(tool.definition.name), tool.definition.description, tool.definition.inputSchema, tool.execute);
     }
   }
 

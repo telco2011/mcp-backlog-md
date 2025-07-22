@@ -16,9 +16,6 @@ describe('exportBoard', () => {
 
     await exportBoard.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog export board --file test.md --force',
-      'Board exported successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog export board --file test.md --force', 'Board exported successfully');
   });
 });

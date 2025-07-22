@@ -17,9 +17,6 @@ describe('createDoc', () => {
 
     await createDoc.execute(args);
 
-    expect(executeCommand).toHaveBeenCalledWith(
-      'backlog doc create "Test Doc" --path "/test/path" --type "test-type"',
-      'Document created successfully'
-    );
+    expect(executeCommand).toHaveBeenCalledWith('backlog doc create "Test Doc" --path "/test/path" --type "test-type"', 'Document created successfully');
   });
 });

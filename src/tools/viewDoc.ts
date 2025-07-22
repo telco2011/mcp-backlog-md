@@ -22,11 +22,10 @@ import { z } from 'zod';
 const schema = {
   id: z.string().describe('The ID of the document to view'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   const command = `backlog doc view ${params.id}`;
   return executeCommand(command, 'Document viewed successfully');
 }

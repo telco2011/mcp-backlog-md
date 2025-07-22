@@ -23,11 +23,10 @@ const schema = {
   file: z.string().optional().describe('The file to export to'),
   force: z.boolean().optional().describe('Force overwrite of existing file'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog export board`;
   if (params.file) command += ` --file ${params.file}`;
   if (params.force) command += ` --force`;

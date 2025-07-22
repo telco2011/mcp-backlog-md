@@ -22,8 +22,7 @@ import { promisify } from 'util';
 const execAsync = promisify(exec);
 
 // Centralized repository path.
-const REPO_PATH =
-  '/home/kratos/Development/Github/The-Dave-Stack/mcp-backlog-md';
+const REPO_PATH = '/home/kratos/Development/Github/The-Dave-Stack/mcp-backlog-md';
 
 /**
  * Executes a shell command and returns a standardized response object.
@@ -31,10 +30,7 @@ const REPO_PATH =
  * @param successMessage The base message to return on success.
  * @returns A string containing the result of the command execution.
  */
-export async function executeCommand(
-  command: string,
-  successMessage: string
-): Promise<CallToolResult> {
+export async function executeCommand(command: string, successMessage: string): Promise<CallToolResult> {
   console.log(`🔩 Executing: ${command}`);
   try {
     const { stdout, stderr } = await execAsync(command, { cwd: REPO_PATH });
@@ -46,7 +42,7 @@ export async function executeCommand(
 
     console.log(`✅ Success: ${stdout}`);
     return {
-      content: [{ type: 'text', text: `${stdout.trim()}` }],
+      content: [{ type: 'text', text: `${stdout.trim()}`, _meta: { successMessage } }],
     };
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);

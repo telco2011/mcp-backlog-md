@@ -21,16 +21,12 @@ import { z } from 'zod';
 
 const schema = {
   port: z.number().optional().describe('The port to launch the web UI on'),
-  noOpen: z
-    .boolean()
-    .optional()
-    .describe("Don't open the browser automatically"),
+  noOpen: z.boolean().optional().describe("Don't open the browser automatically").default(true),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog browser`;
   if (params.port) command += ` --port ${params.port}`;
   if (params.noOpen) command += ` --no-open`;
