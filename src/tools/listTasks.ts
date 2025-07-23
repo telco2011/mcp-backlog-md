@@ -23,6 +23,7 @@ const schema = {
   status: z.string().optional().describe('Filter by status'),
   assignee: z.string().optional().describe('Filter by assignee'),
   parent: z.string().optional().describe('Filter by parent task ID'),
+  plain: z.boolean().describe('View in plain mode for AI').default(true),
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
@@ -32,6 +33,7 @@ async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult>
   if (params.status) command += ` --status "${params.status}"`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
   if (params.parent) command += ` --parent "${params.parent}"`;
+  if (params.plain) command += ' --plain';
 
   return executeCommand(command, 'Tasks listed successfully');
 }

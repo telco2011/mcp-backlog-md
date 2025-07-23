@@ -29,9 +29,7 @@ const zSchema = z.object(schema);
 
 async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   let command = `backlog task view ${params.id}`;
-  if (params.plain) {
-    command += ' --plain';
-  }
+  if (params.plain) command += ' --plain';
 
   return executeCommand(command, 'Task viewed successfully');
 }

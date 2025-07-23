@@ -9,7 +9,8 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
     "check-all": "npm-run-all format lint build",
-    "test": "jest"
+    "test": "jest",
+    "inspector": "npx @modelcontextprotocol/inspector"
   },
   "keywords": [],
   "author": "",
