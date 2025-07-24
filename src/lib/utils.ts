@@ -1,1 +1,1 @@
-export const backlogCommand = 'backlog';
+export const backlogCommand = 'npx backlog';
