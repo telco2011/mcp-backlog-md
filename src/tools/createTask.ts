@@ -2,6 +2,7 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import logger from '../lib/logger.js';
 /**
  * @file createTask.ts
  * @description Defines the MCP tool for creating a new task in backlog.md.
@@ -13,6 +14,7 @@ import { executeCommand } from '../lib/commandExecutor.js';
 import { z } from 'zod';
 
 const name = 'createTask';
+const toolLogger = logger.child({ context: name });
 
 // Use the centralized task schema
 const schema = {
@@ -32,7 +34,10 @@ const schema = {
 
 export const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  toolLogger.info(params, 'Creating task');
   let command = `backlog task create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;

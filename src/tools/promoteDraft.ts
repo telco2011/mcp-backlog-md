@@ -2,6 +2,7 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import logger from '../lib/logger.js';
 /**
  * promoteDraft.ts
  *
@@ -19,13 +20,17 @@ import { executeCommand } from '../lib/commandExecutor.js';
  */
 import { z } from 'zod';
 
+const toolLogger = logger.child({ context: 'PromoteDraft' });
 const schema = {
   id: z.string().describe('The ID of the draft to promote'),
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  toolLogger.info(params, 'Promoting draft');
   const command = `backlog draft promote ${params.id}`;
   return executeCommand(command, 'Draft promoted successfully');
 }

@@ -2,6 +2,7 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import logger from '../lib/logger.js';
 /**
  * viewDoc.ts
  *
@@ -19,13 +20,17 @@ import { executeCommand } from '../lib/commandExecutor.js';
  */
 import { z } from 'zod';
 
+const toolLogger = logger.child({ context: 'ViewDoc' });
 const schema = {
   id: z.string().describe('The ID of the document to view'),
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  toolLogger.info(params, 'Viewing document');
   const command = `backlog doc view ${params.id}`;
   return executeCommand(command, 'Document viewed successfully');
 }

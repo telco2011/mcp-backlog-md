@@ -1,15 +1,7 @@
 #!/usr/bin/env node
 
-import * as changeCase from 'change-case';
-
-import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-
-import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { fileURLToPath } from 'url';
-import path from 'path';
-import pckJson from '../package.json' with { type: 'json' };
-import { readdir } from 'fs/promises';
-import { McpTool } from './lib/types.js';
+import { BacklogMCPServer } from './lib/backlogMCPServer.js';
+import logger from './lib/logger.js';
 
 /**
  * server.ts
@@ -30,50 +22,11 @@ import { McpTool } from './lib/types.js';
  * Last Updated:
  * 2025-07-21 by Cline (Refactored for new tool structure and simplified logic)
  */
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export class BacklogServer {
-  private server: McpServer;
-  private tools: McpTool[] = [];
-
-  constructor() {
-    this.server = new McpServer({
-      name: pckJson.name,
-      version: pckJson.version,
-      title: changeCase.capitalCase(pckJson.name),
-    });
-
-    process.on('SIGINT', async () => {
-      await this.server.close();
-      process.exit(0);
-    });
-  }
-
-  private async registerTools() {
-    const toolsDir = path.join(__dirname, 'tools');
-    const files = await readdir(toolsDir);
-    for (const file of files) {
-      if (file.endsWith('.js')) {
-        // After compilation, files will be .js
-        const toolModule = await import(path.join(toolsDir, file));
-        if (toolModule.default) {
-          this.tools.push(toolModule.default);
-        }
-      }
-    }
-    for (const tool of this.tools) {
-      this.server.tool(changeCase.capitalCase(tool.definition.name), tool.definition.description, tool.definition.inputSchema, tool.execute);
-    }
-  }
-
-  async run() {
-    await this.registerTools();
-    const transport = new StdioServerTransport();
-    await this.server.connect(transport);
-  }
-}
-
-const server = new BacklogServer();
-server.run().catch(console.error);
+const serverLogger = logger.child({ context: 'Server' });
+serverLogger.info('Starting Backlog MCP Server...');
+const server = new BacklogMCPServer();
+server.run().catch((err) => {
+  serverLogger.error({ err }, 'Server failed to run');
+  console.error(err);
+  process.exit(1);
+});

@@ -2,6 +2,7 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import logger from '../lib/logger.js';
 /**
  * configSet.ts
  *
@@ -19,6 +20,7 @@ import { executeCommand } from '../lib/commandExecutor.js';
  */
 import { z } from 'zod';
 
+const toolLogger = logger.child({ context: 'ConfigSet' });
 const schema = {
   key: z.string().describe('The configuration key to set'),
   value: z.string().describe('The value to set for the configuration key'),
@@ -26,7 +28,10 @@ const schema = {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  toolLogger.info(params, 'Setting configuration');
   const command = `backlog config set ${params.key} ${params.value}`;
   return executeCommand(command, 'Configuration set successfully');
 }
