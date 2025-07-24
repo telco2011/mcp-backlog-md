@@ -12,11 +12,11 @@
     "clean:all": "run-s clean clean:all:cmd",
     "clean:all:cmd": "rimraf node_modules package-lock.json",
     "clean": "rimraf build",
-    "build": "npm run clean && tsc && chmod 755 build/src/server.js",
+    "build": "run-s clean build:cmd",
+    "build:cmd": "tsc && chmod 755 build/src/server.js",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write .",
-    "check-all": "npm-run-all format lint build",
-    "test": "jest",
+    "check-all": "run-s format lint build",
     "inspector": "npx @modelcontextprotocol/inspector build/src/server.js"
   },
   "keywords": [
