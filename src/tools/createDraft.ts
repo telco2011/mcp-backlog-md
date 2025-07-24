@@ -1,52 +1,55 @@
-/**
- * @file createDraft.ts
- * @description Defines the MCP tool for creating a draft task in backlog.md.
- * This tool maps directly to the `backlog draft create` CLI command.
- */
-import { exec } from 'child_process';
+import * as changeCase from 'change-case';
 
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
- * @description The definition of the `createDraft` tool.
- * This object describes the tool's name, description, and input schema.
+ * createDraft.ts
+ *
+ * Purpose:
+ * - Provides the functionality to create a new draft task in the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * - Defines a Zod schema for input validation.
+ * - The `execute` function constructs a `backlog draft create` command.
+ * - The command is passed to the centralized `executeCommand` function.
+ *
+ * Last Updated:
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
-const definition = {
-  name: 'createDraft',
-  description: 'Create a draft task in backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      title: {
-        type: 'string',
-        description: 'The title of the draft',
-      },
-    },
-    required: ['title'],
-  },
+import { z } from 'zod';
+
+const name = 'createDraft';
+const schema = {
+  title: z.string().describe('The title of the draft'),
+  description: z.string().optional().describe('The description of the draft.'),
+  assignee: z.string().optional().describe('The assignee of the draft.'),
+  status: z.string().optional().describe('The status of the draft.'),
+  labels: z.string().optional().describe('Comma-separated list of labels for the draft.'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const zSchema = z.object(schema);
 
-/**
- * @description Executes the `createDraft` tool.
- * This function receives the title, constructs the `backlog draft create`
- * command string, and executes it using `child_process.exec`.
- * @param {any} args - The arguments for the tool, matching the inputSchema.
- * @returns {Promise<string>} A promise that resolves with the command's stdout
- * or rejects with an error.
- */
-async function execute(args: any): Promise<string> {
-  const command = `backlog draft create "${args.title}"`;
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  console.info('Creating draft', params);
+  let command = `${backlogCommand} draft create "${params.title}"`;
+  if (params.description) command += ` --description "${params.description}"`;
+  if (params.assignee) command += ` --assignee "${params.assignee}"`;
+  if (params.status) command += ` --status "${params.status}"`;
+  if (params.labels) command += ` --labels "${params.labels}"`;
 
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+  return executeCommand(command, 'Draft created successfully');
 }
 
 export default {
-  definition,
+  definition: {
+    name,
+    title: changeCase.capitalCase(name),
+    description: 'Create a draft task in backlog.md',
+    inputSchema: schema,
+  },
   execute,
 };

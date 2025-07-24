@@ -1,52 +1,46 @@
-/**
- * @file viewDoc.ts
- * @description Defines the MCP tool for viewing a document in backlog.md.
- * This tool maps directly to the `backlog doc view` CLI command.
- */
-import { exec } from 'child_process';
+import * as changeCase from 'change-case';
 
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
- * @description The definition of the `viewDoc` tool.
- * This object describes the tool's name, description, and input schema.
+ * viewDoc.ts
+ *
+ * Purpose:
+ * - Provides the functionality to view a document in the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * - Defines a Zod schema for input validation.
+ * - The `execute` function constructs a `backlog doc view` command.
+ * - The command is passed to the centralized `executeCommand` function.
+ *
+ * Last Updated:
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
-const definition = {
-  name: 'viewDoc',
-  description: 'View a document in backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      id: {
-        type: 'string',
-        description: 'The ID of the document to view',
-      },
-    },
-    required: ['id'],
-  },
+import { z } from 'zod';
+
+const name = 'viewDoc';
+const schema = {
+  id: z.string().describe('The ID of the document to view'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const zSchema = z.object(schema);
 
-/**
- * @description Executes the `viewDoc` tool.
- * This function receives the document ID, constructs the `backlog doc view`
- * command string, and executes it using `child_process.exec`.
- * @param {any} args - The arguments for the tool, matching the inputSchema.
- * @returns {Promise<string>} A promise that resolves with the command's stdout
- * or rejects with an error.
- */
-async function execute(args: any): Promise<string> {
-  const command = `backlog doc view ${args.id}`;
-
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  console.info('Viewing document', params);
+  const command = `${backlogCommand} doc view ${params.id}`;
+  return executeCommand(command, 'Document viewed successfully');
 }
 
 export default {
-  definition,
+  definition: {
+    name,
+    title: changeCase.capitalCase(name),
+    description: 'View a document in backlog.md',
+    inputSchema: schema,
+  },
   execute,
 };

@@ -1,58 +1,54 @@
-/**
- * @file exportBoard.ts
- * @description Defines the MCP tool for exporting the Kanban board to a markdown file in backlog.md.
- * This tool maps directly to the `backlog board export` CLI command.
- */
-import { exec } from 'child_process';
+import * as changeCase from 'change-case';
 
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
- * @description The definition of the `exportBoard` tool.
- * This object describes the tool's name, description, and input schema.
+ * exportBoard.ts
+ *
+ * Purpose:
+ * - Provides the functionality to export the Kanban board to a markdown file.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * - Defines a Zod schema for input validation.
+ * - The `execute` function constructs a `backlog export board` command.
+ * - The command is passed to the centralized `executeCommand` function.
+ *
+ * Last Updated:
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
-const definition = {
-  name: 'exportBoard',
-  description: 'Export the Kanban board to a markdown file',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      file: {
-        type: 'string',
-        description: 'The file to export to',
-      },
-      force: {
-        type: 'boolean',
-        description: 'Force overwrite of existing file',
-      },
-    },
-  },
+import { z } from 'zod';
+
+const name = 'exportBoard';
+const schema = {
+  file: z.string().optional().describe('The file to export to'),
+  force: z.boolean().optional().describe('Force overwrite of existing file'),
+  readme: z.boolean().optional().describe('Export to README.md with markers'),
+  exportVersion: z.string().optional().describe('Version to include in the export'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const zSchema = z.object(schema);
 
-/**
- * @description Executes the `exportBoard` tool.
- * This function receives the arguments, constructs the `backlog board export`
- * command string with all the provided options, and executes it using
- * `child_process.exec`.
- * @param {any} args - The arguments for the tool, matching the inputSchema.
- * @returns {Promise<string>} A promise that resolves with the command's stdout
- * or rejects with an error.
- */
-async function execute(args: any): Promise<string> {
-  let command = `backlog board export`;
-  if (args.file) command += ` ${args.file}`;
-  if (args.force) command += ` --force`;
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  console.info('Exporting board', params);
+  let command = `${backlogCommand} export board`;
+  if (params.file) command += ` --file ${params.file}`;
+  if (params.force) command += ` --force`;
+  if (params.readme) command += ` --readme`;
+  if (params.exportVersion) command += ` --export-version ${params.exportVersion}`;
 
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+  return executeCommand(command, 'Board exported successfully');
 }
 
 export default {
-  definition,
+  definition: {
+    name,
+    title: changeCase.capitalCase(name),
+    description: 'Export the Kanban board to a markdown file',
+    inputSchema: schema,
+  },
   execute,
 };

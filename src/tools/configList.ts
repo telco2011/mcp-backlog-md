@@ -1,45 +1,42 @@
-/**
- * @file configList.ts
- * @description Defines the MCP tool for listing the configuration in backlog.md.
- * This tool maps directly to the `backlog config list` CLI command.
- */
-import { exec } from 'child_process';
+import * as changeCase from 'change-case';
 
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
+import { executeCommand } from '../lib/commandExecutor.js';
 /**
- * @description The definition of the `configList` tool.
- * This object describes the tool's name, description, and input schema.
+ * configList.ts
+ *
+ * Purpose:
+ * - Provides the functionality to list the configuration in the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * - Defines an empty Zod schema as no parameters are needed.
+ * - The `execute` function constructs a `backlog config list` command.
+ * - The command is passed to the centralized `executeCommand` function.
+ *
+ * Last Updated:
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
-const definition = {
-  name: 'configList',
-  description: 'List the configuration in backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {},
-  },
-};
+import { z } from 'zod';
 
-/**
- * @description Executes the `configList` tool.
- * This function constructs and executes the `backlog config list`
- * command string using `child_process.exec`.
- * @returns {Promise<string>} A promise that resolves with the command's stdout
- * or rejects with an error.
- */
-async function execute(): Promise<string> {
-  const command = `backlog config list`;
+const name = 'configList';
+const schema = {};
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const zSchema = z.object(schema);
 
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+async function execute(): Promise<CallToolResult> {
+  console.info('Listing configuration');
+  const command = `${backlogCommand} config list`;
+  return executeCommand(command, 'Configuration listed successfully');
 }
 
 export default {
-  definition,
+  definition: {
+    name,
+    title: changeCase.capitalCase(name),
+    description: 'List the configuration in backlog.md',
+    inputSchema: schema,
+  },
   execute,
 };
