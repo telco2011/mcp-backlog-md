@@ -1,4 +1,4 @@
-name: Build and Test
+name: Build, Test, and Release
 
 on:
   push:
@@ -24,3 +24,51 @@ jobs:
     - run: npm ci
     - run: npm run lint
     - run: npm run check-all --if-present
+
+  release:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get version from package.json
+        id: get_version
+        run: echo "VERSION=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ steps.get_version.outputs.VERSION }}
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  create-pull-request:
+    needs: build
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Create Pull Request
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if ! gh pr list --head develop --base main --json number | jq -e 'any'; then
+            gh pr create \
+              --base main \
+              --head develop \
+              --title "Merge develop into main" \
+              --body "This PR was automatically created by the CI workflow after a successful build on the develop branch."
+          else
+            echo "A pull request from develop to main already exists."
+          fi

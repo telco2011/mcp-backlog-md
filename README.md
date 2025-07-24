@@ -19,13 +19,25 @@ This project provides an MCP (Model Context Protocol) server for the `backlog.md
 
 ### Testing
 
-To run the tests, use the following command:
+To run the unit tests, use the following command:
 
 ```bash
 npm test
 ```
 
-The [MCP inspector](https://github.com/modelcontextprotocol/inspector) will be started. Once the inspector is running and configured in your MCP client, you can use the exposed tools to interact with `backlog.md`.
+To manually test the server with a client, you can use the [MCP inspector](https://github.com/modelcontextprotocol/inspector):
+
+```bash
+npm run inspector
+```
+
+## CI/CD
+
+This project uses GitHub Actions to automate the build, test, and release process.
+
+-   **Build and Test:** On every push or pull request to the `main` and `develop` branches, the workflow in `.github/workflows/build.yml` is triggered. It installs dependencies, lints the code, builds the project, and runs the tests.
+-   **Pull Request Creation:** If a build on the `develop` branch is successful, a pull request is automatically created to merge `develop` into `main`.
+-   **Release and Publish:** When a push is made to the `main` branch, a new GitHub Release is created with a tag corresponding to the version in `package.json`. This, in turn, triggers the `.github/workflows/publish.yml` workflow to publish the package to the npm registry.
 
 ## Development
 
