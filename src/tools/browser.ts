@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * browser.ts
  *
@@ -20,7 +19,7 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'Browser' });
+const name = 'browser';
 const schema = {
   port: z.number().optional().describe('The port to launch the web UI on'),
   noOpen: z.boolean().optional().describe("Don't open the browser automatically").default(true),
@@ -31,7 +30,7 @@ const zSchema = z.object(schema);
 async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
-  toolLogger.info(params, 'Launching browser');
+  console.info('Launching browser', params);
   let command = `backlog browser`;
   if (params.port) command += ` --port ${params.port}`;
   if (params.noOpen) command += ` --no-open`;
@@ -41,8 +40,8 @@ async function execute(
 
 export default {
   definition: {
-    name: 'browser',
-    title: changeCase.capitalCase('browser'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'Launch the web UI for backlog.md',
     inputSchema: schema,
   },

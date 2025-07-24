@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * createDecision.ts
  *
@@ -20,7 +19,7 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'CreateDecision' });
+const name = 'createDecision';
 const schema = {
   title: z.string().describe('The title of the decision'),
   status: z.string().optional().describe('The status of the decision'),
@@ -31,7 +30,7 @@ const zSchema = z.object(schema);
 async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
-  toolLogger.info(params, 'Creating decision');
+  console.info('Creating decision', params);
   let command = `backlog decision create "${params.title}"`;
   if (params.status) command += ` --status "${params.status}"`;
 
@@ -40,8 +39,8 @@ async function execute(
 
 export default {
   definition: {
-    name: 'createDecision',
-    title: changeCase.capitalCase('createDecision'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'Create a new decision in backlog.md',
     inputSchema: schema,
   },

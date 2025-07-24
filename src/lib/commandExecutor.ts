@@ -17,11 +17,9 @@
  */
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { exec } from 'child_process';
-import logger from './logger.js';
 import { promisify } from 'util';
 
 const execAsync = promisify(exec);
-const cmdLogger = logger.child({ context: 'CommandExecutor' });
 
 // Centralized repository path.
 const REPO_PATH = '/home/kratos/Development/Github/The-Dave-Stack/mcp-backlog-md';
@@ -36,16 +34,16 @@ export async function executeCommand(
   command: string,
   successMessage: string
 ): Promise<CallToolResult> {
-  cmdLogger.info({ command }, 'Executing command');
+  console.info({ command }, 'Executing command');
   try {
     const { stdout, stderr } = await execAsync(command, { cwd: REPO_PATH });
 
     if (stderr) {
-      cmdLogger.error({ stderr }, 'Command execution resulted in stderr');
+      console.error({ stderr }, 'Command execution resulted in stderr');
       throw new Error(`Command execution error: ${stderr}`);
     }
 
-    cmdLogger.info({ stdout }, 'Command executed successfully');
+    console.info({ stdout }, 'Command executed successfully');
     return {
       content: [
         { type: 'text', text: `${stdout.trim()}`, _meta: { successMessage } },
@@ -53,7 +51,7 @@ export async function executeCommand(
     };
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
-    cmdLogger.error({ err: error }, 'Failed to execute command');
+    console.error({ err: error }, 'Failed to execute command');
     // Re-throw the error to be caught by the server's central error handler
     throw new Error(`Server execution failed: ${message}`);
   }

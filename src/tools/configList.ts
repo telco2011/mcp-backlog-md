@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * configList.ts
  *
@@ -20,21 +19,21 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'ConfigList' });
+const name = 'configList';
 const schema = {};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
 async function execute(): Promise<CallToolResult> {
-  toolLogger.info('Listing configuration');
+  console.info('Listing configuration');
   const command = `backlog config list`;
   return executeCommand(command, 'Configuration listed successfully');
 }
 
 export default {
   definition: {
-    name: 'configList',
-    title: changeCase.capitalCase('configList'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'List the configuration in backlog.md',
     inputSchema: schema,
   },

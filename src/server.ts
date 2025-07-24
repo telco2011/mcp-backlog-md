@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
+import "mcps-logger/console";
+
 import { BacklogMCPServer } from './lib/backlogMCPServer.js';
-import logger from './lib/logger.js';
 
 /**
  * server.ts
@@ -22,11 +23,10 @@ import logger from './lib/logger.js';
  * Last Updated:
  * 2025-07-21 by Cline (Refactored for new tool structure and simplified logic)
  */
-const serverLogger = logger.child({ context: 'Server' });
-serverLogger.info('Starting Backlog MCP Server...');
+console.info('Starting Backlog MCP Server...');
 const server = new BacklogMCPServer();
 server.run().catch((err) => {
-  serverLogger.error({ err }, 'Server failed to run');
+  console.error('Server failed to run', err);
   console.error(err);
   process.exit(1);
 });

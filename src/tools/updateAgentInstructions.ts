@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * updateAgentInstructions.ts
  *
@@ -20,21 +19,21 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'UpdateAgentInstructions' });
+const name = 'updateAgentInstructions';
 const schema = {};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
 async function execute(): Promise<CallToolResult> {
-  toolLogger.info('Updating agent instructions');
+  console.info('Updating agent instructions');
   const command = `backlog update-agent-instructions`;
   return executeCommand(command, 'Agent instructions updated successfully');
 }
 
 export default {
   definition: {
-    name: 'updateAgentInstructions',
-    title: changeCase.capitalCase('updateAgentInstructions'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'Update agent instruction files in backlog.md',
     inputSchema: schema,
   },

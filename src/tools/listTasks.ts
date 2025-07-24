@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * listTasks.ts
  *
@@ -20,7 +19,7 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'ListTasks' });
+const name = 'listTasks';
 const schema = {
   status: z.string().optional().describe('Filter by status'),
   assignee: z.string().optional().describe('Filter by assignee'),
@@ -33,7 +32,7 @@ const zSchema = z.object(schema);
 async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
-  toolLogger.info(params, 'Listing tasks');
+  console.info('Listing tasks', params);
   let command = `backlog task list`;
   if (params.status) command += ` --status "${params.status}"`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
@@ -45,8 +44,8 @@ async function execute(
 
 export default {
   definition: {
-    name: 'listTasks',
-    title: changeCase.capitalCase('listTasks'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'List tasks in backlog.md',
     inputSchema: schema,
   },

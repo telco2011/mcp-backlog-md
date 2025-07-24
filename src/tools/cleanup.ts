@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * cleanup.ts
  *
@@ -20,21 +19,21 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'Cleanup' });
+const name = 'cleanup';
 const schema = {};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
 async function execute(): Promise<CallToolResult> {
-  toolLogger.info('Cleaning up tasks');
+  console.info('Cleaning up tasks');
   const command = `backlog cleanup`;
   return executeCommand(command, 'Cleanup successful');
 }
 
 export default {
   definition: {
-    name: 'cleanup',
-    title: changeCase.capitalCase('cleanup'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'Cleanup done tasks in backlog.md',
     inputSchema: schema,
   },

@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * editTask.ts
  *
@@ -20,7 +19,7 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'EditTask' });
+const name = 'editTask';
 const schema = {
   id: z.string().describe('The ID of the task to edit'),
   assignee: z.string().optional().describe('The new assignee of the task'),
@@ -36,7 +35,7 @@ const zSchema = z.object(schema);
 async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
-  toolLogger.info(params, 'Editing task');
+  console.info('Editing task', params);
   let command = `backlog task edit ${params.id}`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
   if (params.labels) command += ` --labels ${params.labels}`;
@@ -50,8 +49,8 @@ async function execute(
 
 export default {
   definition: {
-    name: 'editTask',
-    title: changeCase.capitalCase('editTask'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'Edit an existing task in backlog.md',
     inputSchema: schema,
   },

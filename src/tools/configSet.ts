@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * configSet.ts
  *
@@ -20,7 +19,7 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'ConfigSet' });
+const name = 'configSet';
 const schema = {
   key: z.string().describe('The configuration key to set'),
   value: z.string().describe('The value to set for the configuration key'),
@@ -31,15 +30,15 @@ const zSchema = z.object(schema);
 async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
-  toolLogger.info(params, 'Setting configuration');
+  console.info('Setting configuration', params);
   const command = `backlog config set ${params.key} ${params.value}`;
   return executeCommand(command, 'Configuration set successfully');
 }
 
 export default {
   definition: {
-    name: 'configSet',
-    title: changeCase.capitalCase('configSet'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'Set a configuration value in backlog.md',
     inputSchema: schema,
   },

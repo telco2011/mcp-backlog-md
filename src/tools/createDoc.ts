@@ -2,7 +2,6 @@ import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { executeCommand } from '../lib/commandExecutor.js';
-import logger from '../lib/logger.js';
 /**
  * createDoc.ts
  *
@@ -20,7 +19,7 @@ import logger from '../lib/logger.js';
  */
 import { z } from 'zod';
 
-const toolLogger = logger.child({ context: 'CreateDoc' });
+const name = 'createDoc';
 const schema = {
   title: z.string().describe('The title of the document'),
   path: z.string().optional().describe('The path to create the document in'),
@@ -32,7 +31,7 @@ const zSchema = z.object(schema);
 async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
-  toolLogger.info(params, 'Creating document');
+  console.info('Creating document', params);
   let command = `backlog doc create "${params.title}"`;
   if (params.path) command += ` --path "${params.path}"`;
   if (params.type) command += ` --type "${params.type}"`;
@@ -42,8 +41,8 @@ async function execute(
 
 export default {
   definition: {
-    name: 'createDoc',
-    title: changeCase.capitalCase('createDoc'),
+    name,
+    title: changeCase.capitalCase(name),
     description: 'Create a new document in backlog.md',
     inputSchema: schema,
   },
