@@ -8,8 +8,7 @@
 - **Libraries:**
   - zod: for schema validation
   - commander: for command-line interface
-  - pino: for logging
-  - pino-pretty: for pretty-printing logs
+  - change-case: for case conversion
 
 ## Development Setup
 
@@ -28,7 +27,7 @@ The project is intended to be published as an npm package. Currently, for develo
 
 - **@modelcontextprotocol/sdk:** For MCP server implementation.
 - **zod:** For schema validation of tool inputs.
-- **pino**: For structured logging.
+- **change-case:** For case conversion of tool names.
 - **backlog.md:** External CLI tool that this server wraps.
 
 ## Tool Usage Patterns
@@ -37,6 +36,4 @@ The project is intended to be published as an npm package. Currently, for develo
 
 ## Environment Variables
 
-- `NODE_ENV`: Controls the logging output format.
-  - `development`: Enables `pino-pretty` for colorized, human-readable logs.
-  - `production` (or any other value): Enables structured JSON logging for production environments.
+- `NODE_ENV`: Can be set to `development` or `production`. This is a standard Node.js environment variable that can be used for conditional logic, but it is not currently used in this project.

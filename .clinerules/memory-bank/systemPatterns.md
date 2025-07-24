@@ -19,7 +19,8 @@ This architecture makes the system highly extensible, as adding a new command on
 
 ## Key Technical Decisions
 
-[List any major technical decisions that have been made, e.g., choice of database, messaging system, etc.]
+- **Zod for Validation:** Zod is used for schema definition and input validation for all tools. This ensures that the `execute` function for each tool receives a correctly typed and validated parameters object, preventing a large class of runtime errors.
+- **change-case for Naming:** The `change-case` library is used to automatically generate user-friendly tool titles from their camelCase names, ensuring consistency in the MCP server's tool manifest.
 
 ## Design Patterns
 
