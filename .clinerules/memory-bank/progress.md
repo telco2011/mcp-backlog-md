@@ -6,6 +6,7 @@
 - The MCP server can be started and loads all the tools.
 - Unit tests have been created for all the tools and are passing.
 - The tests have been reviewed and improved to cover more cases.
+- A comprehensive, contextual logging system using Pino has been integrated.
 
 ## What's Left to Build
 

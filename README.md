@@ -26,3 +26,16 @@ npm test
 ```
 
 Once the server is running and configured in your MCP client, you can use the exposed tools to interact with `backlog.md`.
+
+## Logging
+
+This server uses `pino` for structured, contextual logging. When running the server, you will see detailed logs in a human-readable format, like this:
+
+```
+[2025-07-24T09:53:34.000Z] INFO [Server]: Starting Backlog MCP Server...
+[2025-07-24T09:53:34.000Z] INFO [BacklogMCPServer]: Initializing Backlog MCP Server...
+[2025-07-24T09:53:34.000Z] INFO [BacklogMCPServer]: Scanning for tools in /path/to/your/project/src/tools
+...
+```
+
+Each log entry is tagged with its context (e.g., `Server`, `BacklogMCPServer`, `CreateTask`), making it easy to trace the application's execution flow.

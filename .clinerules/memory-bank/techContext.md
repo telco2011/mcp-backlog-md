@@ -8,6 +8,8 @@
 - **Libraries:**
   - zod: for schema validation
   - commander: for command-line interface
+  - pino: for logging
+  - pino-pretty: for pretty-printing logs
 
 ## Development Setup
 
@@ -26,6 +28,7 @@ The project is intended to be published as an npm package. Currently, for develo
 
 - **@modelcontextprotocol/sdk:** For MCP server implementation.
 - **zod:** For schema validation of tool inputs.
+- **pino**: For structured logging.
 - **backlog.md:** External CLI tool that this server wraps.
 
 ## Tool Usage Patterns
