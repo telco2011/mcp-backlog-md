@@ -34,3 +34,9 @@ The project is intended to be published as an npm package. Currently, for develo
 ## Tool Usage Patterns
 
 [Describe any patterns for using specific tools.]
+
+## Environment Variables
+
+- `NODE_ENV`: Controls the logging output format.
+  - `development`: Enables `pino-pretty` for colorized, human-readable logs.
+  - `production` (or any other value): Enables structured JSON logging for production environments.

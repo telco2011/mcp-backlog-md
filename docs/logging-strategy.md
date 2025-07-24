@@ -32,6 +32,14 @@ To ensure traceability, we use child loggers. Each major component of the applic
 
 This ensures that every log message is clearly attributable to its source, which is invaluable for debugging and monitoring.
 
+## Environments
+
+The logging output is dependent on the `NODE_ENV` environment variable.
+
+- **Development (`NODE_ENV=development`)**: When `NODE_ENV` is set to `development`, the logger uses `pino-pretty` to produce colorized, human-readable output. This is the recommended setting for local development.
+
+- **Production (Default)**: If `NODE_ENV` is not set or has any value other than `development`, the logger will output structured, newline-delimited JSON (NDJSON). This format is optimized for log collection, parsing, and analysis by external services (e.g., Datadog, Splunk, or the ELK stack).
+
 ## Implementation
 
 The core logger is configured in `src/lib/logger.ts`. This module exports a base `pino` instance that is then used to create child loggers throughout the application.
