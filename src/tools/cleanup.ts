@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * cleanup.ts
@@ -26,7 +27,7 @@ const zSchema = z.object(schema);
 
 async function execute(): Promise<CallToolResult> {
   console.info('Cleaning up tasks');
-  const command = `backlog cleanup`;
+  const command = `${backlogCommand} cleanup`;
   return executeCommand(command, 'Cleanup successful');
 }
 

@@ -1,4 +1,3 @@
-import "mcps-logger/console";
 import * as changeCase from 'change-case';
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';

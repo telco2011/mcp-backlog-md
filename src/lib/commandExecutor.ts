@@ -53,6 +53,6 @@ export async function executeCommand(
     const message = error instanceof Error ? error.message : String(error);
     console.error({ err: error }, 'Failed to execute command');
     // Re-throw the error to be caught by the server's central error handler
-    throw new Error(`Server execution failed: ${message}`);
+    throw new Error(`Server execution failed: ${message}. Command executed: ${command}`);
   }
 }

@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * createDraft.ts
@@ -22,6 +23,10 @@ import { z } from 'zod';
 const name = 'createDraft';
 const schema = {
   title: z.string().describe('The title of the draft'),
+  description: z.string().optional().describe('The description of the draft.'),
+  assignee: z.string().optional().describe('The assignee of the draft.'),
+  status: z.string().optional().describe('The status of the draft.'),
+  labels: z.string().optional().describe('Comma-separated list of labels for the draft.'),
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
@@ -30,7 +35,12 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Creating draft', params);
-  const command = `backlog draft create "${params.title}"`;
+  let command = `${backlogCommand} draft create "${params.title}"`;
+  if (params.description) command += ` --description "${params.description}"`;
+  if (params.assignee) command += ` --assignee "${params.assignee}"`;
+  if (params.status) command += ` --status "${params.status}"`;
+  if (params.labels) command += ` --labels "${params.labels}"`;
+
   return executeCommand(command, 'Draft created successfully');
 }
 

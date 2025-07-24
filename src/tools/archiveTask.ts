@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * archiveTask.ts
@@ -30,7 +31,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Archiving task', params);
-  const command = `backlog task archive ${params.id}`;
+  const command = `${backlogCommand} task archive ${params.id}`;
   return executeCommand(command, 'Task archived successfully');
 }
 

@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * demoteTask.ts
@@ -30,7 +31,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Demoting task', params);
-  const command = `backlog task demote ${params.id}`;
+  const command = `${backlogCommand} task demote ${params.id}`;
   return executeCommand(command, 'Task demoted successfully');
 }
 

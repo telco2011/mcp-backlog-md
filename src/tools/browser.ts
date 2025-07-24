@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * browser.ts
@@ -31,7 +32,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Launching browser', params);
-  let command = `backlog browser`;
+  let command = `${backlogCommand} browser`;
   if (params.port) command += ` --port ${params.port}`;
   if (params.noOpen) command += ` --no-open`;
 

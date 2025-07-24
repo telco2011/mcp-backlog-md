@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * createDecision.ts
@@ -31,7 +32,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Creating decision', params);
-  let command = `backlog decision create "${params.title}"`;
+  let command = `${backlogCommand} decision create "${params.title}"`;
   if (params.status) command += ` --status "${params.status}"`;
 
   return executeCommand(command, 'Decision created successfully');

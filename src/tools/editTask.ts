@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * editTask.ts
@@ -22,12 +23,18 @@ import { z } from 'zod';
 const name = 'editTask';
 const schema = {
   id: z.string().describe('The ID of the task to edit'),
+  title: z.string().optional().describe('The new title for the task'),
+  description: z.string().optional().describe('The new description for the task'),
   assignee: z.string().optional().describe('The new assignee of the task'),
-  labels: z.string().optional().describe('Comma-separated list of new labels'),
-  plan: z.string().optional().describe('The new plan for the task'),
-  ac: z.string().optional().describe('New acceptance criteria for the task'),
-  notes: z.string().optional().describe('New notes for the task'),
-  dep: z.string().optional().describe('Comma-separated list of new dependencies'),
+  status: z.string().optional().describe('The new status of the task'),
+  label: z.string().optional().describe('Set a new comma-separated list of labels'),
+  priority: z.string().optional().describe('The new priority for the task (high, medium, low)'),
+  addLabel: z.string().optional().describe('Add a new label to the task'),
+  removeLabel: z.string().optional().describe('Remove a label from the task'),
+  acceptanceCriteria: z.string().optional().describe('Set new acceptance criteria (comma-separated)'),
+  plan: z.string().optional().describe('The new implementation plan for the task'),
+  notes: z.string().optional().describe('New implementation notes for the task'),
+  dependsOn: z.string().optional().describe('Set a new comma-separated list of task dependencies'),
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
@@ -36,13 +43,19 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Editing task', params);
-  let command = `backlog task edit ${params.id}`;
+  let command = `${backlogCommand} task edit ${params.id}`;
+  if (params.title) command += ` --title "${params.title}"`;
+  if (params.description) command += ` --description "${params.description}"`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
-  if (params.labels) command += ` --labels ${params.labels}`;
+  if (params.status) command += ` --status "${params.status}"`;
+  if (params.label) command += ` --label "${params.label}"`;
+  if (params.priority) command += ` --priority ${params.priority}`;
+  if (params.addLabel) command += ` --add-label "${params.addLabel}"`;
+  if (params.removeLabel) command += ` --remove-label "${params.removeLabel}"`;
+  if (params.acceptanceCriteria) command += ` --ac "${params.acceptanceCriteria}"`;
   if (params.plan) command += ` --plan "${params.plan}"`;
-  if (params.ac) command += ` --ac "${params.ac}"`;
   if (params.notes) command += ` --notes "${params.notes}"`;
-  if (params.dep) command += ` --dep ${params.dep}`;
+  if (params.dependsOn) command += ` --dep "${params.dependsOn}"`;
 
   return executeCommand(command, 'Task edited successfully');
 }

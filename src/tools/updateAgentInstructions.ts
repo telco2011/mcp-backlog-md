@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * updateAgentInstructions.ts
@@ -26,7 +27,7 @@ const zSchema = z.object(schema);
 
 async function execute(): Promise<CallToolResult> {
   console.info('Updating agent instructions');
-  const command = `backlog update-agent-instructions`;
+  const command = `${backlogCommand} update-agent-instructions`;
   return executeCommand(command, 'Agent instructions updated successfully');
 }
 

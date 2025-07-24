@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * promoteDraft.ts
@@ -30,7 +31,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Promoting draft', params);
-  const command = `backlog draft promote ${params.id}`;
+  const command = `${backlogCommand} draft promote ${params.id}`;
   return executeCommand(command, 'Draft promoted successfully');
 }
 

@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * createDoc.ts
@@ -32,7 +33,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Creating document', params);
-  let command = `backlog doc create "${params.title}"`;
+  let command = `${backlogCommand} doc create "${params.title}"`;
   if (params.path) command += ` --path "${params.path}"`;
   if (params.type) command += ` --type "${params.type}"`;
 

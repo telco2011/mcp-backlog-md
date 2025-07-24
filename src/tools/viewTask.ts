@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * viewTask.ts
@@ -32,7 +33,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Viewing task', params);
-  let command = `backlog task view ${params.id}`;
+  let command = `${backlogCommand} task view ${params.id}`;
   if (params.plain) command += ' --plain';
 
   return executeCommand(command, 'Task viewed successfully');

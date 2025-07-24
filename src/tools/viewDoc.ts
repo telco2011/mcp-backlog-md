@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * viewDoc.ts
@@ -30,7 +31,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Viewing document', params);
-  const command = `backlog doc view ${params.id}`;
+  const command = `${backlogCommand} doc view ${params.id}`;
   return executeCommand(command, 'Document viewed successfully');
 }
 

@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * listDocs.ts
@@ -20,13 +21,18 @@ import { executeCommand } from '../lib/commandExecutor.js';
 import { z } from 'zod';
 
 const name = 'listDocs';
-const schema = {};
+const schema = {
+  plain: z.boolean().optional().describe('View in plain mode for AI').default(true),
+};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(): Promise<CallToolResult> {
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
   console.info('Listing documents');
-  const command = `backlog doc list`;
+  let command = `${backlogCommand} doc list`;
+  if (params.plain) command += ' --plain';
   return executeCommand(command, 'Documents listed successfully');
 }
 

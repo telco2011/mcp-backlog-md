@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * configSet.ts
@@ -31,7 +32,7 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Setting configuration', params);
-  const command = `backlog config set ${params.key} ${params.value}`;
+  const command = `${backlogCommand} config set ${params.key} ${params.value}`;
   return executeCommand(command, 'Configuration set successfully');
 }
 

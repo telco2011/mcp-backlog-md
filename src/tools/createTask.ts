@@ -1,6 +1,7 @@
 import * as changeCase from 'change-case';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * @file createTask.ts
@@ -16,18 +17,18 @@ const name = 'createTask';
 
 // Use the centralized task schema
 const schema = {
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().optional(),
-  assignee: z.string().optional(),
-  status: z.string().optional(),
-  labels: z.string().optional(),
-  priority: z.string().optional(),
-  plan: z.string().optional(),
-  ac: z.string().optional(),
-  notes: z.string().optional(),
-  dep: z.string().optional(),
-  parent: z.string().optional(),
-  draft: z.boolean().optional(),
+  title: z.string().min(1, 'Title is required').describe('The title of the task.'),
+  description: z.string().optional().describe('The description of the task.'),
+  assignee: z.string().optional().describe('The assignee of the task.'),
+  status: z.string().optional().describe('The status of the task.'),
+  labels: z.string().optional().describe('Comma-separated list of labels for the task.'),
+  priority: z.string().optional().describe('The priority of the task (high, medium, low).'),
+  acceptanceCriteria: z.string().optional().describe('Comma-separated list of acceptance criteria.'),
+  plan: z.string().optional().describe('The implementation plan for the task.'),
+  notes: z.string().optional().describe('Implementation notes for the task.'),
+  draft: z.boolean().optional().describe('Create the task as a draft.'),
+  parent: z.string().optional().describe('The parent task ID.'),
+  dependsOn: z.string().optional().describe('Comma-separated list of task dependencies.'),
 };
 
 export const zSchema = z.object(schema);
@@ -36,17 +37,17 @@ async function execute(
   params: z.infer<typeof zSchema>
 ): Promise<CallToolResult> {
   console.info('Creating task', params);
-  let command = `backlog task create "${params.title}"`;
+  let command = `${backlogCommand} task create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
   if (params.status) command += ` --status "${params.status}"`;
   // The CLI expects a comma-separated string for labels
-  if (params.labels) command += ` --labels ${params.labels}`;
+  if (params.labels) command += ` --labels "${params.labels}"`;
   if (params.priority) command += ` --priority ${params.priority}`;
   if (params.plan) command += ` --plan "${params.plan}"`;
-  if (params.ac) command += ` --ac "${params.ac}"`;
+  if (params.acceptanceCriteria) command += ` --ac "${params.acceptanceCriteria}"`;
   if (params.notes) command += ` --notes "${params.notes}"`;
-  if (params.dep) command += ` --dep ${params.dep}`;
+  if (params.dependsOn) command += ` --dep "${params.dependsOn}"`;
   if (params.parent) command += ` --parent ${params.parent}`;
   if (params.draft) command += ` --draft`;
 
