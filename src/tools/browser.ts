@@ -1,40 +1,50 @@
-import { exec } from 'child_process';
+import * as changeCase from 'change-case';
 
-const definition = {
-  name: 'browser',
-  description: 'Launch the web UI for backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      port: {
-        type: 'number',
-        description: 'The port to launch the web UI on',
-      },
-      noOpen: {
-        type: 'boolean',
-        description: "Don't open the browser automatically",
-      },
-    },
-  },
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
+import { executeCommand } from '../lib/commandExecutor.js';
+/**
+ * browser.ts
+ *
+ * Purpose:
+ * - Provides the functionality to launch the web UI for the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * - Defines a Zod schema for input validation.
+ * - The `execute` function constructs a `backlog browser` command.
+ * - The command is passed to the centralized `executeCommand` function.
+ *
+ * Last Updated:
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
+ */
+import { z } from 'zod';
+
+const name = 'browser';
+const schema = {
+  port: z.number().optional().describe('The port to launch the web UI on'),
+  noOpen: z.boolean().optional().describe("Don't open the browser automatically").default(true),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const zSchema = z.object(schema);
 
-async function execute(args: any): Promise<string> {
-  let command = `backlog browser`;
-  if (args.port) command += ` --port ${args.port}`;
-  if (args.noOpen) command += ` --no-open`;
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  console.info('Launching browser', params);
+  let command = `${backlogCommand} browser`;
+  if (params.port) command += ` --port ${params.port}`;
+  if (params.noOpen) command += ` --no-open`;
 
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+  return executeCommand(command, 'Browser launched successfully');
 }
 
 export default {
-  definition,
+  definition: {
+    name,
+    title: changeCase.capitalCase(name),
+    description: 'Launch the web UI for backlog.md',
+    inputSchema: schema,
+  },
   execute,
 };

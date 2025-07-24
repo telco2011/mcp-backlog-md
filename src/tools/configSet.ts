@@ -1,39 +1,47 @@
-import { exec } from 'child_process';
+import * as changeCase from 'change-case';
 
-const definition = {
-  name: 'configSet',
-  description: 'Set a configuration value in backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      key: {
-        type: 'string',
-        description: 'The configuration key to set',
-      },
-      value: {
-        type: 'string',
-        description: 'The value to set for the configuration key',
-      },
-    },
-    required: ['key', 'value'],
-  },
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
+import { executeCommand } from '../lib/commandExecutor.js';
+/**
+ * configSet.ts
+ *
+ * Purpose:
+ * - Provides the functionality to set a configuration value in the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * - Defines a Zod schema for input validation.
+ * - The `execute` function constructs a `backlog config set` command.
+ * - The command is passed to the centralized `executeCommand` function.
+ *
+ * Last Updated:
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
+ */
+import { z } from 'zod';
+
+const name = 'configSet';
+const schema = {
+  key: z.string().describe('The configuration key to set'),
+  value: z.string().describe('The value to set for the configuration key'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const zSchema = z.object(schema);
 
-async function execute(args: any): Promise<string> {
-  const command = `backlog config set ${args.key} "${args.value}"`;
-
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  console.info('Setting configuration', params);
+  const command = `${backlogCommand} config set ${params.key} ${params.value}`;
+  return executeCommand(command, 'Configuration set successfully');
 }
 
 export default {
-  definition,
+  definition: {
+    name,
+    title: changeCase.capitalCase(name),
+    description: 'Set a configuration value in backlog.md',
+    inputSchema: schema,
+  },
   execute,
 };

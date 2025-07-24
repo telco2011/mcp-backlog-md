@@ -1,45 +1,51 @@
-import { exec } from 'child_process';
+import * as changeCase from 'change-case';
 
-const definition = {
-  name: 'createDoc',
-  description: 'Create a new document in backlog.md',
-  inputSchema: {
-    type: 'object',
-    properties: {
-      title: {
-        type: 'string',
-        description: 'The title of the document',
-      },
-      path: {
-        type: 'string',
-        description: 'The path to create the document in',
-      },
-      type: {
-        type: 'string',
-        description: 'The type of the document',
-      },
-    },
-    required: ['title'],
-  },
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+import { backlogCommand } from '../lib/utils.js';
+import { executeCommand } from '../lib/commandExecutor.js';
+/**
+ * createDoc.ts
+ *
+ * Purpose:
+ * - Provides the functionality to create a new document in the backlog.
+ * - Exposes this functionality as an MCP tool.
+ *
+ * Logic Overview:
+ * - Defines a Zod schema for input validation.
+ * - The `execute` function constructs a `backlog doc create` command.
+ * - The command is passed to the centralized `executeCommand` function.
+ *
+ * Last Updated:
+ * 2025-07-21 by Cline (Refactored to use centralized command executor)
+ */
+import { z } from 'zod';
+
+const name = 'createDoc';
+const schema = {
+  title: z.string().describe('The title of the document'),
+  path: z.string().optional().describe('The path to create the document in'),
+  type: z.string().optional().describe('The type of the document'),
 };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const zSchema = z.object(schema);
 
-async function execute(args: any): Promise<string> {
-  let command = `backlog doc create "${args.title}"`;
-  if (args.path) command += ` -p ${args.path}`;
-  if (args.type) command += ` -t ${args.type}`;
+async function execute(
+  params: z.infer<typeof zSchema>
+): Promise<CallToolResult> {
+  console.info('Creating document', params);
+  let command = `${backlogCommand} doc create "${params.title}"`;
+  if (params.path) command += ` --path "${params.path}"`;
+  if (params.type) command += ` --type "${params.type}"`;
 
-  return new Promise((resolve, reject) => {
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(new Error(stderr || error.message));
-      } else {
-        resolve(stdout);
-      }
-    });
-  });
+  return executeCommand(command, 'Document created successfully');
 }
 
 export default {
-  definition,
+  definition: {
+    name,
+    title: changeCase.capitalCase(name),
+    description: 'Create a new document in backlog.md',
+    inputSchema: schema,
+  },
   execute,
 };
