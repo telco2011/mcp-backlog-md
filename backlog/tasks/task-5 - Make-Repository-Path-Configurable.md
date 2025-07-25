@@ -24,6 +24,6 @@ The `REPO_PATH` is currently hardcoded in `src/lib/commandExecutor.ts`. This sho
 
 Time spent: 5 minutes and 38 seconds.
 
-Time spent: 5 minutes and 38 seconds (initial implementation). Additional time spent adapting code to new  parameter: 15 minutes and 2 seconds.
+Time spent: 5 minutes and 38 seconds (initial implementation). Additional time spent adapting code to new parameter: 15 minutes and 2 seconds.
 
 Time spent: 5 minutes and 38 seconds (initial implementation). Additional time spent adapting code to new projectPath parameter: 15 minutes and 2 seconds.
