@@ -8,6 +8,7 @@ This project provides an MCP (Model Context Protocol) server for the [`backlog.m
 
 - Node.js
 - (Optional) This MCP Server uses `npx` but you can install `backlog.md` CLI tool globally (`npm i -g backlog.md`)
+- [Backlog.md initialization](https://github.com/MrLesk/Backlog.md?tab=readme-ov-file#project-setup)
 
 ### Installation
 
@@ -40,12 +41,6 @@ This project provides an MCP (Model Context Protocol) server for the [`backlog.m
   }
 }
 ```
-
-## Configuration
-
-The server can be configured using the following environment variable:
-
-- `BACKLOG_REPO_PATH`: The absolute path to the repository where the `backlog` directory is located. If not set, it defaults to the current working directory.
 
 ## Usage
 
