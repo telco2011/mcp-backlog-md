@@ -1,29 +1,49 @@
 # MCP Server for Backlog.md
 
-This project provides an MCP (Model Context Protocol) server for the `backlog.md` CLI tool. It allows language models to interact with `backlog.md` to manage tasks, boards, and other project artifacts.
+This project provides an MCP (Model Context Protocol) server for the [`backlog.md` CLI](https://github.com/MrLesk/Backlog.md) tool. It allows language models to interact with `backlog.md` to manage tasks, boards, and other project artifacts.
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js
-- `backlog.md` CLI tool installed globally (`npm i -g backlog.md`)
+- (Optional) This MCP Server uses `npx` but you can install `backlog.md` CLI tool globally (`npm i -g backlog.md`)
 
 ### Installation
 
-1. Clone the repository.
-2. Install dependencies: `npm install`
-3. Build the server: `npm run build`
+#### VS Code
+
+```json
+{
+  "servers": {
+    "mcp-backlog-md": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-backlog-md"]
+    }
+  }
+}
+```
+
+#### Cline
+
+```json
+{
+  "mcpServers": {
+    "mcp-backlog-md": {
+      "command": "npx",
+      "args": ["-y", "mcp-backlog-md"],
+      "disabled": false,
+      "autoApprove": [],
+      "timeout": 30
+    }
+  }
+}
+```
 
 ## Usage
 
 ### Testing
-
-To run the unit tests, use the following command:
-
-```bash
-npm test
-```
 
 To manually test the server with a client, you can use the [MCP inspector](https://github.com/modelcontextprotocol/inspector):
 
