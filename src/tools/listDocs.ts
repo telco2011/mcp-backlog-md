@@ -14,12 +14,13 @@
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
 import * as changeCase from 'change-case';
+import { z } from 'zod';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { backlogCommand } from '../lib/utils.js';
+
 import { executeCommand } from '../lib/commandExecutor.js';
 import { withProjectPath } from '../lib/schemas.js';
-import { z } from 'zod';
+import { backlogCommand } from '../lib/utils.js';
 
 const name = 'listDocs';
 const schema = {

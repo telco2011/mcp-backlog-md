@@ -15,6 +15,7 @@
  * 2025-07-25 by Cline (Model: claude-3-opus, Task: Made repository path configurable and passed as parameter)
  */
 import { exec } from 'child_process';
+import { existsSync } from 'fs';
 import { promisify } from 'util';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
@@ -29,6 +30,12 @@ const execAsync = promisify(exec);
 export async function executeCommand(options: { command: string; successMessage: string; projectPath: string }): Promise<CallToolResult> {
   console.info({ command: options.command }, 'Executing command');
   try {
+    if (!existsSync(options.projectPath) && !existsSync(`${options.projectPath}/backlog`) && !existsSync(`${options.projectPath}/backlog/config.yml`)) {
+      console.error({ projectPath: options.projectPath }, 'Backlog.md has not been initialized or does not exist');
+      throw new Error(`Backlog.md has not been initialized or does not exist at path: ${options.projectPath}. 
+        Check https://github.com/MrLesk/Backlog.md?tab=readme-ov-file#project-setup for more information.`);
+    }
+
     const { stdout, stderr } = await execAsync(options.command, { cwd: options.projectPath });
 
     if (stderr) {
