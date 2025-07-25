@@ -8,7 +8,7 @@ This guide provides all the information you need to get started with developing 
 
 - Node.js (v18 or higher)
 - npm
-- `backlog.md` CLI tool installed globally:
+- (Optional) `backlog.md` CLI tool installed globally:
   ```bash
   npm i -g backlog.md
   ```
@@ -71,18 +71,7 @@ npm run build
 node build/src/server.js
 ```
 
-## 4. Testing Approach
-
-The project uses Jest for testing.
-
--   **Running Tests:**
-    ```bash
-    npm test
-    ```
--   **Test Files:** Test files are located alongside the files they are testing, with a `.test.ts` extension.
--   **Mocks:** The tests use mocks for the `commandExecutor` to avoid actually running shell commands during tests. The mocks are configured in `jest.config.js`.
-
-## 5. Common Troubleshooting Steps
+## 4. Common Troubleshooting Steps
 
 -   **`backlog: command not found`:** This error means that the `backlog.md` CLI tool is not installed globally or is not in your system's PATH. Make sure you have run `npm i -g backlog.md`.
 -   **Tool not found:** If you have added a new tool and it's not appearing in the MCP client, make sure you have run `npm run build` to compile the new file. Also, check the server logs for any errors during tool registration.
