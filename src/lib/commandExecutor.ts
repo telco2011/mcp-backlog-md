@@ -1,6 +1,3 @@
-import { CliError, SystemError } from './errors.js';
-
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 /**
  * commandExecutor.ts
  *
@@ -32,6 +29,10 @@ import { join } from 'path';
 // CHANGE: Import 'join' for robust path handling
 import { promisify } from 'util';
 
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+import { CliError, SystemError } from './errors.js';
+
 const execAsync = promisify(exec);
 
 // CHANGE: Defined a dedicated interface for options for better type safety and clarity.
@@ -57,7 +58,7 @@ function _validateProjectPath(projectPath: string): void {
     console.error({ configPath }, 'Backlog.md configuration does not exist.');
     throw new SystemError(
       `Backlog.md has not been initialized. Expected config at: ${configPath}.
-      Check https://github.com/MrLesk/Backlog.md?tab=readme-ov-file#project-setup for more information or execute "npx backlog init" to create the backlog.md project.`,
+      Check https://github.com/MrLesk/Backlog.md?tab=readme-ov-file#project-setup for more information or execute "npx backlog init" to create the backlog.md project.`
     );
   }
 }
