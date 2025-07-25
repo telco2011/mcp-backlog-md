@@ -1,6 +1,8 @@
 /**
  * commandExecutor.ts
  *
+ * Design Doc: backlog/docs/improved-error-handling.md
+ *
  * Purpose:
  * - Provides a single, centralized function for executing shell commands.
  * - Standardizes error handling, logging, and response formatting for all tool commands.
@@ -10,7 +12,7 @@
  * 1. Exports an `executeCommand` function that takes a strongly-typed options object.
  * 2. It validates the project path's existence before execution.
  * 3. It wraps the `child_process.exec` call in a promise.
- * 4. It relies on the promise rejection for error handling (non-zero exit code) instead of checking stderr directly.
+ * 4. It catches errors and wraps them in custom error classes (`CliError`, `SystemError`) to provide more context.
  * 5. It includes robust error logging, preserving the original error context.
  *
  * SECURITY WARNING:
@@ -19,7 +21,7 @@
  * the command from its arguments, mitigating this risk.
  *
  * Last Updated:
- * 2025-07-25 by Gemini (Model: gemini-1.5-pro, Task: Refactored for security, robustness, and clarity)
+ * 2025-07-25 by Cline (Model: claude-3-opus, Task: Improve Error Handling)
  */
 import { exec } from 'child_process';
 import { existsSync } from 'fs';
@@ -28,6 +30,8 @@ import { join } from 'path';
 import { promisify } from 'util';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+import { CliError, SystemError } from './errors.js';
 
 const execAsync = promisify(exec);
 
@@ -52,8 +56,10 @@ function _validateProjectPath(projectPath: string): void {
 
   if (!existsSync(configPath)) {
     console.error({ configPath }, 'Backlog.md configuration does not exist.');
-    throw new Error(`Backlog.md has not been initialized. Expected config at: ${configPath}.
-      Check https://github.com/MrLesk/Backlog.md?tab=readme-ov-file#project-setup for more information or execute "npx backlog init" to create the backlog.md project.`);
+    throw new SystemError(
+      `Backlog.md has not been initialized. Expected config at: ${configPath}.
+      Check https://github.com/MrLesk/Backlog.md?tab=readme-ov-file#project-setup for more information or execute "npx backlog init" to create the backlog.md project.`
+    );
   }
 }
 
@@ -84,7 +90,15 @@ export async function executeCommand(options: ExecuteCommandOptions): Promise<Ca
 
     console.error({ err: originalError }, 'Failed to execute command');
 
-    throw new Error(`Server execution failed: ${errorMessage}. Command: "${options.command}"`, {
+    // If the error contains stderr, it's likely a CLI tool error.
+    if (originalError.stderr) {
+      throw new CliError(`Command failed with error: ${errorMessage}. Command: "${options.command}"`, {
+        cause: error,
+      });
+    }
+
+    // Otherwise, it's likely a system-level error (e.g., command not found).
+    throw new SystemError(`Server execution failed: ${errorMessage}. Command: "${options.command}"`, {
       cause: error,
     });
   }
