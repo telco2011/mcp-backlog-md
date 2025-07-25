@@ -3,6 +3,7 @@ import * as changeCase from 'change-case';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
 /**
  * configList.ts
  *
@@ -21,14 +22,20 @@ import { executeCommand } from '../lib/commandExecutor.js';
 import { z } from 'zod';
 
 const name = 'configList';
-const schema = {};
+const schema = {
+  ...withProjectPath.shape,
+};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Listing configuration');
   const command = `${backlogCommand} config list`;
-  return executeCommand(command, 'Configuration listed successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Configuration listed successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

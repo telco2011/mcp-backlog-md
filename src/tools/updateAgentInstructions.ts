@@ -3,6 +3,7 @@ import * as changeCase from 'change-case';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
 /**
  * updateAgentInstructions.ts
  *
@@ -21,14 +22,20 @@ import { executeCommand } from '../lib/commandExecutor.js';
 import { z } from 'zod';
 
 const name = 'updateAgentInstructions';
-const schema = {};
+const schema = {
+  ...withProjectPath.shape,
+};
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Updating agent instructions');
   const command = `${backlogCommand} update-agent-instructions`;
-  return executeCommand(command, 'Agent instructions updated successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Agent instructions updated successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

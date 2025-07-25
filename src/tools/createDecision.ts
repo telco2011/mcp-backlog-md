@@ -3,6 +3,7 @@ import * as changeCase from 'change-case';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
 /**
  * createDecision.ts
  *
@@ -24,18 +25,21 @@ const name = 'createDecision';
 const schema = {
   title: z.string().describe('The title of the decision'),
   status: z.string().optional().describe('The status of the decision'),
+  ...withProjectPath.shape,
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Creating decision', params);
   let command = `${backlogCommand} decision create "${params.title}"`;
   if (params.status) command += ` --status "${params.status}"`;
 
-  return executeCommand(command, 'Decision created successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Decision created successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

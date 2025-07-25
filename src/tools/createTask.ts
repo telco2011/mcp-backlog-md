@@ -3,6 +3,7 @@ import * as changeCase from 'change-case';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
 /**
  * @file createTask.ts
  * @description Defines the MCP tool for creating a new task in backlog.md.
@@ -29,13 +30,12 @@ const schema = {
   draft: z.boolean().optional().describe('Create the task as a draft.'),
   parent: z.string().optional().describe('The parent task ID.'),
   dependsOn: z.string().optional().describe('Comma-separated list of task dependencies.'),
+  ...withProjectPath.shape,
 };
 
 export const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Creating task', params);
   let command = `${backlogCommand} task create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;
@@ -51,7 +51,11 @@ async function execute(
   if (params.parent) command += ` --parent ${params.parent}`;
   if (params.draft) command += ` --draft`;
 
-  return executeCommand(command, 'Task created successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Task created successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

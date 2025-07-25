@@ -1,5 +1,5 @@
 import { z } from 'zod';
 
-export const withRepoPath = z.object({
-  repoPath: z.string().describe('The path to the repository').default(process.cwd()),
+export const withProjectPath = z.object({
+  projectPath: z.string().describe('The path to the project').default(process.cwd()),
 });

@@ -3,6 +3,7 @@ import * as changeCase from 'change-case';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
 /**
  * archiveTask.ts
  *
@@ -23,16 +24,19 @@ import { z } from 'zod';
 const name = 'archiveTask';
 const schema = {
   id: z.string().describe('The ID of the task to archive'),
+  ...withProjectPath.shape,
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Archiving task', params);
   const command = `${backlogCommand} task archive ${params.id}`;
-  return executeCommand(command, 'Task archived successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Task archived successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

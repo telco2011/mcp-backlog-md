@@ -17,7 +17,7 @@ export class BacklogMCPServer {
   constructor() {
     this.__filename = fileURLToPath(import.meta.url);
     this.__dirname = path.dirname(this.__filename);
-    
+
     console.info('Initializing Backlog MCP Server...');
     this.server = new McpServer({
       name: pckJson.name,
@@ -49,12 +49,7 @@ export class BacklogMCPServer {
             const tool: McpTool = toolModule.default;
             const toolName = changeCase.snakeCase(tool.definition.name);
             console.info(`Registering tool: ${toolName}`);
-            this.server.tool(
-              toolName,
-              tool.definition.description,
-              tool.definition.inputSchema,
-              tool.execute
-            );
+            this.server.tool(toolName, tool.definition.description, tool.definition.inputSchema, tool.execute);
           } else {
             console.warn(`No default export found in ${toolFilePath}`);
           }

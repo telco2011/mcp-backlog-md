@@ -3,6 +3,7 @@ import * as changeCase from 'change-case';
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
 /**
  * browser.ts
  *
@@ -24,19 +25,22 @@ const name = 'browser';
 const schema = {
   port: z.number().optional().describe('The port to launch the web UI on'),
   noOpen: z.boolean().optional().describe("Don't open the browser automatically").default(true),
+  ...withProjectPath.shape,
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Launching browser', params);
   let command = `${backlogCommand} browser`;
   if (params.port) command += ` --port ${params.port}`;
   if (params.noOpen) command += ` --no-open`;
 
-  return executeCommand(command, 'Browser launched successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Browser launched successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {
