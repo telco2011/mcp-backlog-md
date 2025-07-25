@@ -1,6 +1,6 @@
 {
   "name": "mcp-backlog-md",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "An MCP (Model Context Protocol) server for the backlog.md CLI tool.",
   "type": "module",
   "main": "build/src/server.js",
