@@ -1,8 +1,3 @@
-import * as changeCase from 'change-case';
-
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { backlogCommand } from '../lib/utils.js';
-import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * editTask.ts
  *
@@ -18,7 +13,14 @@ import { executeCommand } from '../lib/commandExecutor.js';
  * Last Updated:
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
+import * as changeCase from 'change-case';
 import { z } from 'zod';
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
+import { backlogCommand } from '../lib/utils.js';
 
 const name = 'editTask';
 const schema = {
@@ -35,13 +37,12 @@ const schema = {
   plan: z.string().optional().describe('The new implementation plan for the task'),
   notes: z.string().optional().describe('New implementation notes for the task'),
   dependsOn: z.string().optional().describe('Set a new comma-separated list of task dependencies'),
+  ...withProjectPath.shape,
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Editing task', params);
   let command = `${backlogCommand} task edit ${params.id}`;
   if (params.title) command += ` --title "${params.title}"`;
@@ -57,7 +58,11 @@ async function execute(
   if (params.notes) command += ` --notes "${params.notes}"`;
   if (params.dependsOn) command += ` --dep "${params.dependsOn}"`;
 
-  return executeCommand(command, 'Task edited successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Task edited successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

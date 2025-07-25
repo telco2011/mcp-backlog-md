@@ -1,8 +1,3 @@
-import * as changeCase from 'change-case';
-
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { backlogCommand } from '../lib/utils.js';
-import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * exportBoard.ts
  *
@@ -18,7 +13,14 @@ import { executeCommand } from '../lib/commandExecutor.js';
  * Last Updated:
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
+import * as changeCase from 'change-case';
 import { z } from 'zod';
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
+import { backlogCommand } from '../lib/utils.js';
 
 const name = 'exportBoard';
 const schema = {
@@ -26,13 +28,12 @@ const schema = {
   force: z.boolean().optional().describe('Force overwrite of existing file'),
   readme: z.boolean().optional().describe('Export to README.md with markers'),
   exportVersion: z.string().optional().describe('Version to include in the export'),
+  ...withProjectPath.shape,
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Exporting board', params);
   let command = `${backlogCommand} export board`;
   if (params.file) command += ` --file ${params.file}`;
@@ -40,7 +41,11 @@ async function execute(
   if (params.readme) command += ` --readme`;
   if (params.exportVersion) command += ` --export-version ${params.exportVersion}`;
 
-  return executeCommand(command, 'Board exported successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Board exported successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

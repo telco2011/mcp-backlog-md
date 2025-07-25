@@ -1,8 +1,3 @@
-import * as changeCase from 'change-case';
-
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { backlogCommand } from '../lib/utils.js';
-import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * viewDoc.ts
  *
@@ -18,21 +13,31 @@ import { executeCommand } from '../lib/commandExecutor.js';
  * Last Updated:
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
+import * as changeCase from 'change-case';
 import { z } from 'zod';
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
+import { backlogCommand } from '../lib/utils.js';
 
 const name = 'viewDoc';
 const schema = {
   id: z.string().describe('The ID of the document to view'),
+  ...withProjectPath.shape,
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Viewing document', params);
   const command = `${backlogCommand} doc view ${params.id}`;
-  return executeCommand(command, 'Document viewed successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Document viewed successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

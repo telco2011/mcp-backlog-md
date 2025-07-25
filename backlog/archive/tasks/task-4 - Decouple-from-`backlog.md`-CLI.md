@@ -1,9 +1,10 @@
 ---
 id: task-4
 title: Decouple from `backlog.md` CLI
-status: To Do
+status: Done
 assignee: []
 created_date: '2025-07-24'
+updated_date: '2025-07-25'
 labels:
   - architecture
   - refactor
@@ -18,3 +19,7 @@ Refactor the application to interact with the backlog data directly instead of s
 ## Implementation Plan
 
 1. Design a library for reading and writing backlog markdown files.\n2. Implement the library with functions for all the operations currently handled by the CLI.\n3. Refactor the tool execution logic to use the new library instead of `executeCommand`.\n4. Ensure all existing tests pass with the new implementation.
+
+## Implementation Notes
+
+backlog.md CLI is absolutly necessary for this mcp server

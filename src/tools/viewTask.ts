@@ -1,8 +1,3 @@
-import * as changeCase from 'change-case';
-
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { backlogCommand } from '../lib/utils.js';
-import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * viewTask.ts
  *
@@ -18,25 +13,35 @@ import { executeCommand } from '../lib/commandExecutor.js';
  * Last Updated:
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
+import * as changeCase from 'change-case';
 import { z } from 'zod';
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
+import { backlogCommand } from '../lib/utils.js';
 
 const name = 'viewTask';
 const schema = {
   id: z.string().describe('The ID of the task to view'),
   plain: z.boolean().describe('View in plain mode for AI').default(true),
+  ...withProjectPath.shape,
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Viewing task', params);
   let command = `${backlogCommand} task view ${params.id}`;
   if (params.plain) command += ' --plain';
 
-  return executeCommand(command, 'Task viewed successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Task viewed successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {

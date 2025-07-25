@@ -1,8 +1,3 @@
-import * as changeCase from 'change-case';
-
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { backlogCommand } from '../lib/utils.js';
-import { executeCommand } from '../lib/commandExecutor.js';
 /**
  * listTasks.ts
  *
@@ -18,7 +13,14 @@ import { executeCommand } from '../lib/commandExecutor.js';
  * Last Updated:
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
+import * as changeCase from 'change-case';
 import { z } from 'zod';
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
+
+import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
+import { backlogCommand } from '../lib/utils.js';
 
 const name = 'listTasks';
 const schema = {
@@ -28,13 +30,12 @@ const schema = {
   priority: z.string().optional().describe('Filter by priority (high, medium, low)'),
   sort: z.string().optional().describe('Sort tasks by field (priority, id)'),
   plain: z.boolean().describe('View in plain mode for AI').default(true),
+  ...withProjectPath.shape,
 };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema);
 
-async function execute(
-  params: z.infer<typeof zSchema>
-): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Listing tasks', params);
   let command = `${backlogCommand} task list`;
   if (params.status) command += ` --status "${params.status}"`;
@@ -44,7 +45,11 @@ async function execute(
   if (params.sort) command += ` --sort "${params.sort}"`;
   if (params.plain) command += ' --plain';
 
-  return executeCommand(command, 'Tasks listed successfully');
+  return executeCommand({
+    command,
+    successMessage: 'Tasks listed successfully',
+    projectPath: params.projectPath,
+  });
 }
 
 export default {
