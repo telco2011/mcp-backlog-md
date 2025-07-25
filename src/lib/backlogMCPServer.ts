@@ -47,7 +47,7 @@ export class BacklogMCPServer {
 
           if (toolModule.default) {
             const tool: McpTool = toolModule.default;
-            const toolName = changeCase.capitalCase(tool.definition.name);
+            const toolName = changeCase.snakeCase(tool.definition.name);
             console.info(`Registering tool: ${toolName}`);
             this.server.tool(
               toolName,
