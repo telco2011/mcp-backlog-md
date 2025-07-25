@@ -14,9 +14,10 @@
  * Last Updated:
  * 2025-07-25 by Cline (Model: claude-3-opus, Task: Made repository path configurable and passed as parameter)
  */
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 const execAsync = promisify(exec);
 
