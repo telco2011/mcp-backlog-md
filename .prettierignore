@@ -1,2 +1,7 @@
 node_modules
 build
+.clinerules
+.clineignore
+backlog
+package-lock.json
+yarn.lock

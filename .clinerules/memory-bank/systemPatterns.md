@@ -19,7 +19,7 @@ This architecture makes the system highly extensible, as adding a new command on
 
 ## Key Technical Decisions
 
-- **Zod for Validation:** Zod is used for schema definition and input validation for all tools. This ensures that the `execute` function for each tool receives a correctly typed and validated parameters object, preventing a large class of runtime errors.
+- **Zod for Validation:** Zod is used for schema definition and input validation for all tools. This ensures that the `execute` function for each tool receives a correctly typed and validated parameters object, preventing a large class of runtime errors. Each tool must export a `schema` object and a `zSchema` Zod object. This is a requirement of the `@modelcontextprotocol/sdk` library.
 - **change-case for Naming:** The `change-case` library is used to automatically generate user-friendly tool titles from their camelCase names, ensuring consistency in the MCP server's tool manifest.
 
 ## Design Patterns

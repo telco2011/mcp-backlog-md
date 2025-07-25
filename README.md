@@ -8,6 +8,7 @@ This project provides an MCP (Model Context Protocol) server for the [`backlog.m
 
 - Node.js
 - (Optional) This MCP Server uses `npx` but you can install `backlog.md` CLI tool globally (`npm i -g backlog.md`)
+- [Backlog.md initialization](https://github.com/MrLesk/Backlog.md?tab=readme-ov-file#project-setup)
 
 ### Installation
 
@@ -55,9 +56,9 @@ npm run inspector
 
 This project uses GitHub Actions to automate the build, test, and release process.
 
--   **Build and Test:** On every push or pull request to the `main` and `develop` branches, the workflow in `.github/workflows/build.yml` is triggered. It installs dependencies, lints the code, builds the project, and runs the tests.
--   **Pull Request Creation:** If a build on the `develop` branch is successful, a pull request is automatically created to merge `develop` into `main`.
--   **Release and Publish:** When a push is made to the `main` branch, a new GitHub Release is created with a tag corresponding to the version in `package.json`. This, in turn, triggers the `.github/workflows/publish.yml` workflow to publish the package to the npm registry.
+- **Build and Test:** On every push or pull request to the `main` and `develop` branches, the workflow in `.github/workflows/build.yml` is triggered. It installs dependencies, lints the code, builds the project, and runs the tests.
+- **Pull Request Creation:** If a build on the `develop` branch is successful, a pull request is automatically created to merge `develop` into `main`.
+- **Release and Publish:** When a push is made to the `main` branch, a new GitHub Release is created with a tag corresponding to the version in `package.json`. This, in turn, triggers the `.github/workflows/publish.yml` workflow to publish the package to the npm registry.
 
 ## Development
 

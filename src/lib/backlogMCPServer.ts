@@ -1,12 +1,28 @@
+/**
+ * backlogMCPServer.ts
+ *
+ * Purpose:
+ * - Implements the core MCP server logic for the backlog.md tool.
+ * - Dynamically discovers and registers all available tools from the `src/tools` directory.
+ * - Manages the server lifecycle and connection to the transport layer.
+ *
+ * Logic Overview:
+ * - The `BacklogMCPServer` class initializes an `McpServer` instance.
+ * - The `registerTools` method scans the tools directory, imports each tool module, and registers it with the server.
+ * - The `run` method orchestrates the tool registration and connects to the `StdioServerTransport`.
+ *
+ * Last Updated:
+ * 2025-07-25 by Cline (Model: Cline, Task: Add missing file header)
+ */
 import * as changeCase from 'change-case';
+import { readdir } from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { fileURLToPath } from 'url';
-import path from 'path';
+
 import pckJson from '../../package.json' with { type: 'json' };
-import { readdir } from 'fs/promises';
 import { McpTool } from './types';
 
 export class BacklogMCPServer {
@@ -17,7 +33,7 @@ export class BacklogMCPServer {
   constructor() {
     this.__filename = fileURLToPath(import.meta.url);
     this.__dirname = path.dirname(this.__filename);
-    
+
     console.info('Initializing Backlog MCP Server...');
     this.server = new McpServer({
       name: pckJson.name,
@@ -49,12 +65,7 @@ export class BacklogMCPServer {
             const tool: McpTool = toolModule.default;
             const toolName = changeCase.snakeCase(tool.definition.name);
             console.info(`Registering tool: ${toolName}`);
-            this.server.tool(
-              toolName,
-              tool.definition.description,
-              tool.definition.inputSchema,
-              tool.execute
-            );
+            this.server.tool(toolName, tool.definition.description, tool.definition.inputSchema, tool.execute);
           } else {
             console.warn(`No default export found in ${toolFilePath}`);
           }
