@@ -14,13 +14,14 @@
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
 import * as changeCase from 'change-case';
+import { z } from 'zod';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { SystemError } from '../lib/errors.js';
-import { backlogCommand } from '../lib/utils.js';
+
 import { executeCommand } from '../lib/commandExecutor.js';
+import { SystemError } from '../lib/errors.js';
 import { withProjectPath } from '../lib/schemas.js';
-import { z } from 'zod';
+import { backlogCommand } from '../lib/utils.js';
 
 const name = 'archiveTask';
 const schema = {
@@ -50,7 +51,7 @@ async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult>
           command,
           successMessage: `Task ${id} archived successfully`,
           projectPath: params.projectPath,
-        }),
+        })
       );
     } catch (error) {
       console.error(`Failed to archive task ${id}:`, error);
