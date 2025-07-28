@@ -14,14 +14,13 @@
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
 import * as changeCase from 'change-case';
-import { z } from 'zod';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-
-import { executeCommand } from '../lib/commandExecutor.js';
 import { SystemError } from '../lib/errors.js';
-import { withProjectPath } from '../lib/schemas.js';
 import { backlogCommand } from '../lib/utils.js';
+import { executeCommand } from '../lib/commandExecutor.js';
+import { withProjectPath } from '../lib/schemas.js';
+import { z } from 'zod';
 
 const name = 'archiveTask';
 const schema = {
@@ -41,30 +40,26 @@ async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult>
   }
   const taskIds = params.ids ? params.ids.split(',').map((id) => id.trim()) : [params.id!];
 
-  const results = await Promise.all(
-    taskIds.map((id) => {
-      const command = `${backlogCommand} task archive ${id}`;
-      return executeCommand({
-        command,
-        successMessage: `Task ${id} archived successfully`,
-        projectPath: params.projectPath,
-      });
-    })
-  );
-
-  const successful = results.filter((r) => r.result === 'success');
-  const failed = results.filter((r) => r.result !== 'success');
-
-  if (failed.length > 0) {
-    const failedIds = failed.map((f) => (f.result as string).split(' ')[1]).join(', ');
-    return {
-      result: `Failed to archive the following tasks: ${failedIds}`,
-      content: [],
-    };
+  const results: { successful: unknown[]; failed: unknown[] } = { successful: [], failed: [] };
+  for (const id of taskIds) {
+    const command = `${backlogCommand} task archive ${id}`;
+    console.info(`Executing command: ${command}`);
+    try {
+      results.successful.push(
+        await executeCommand({
+          command,
+          successMessage: `Task ${id} archived successfully`,
+          projectPath: params.projectPath,
+        }),
+      );
+    } catch (error) {
+      console.error(`Failed to archive task ${id}:`, error);
+      results.failed.push(`Task ${id} could not be archived: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 
   return {
-    result: `Successfully archived ${successful.length} tasks.`,
+    result: `Successfully archived ${results.successful.length} tasks. Failed to archive ${results.failed.length} tasks: ${results.failed.join(', ')}`,
     content: [],
   };
 }
@@ -73,7 +68,7 @@ export default {
   definition: {
     name,
     title: changeCase.capitalCase(name),
-    description: 'Archive a task in backlog.md',
+    description: 'Archive a task, or tasks, in backlog.md',
     inputSchema: schema,
   },
   execute,
