@@ -1,10 +1,10 @@
 ---
 id: task-7
 title: Improve Archive Task tool to allow multiple identifiers
-status: In Progress
+status: Done
 assignee: []
 created_date: '2025-07-25'
-updated_date: '2025-07-26'
+updated_date: '2025-07-28'
 labels: []
 dependencies: []
 priority: medium
@@ -46,3 +46,5 @@ The `Archive Task` tool currently only accepts a single task ID. This should be 
 ## Implementation Notes
 
 Updated the  tool to accept multiple task IDs via a new  parameter. The uid=1000(kratos) gid=1000(kratos) groups=1000(kratos),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),100(users),104(kvm),119(lpadmin),129(sambashare),133(libvirt),993(ollama),995(docker) parameter is now optional, but at least one of uid=1000(kratos) gid=1000(kratos) groups=1000(kratos),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),100(users),104(kvm),119(lpadmin),129(sambashare),133(libvirt),993(ollama),995(docker) or  must be provided. The  function was updated to handle both single and multiple IDs, and to return a summary of the archived tasks. Also fixed a TypeScript error and an ESLint warning.
+
+Replaced the  loop with a  loop in the  tool to ensure that the archive commands are executed sequentially. This addresses a potential issue where the  function would return before all archive operations were complete.
