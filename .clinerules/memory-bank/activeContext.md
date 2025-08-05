@@ -6,5 +6,5 @@
 
 ## Next Steps
 
-- Mark the backlog task as complete.
 - Commit the updated memory bank files to the repository.
+- Mark the backlog task as complete.
