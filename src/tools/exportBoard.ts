@@ -7,20 +7,19 @@
  *
  * Logic Overview:
  * - Defines a Zod schema for input validation.
- * - The `execute` function constructs a `backlog export board` command.
+ * - The `execute` function constructs a `backlog board export` command.
  * - The command is passed to the centralized `executeCommand` function.
  *
  * Last Updated:
- * 2025-07-21 by Cline (Refactored to use centralized command executor)
+ * 2025-08-05 by Cline (Fixed `export_board` command to use `board export` syntax and updated documentation)
  */
 import * as changeCase from 'change-case';
-import { z } from 'zod';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-
+import { backlogCommand } from '../lib/utils.js';
 import { executeCommand } from '../lib/commandExecutor.js';
 import { withProjectPath } from '../lib/schemas.js';
-import { backlogCommand } from '../lib/utils.js';
+import { z } from 'zod';
 
 const name = 'exportBoard';
 const schema = {
@@ -35,7 +34,7 @@ const zSchema = z.object(schema);
 
 async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
   console.info('Exporting board', params);
-  let command = `${backlogCommand} export board`;
+  let command = `${backlogCommand} board export`;
   if (params.file) command += ` --file ${params.file}`;
   if (params.force) command += ` --force`;
   if (params.readme) command += ` --readme`;

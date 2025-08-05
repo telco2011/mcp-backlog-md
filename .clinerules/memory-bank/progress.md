@@ -9,7 +9,7 @@
 
 ## What's Left to Build
 
-- The integration test for the MCP server is not working and has been removed. This needs to be revisited.
+- The integration test for the MCP server needs to be improved to cover more cases.
 
 ## Current Status
 
@@ -17,7 +17,6 @@
 
 ## Known Issues
 
-- The integration test for the MCP server is failing due to a module resolution issue with the `@modelcontextprotocol/sdk` package.
 - A persistent TypeScript error related to a missing `backlogReInit.ts` file appears when editing test files. This does not seem to affect the tests themselves, but it should be investigated.
 
 ## Evolution of Project Decisions
