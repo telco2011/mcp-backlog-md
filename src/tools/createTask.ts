@@ -21,6 +21,8 @@ const name = 'createTask';
 const schema = {
   title: z.string().min(1, 'Title is required').describe('The title of the task.'),
   description: z.string().optional().describe('The description of the task.'),
+  desc: z.string().optional().describe('Alternative description field (alias for description).'),
+  ordinal: z.number().optional().describe('Task ordering position.'),
   assignee: z.string().optional().describe('The assignee of the task.'),
   status: z.string().optional().describe('The status of the task.'),
   labels: z.string().optional().describe('Comma-separated list of labels for the task.'),
@@ -40,6 +42,8 @@ async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult
   console.info('Creating task', params);
   let command = `${backlogCommand} task create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;
+  if (params.desc) command += ` --desc "${params.desc}"`;
+  if (params.ordinal) command += ` --ordinal ${params.ordinal}`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
   if (params.status) command += ` --status "${params.status}"`;
   // The CLI expects a comma-separated string for labels

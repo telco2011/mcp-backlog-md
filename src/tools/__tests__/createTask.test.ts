@@ -198,10 +198,34 @@ describe('createTask tool', () => {
       });
     });
 
+    it('should include desc when provided', async () => {
+      const params = { ...baseParams, desc: 'Alternative description field' };
+      await createTaskTool.execute(params);
+
+      expect(mockedExecuteCommand).toHaveBeenCalledWith({
+        command: 'npx backlog task create "Test Task" --desc "Alternative description field"',
+        successMessage: 'Task created successfully',
+        projectPath: '/test/project',
+      });
+    });
+
+    it('should include ordinal when provided', async () => {
+      const params = { ...baseParams, ordinal: 10 };
+      await createTaskTool.execute(params);
+
+      expect(mockedExecuteCommand).toHaveBeenCalledWith({
+        command: 'npx backlog task create "Test Task" --ordinal 10',
+        successMessage: 'Task created successfully',
+        projectPath: '/test/project',
+      });
+    });
+
     it('should combine all parameters correctly', async () => {
       const params = {
         ...baseParams,
         description: 'Full test description',
+        desc: 'Alternative desc',
+        ordinal: 5,
         assignee: 'test.user',
         status: 'To Do',
         labels: 'test,example',
@@ -219,6 +243,8 @@ describe('createTask tool', () => {
       const expectedCommand = [
         'npx backlog task create "Test Task"',
         '--description "Full test description"',
+        '--desc "Alternative desc"',
+        '--ordinal 5',
         '--assignee "test.user"',
         '--status "To Do"',
         '--labels "test,example"',
@@ -294,6 +320,8 @@ describe('createTask tool', () => {
         title: 'Test',
         projectPath: '/path',
         description: 'desc',
+        desc: 'alternative desc',
+        ordinal: 1,
         assignee: 'user',
         status: 'status',
         labels: 'label1,label2',

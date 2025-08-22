@@ -66,19 +66,73 @@ function sanitizeArgument(arg: string): string {
   // Remove or escape dangerous characters
   return arg
     .replace(/[;&|`$(){}[\]\\]/g, '') // Remove shell metacharacters
-    .replace(/\.\./g, '') // Remove directory traversal
+    .replace(/\.\.\//g, '') // Remove directory traversal
     .trim();
 }
 
 /**
  * Parses a command string into executable and arguments for safer execution.
+ * Handles quoted arguments properly to support multi-word strings.
  * @param command The full command string to parse
  * @returns Object with executable and arguments array
  */
-function parseCommand(command: string): { executable: string; args: string[] } {
-  const parts = command.trim().split(/\s+/);
+export function parseCommand(command: string): { executable: string; args: string[] } {
+  const parts: string[] = [];
+  const wasQuoted: boolean[] = []; // Track which arguments were quoted
+  let current = '';
+  let inQuotes = false;
+  let quoteChar = '';
+  let currentWasQuoted = false;
+  
+  const trimmedCommand = command.trim();
+  
+  for (let i = 0; i < trimmedCommand.length; i++) {
+    const char = trimmedCommand[i];
+    
+    if (!inQuotes && (char === '"' || char === "'")) {
+      // Start of quoted section
+      inQuotes = true;
+      quoteChar = char;
+      currentWasQuoted = true;
+    } else if (inQuotes && char === quoteChar) {
+      // End of quoted section
+      inQuotes = false;
+      quoteChar = '';
+    } else if (!inQuotes && /\s/.test(char)) {
+      // Whitespace outside quotes - end current argument
+      if (current !== '' || currentWasQuoted) {
+        parts.push(current);
+        wasQuoted.push(currentWasQuoted);
+        current = '';
+        currentWasQuoted = false;
+      }
+    } else {
+      // Regular character or quoted content
+      current += char;
+    }
+  }
+  
+  // Add final argument if exists
+  if (current !== '' || currentWasQuoted) {
+    parts.push(current);
+    wasQuoted.push(currentWasQuoted);
+  }
+  
+  if (parts.length === 0) {
+    throw new Error('Empty command provided');
+  }
+  
   const executable = parts[0];
-  const args = parts.slice(1).map(sanitizeArgument);
+  const args = parts.slice(1).map((arg, index) => {
+    // Only sanitize unquoted arguments to preserve quoted strings
+    if (wasQuoted[index + 1]) {
+      // Argument was quoted - only remove directory traversal, preserve everything else
+      return arg.replace(/\.\.\//g, '');
+    } else {
+      // Argument was unquoted - apply full sanitization
+      return sanitizeArgument(arg);
+    }
+  });
 
   return { executable, args };
 }
