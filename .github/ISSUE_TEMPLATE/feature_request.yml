@@ -1,0 +1,187 @@
+name: ✨ Feature Request
+description: Suggest a new feature or enhancement
+title: "[FEATURE] "
+labels: ["enhancement", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting a new feature! ✨
+        
+        Please provide detailed information to help us understand your request.
+
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: 📋 Prerequisites
+      description: Please confirm these before submitting
+      options:
+        - label: I have searched existing issues and feature requests
+          required: true
+        - label: I have read the [documentation](../README.md) and [API reference](../docs/API.md)
+          required: true
+        - label: This feature is not already available in the current version
+          required: true
+
+  - type: textarea
+    id: problem-statement
+    attributes:
+      label: 🎯 Problem Statement
+      description: What problem would this feature solve?
+      placeholder: Describe the problem or limitation you're experiencing...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: 💡 Proposed Solution
+      description: Describe your proposed solution in detail
+      placeholder: How do you think this feature should work?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: 🔧 Feature Type
+      description: What type of feature is this?
+      options:
+        - "🛠️ New MCP Tool - Add a new tool for backlog operations"
+        - "⚡ Enhancement - Improve existing tool functionality"
+        - "🎨 User Experience - Improve usability or interface"
+        - "🔒 Security - Security-related improvement"
+        - "📈 Performance - Performance optimization"
+        - "📚 Documentation - Documentation improvement"
+        - "🔧 Developer Experience - Tools and workflow improvements"
+        - "🌐 Integration - New integrations or compatibility"
+        - "Other"
+    validations:
+      required: true
+
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: 📝 Detailed Description
+      description: Provide a comprehensive description of the feature
+      placeholder: |
+        - What exactly should this feature do?
+        - How should it integrate with existing functionality?
+        - What are the key requirements?
+
+  - type: textarea
+    id: use-cases
+    attributes:
+      label: 🎯 Use Cases
+      description: Describe specific scenarios where this feature would be useful
+      placeholder: |
+        1. As a project manager, I want to...
+        2. When working on large projects, it would be helpful to...
+        3. This would solve the issue of...
+      value: |
+        1. 
+        2. 
+        3. 
+
+  - type: textarea
+    id: api-design
+    attributes:
+      label: 🏗️ API Design (if applicable)
+      description: If this is a new MCP tool, describe the proposed API
+      placeholder: |
+        Tool name: myNewTool
+        Parameters: {
+          "requiredParam": "string - description",
+          "optionalParam": "string (optional) - description",
+          "projectPath": "string - project path"
+        }
+        Response: "Description of expected response"
+      render: json
+
+  - type: textarea
+    id: alternatives-considered
+    attributes:
+      label: 🤔 Alternatives Considered
+      description: What alternative solutions have you considered?
+      placeholder: Describe any alternative approaches you've thought about...
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 📝 Additional Context
+      description: Add any other context, mockups, or examples
+      placeholder: Screenshots, mockups, code examples, links to similar features...
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: ⭐ Priority Level
+      description: How important is this feature to you?
+      options:
+        - "🔴 Critical - Essential for my workflow"
+        - "🟠 High - Would significantly improve my workflow"
+        - "🟡 Medium - Would be a nice improvement"
+        - "🟢 Low - Would be nice to have eventually"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: 🎯 Potential Impact
+      description: Who would benefit from this feature? (Select all that apply)
+      options:
+        - label: End users managing tasks with MCP clients
+        - label: Developers integrating with the MCP server
+        - label: Project managers organizing team workflows
+        - label: Teams collaborating on projects
+        - label: Individual users organizing personal tasks
+        - label: Organizations with complex project structures
+
+  - type: checkboxes
+    id: implementation
+    attributes:
+      label: 🛠️ Implementation Considerations
+      description: Are there any technical considerations? (Select all that apply)
+      options:
+        - label: This might require changes to the backlog.md CLI
+        - label: This might need new dependencies
+        - label: This could be a breaking change
+        - label: This affects security considerations
+        - label: This impacts performance
+        - label: This requires documentation updates
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: 🤝 Contribution
+      description: Would you be interested in contributing?
+      options:
+        - label: I'd be willing to implement this feature
+        - label: I'd like to collaborate on the design
+        - label: I can help with testing
+        - label: I can help with documentation
+
+  - type: textarea
+    id: timeline
+    attributes:
+      label: ⏰ Timeline Expectations
+      description: When would you ideally like to see this feature?
+      placeholder: No rush, just curious about your timeline needs...
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ## 📚 Helpful Resources
+        
+        - [🚀 Developer Guide](../DEVELOPER_GUIDE.md) - Learn about implementing new features
+        - [🤝 Contributing](../CONTRIBUTING.md) - How to contribute to the project
+        - [📚 API Documentation](../docs/API.md) - Current available tools
+        - [📝 Examples](../docs/EXAMPLES.md) - See existing workflows
+        - [💬 GitHub Discussions](../../discussions) - Discuss ideas with the community
+        
+        Thank you for helping make the MCP Backlog.md Server better! 🎉

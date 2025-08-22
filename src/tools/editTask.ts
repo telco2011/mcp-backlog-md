@@ -34,12 +34,20 @@ const schema = {
   addLabel: z.string().optional().describe('Add a new label to the task'),
   removeLabel: z.string().optional().describe('Remove a label from the task'),
   acceptanceCriteria: z.string().optional().describe('Set new acceptance criteria (comma-separated)'),
+  addAc: z.string().optional().describe('Add acceptance criteria without overwriting existing ones'),
+  removeAc: z.string().optional().describe('Remove specific acceptance criteria'),
+  clearAc: z.string().optional().describe('Clear all acceptance criteria'),
   plan: z.string().optional().describe('The new implementation plan for the task'),
   notes: z.string().optional().describe('New implementation notes for the task'),
   dependsOn: z.string().optional().describe('Set a new comma-separated list of task dependencies'),
+  addDep: z.string().optional().describe('Add dependencies without overwriting existing ones'),
+  removeDep: z.string().optional().describe('Remove specific dependencies'),
+  clearDep: z.string().optional().describe('Clear all dependencies'),
+  clearLabels: z.string().optional().describe('Clear all labels'),
+  parent: z.string().optional().describe('Set or change the parent task ID'),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const zSchema = z.object(schema);
 
 async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
@@ -53,10 +61,18 @@ async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult>
   if (params.priority) command += ` --priority ${params.priority}`;
   if (params.addLabel) command += ` --add-label "${params.addLabel}"`;
   if (params.removeLabel) command += ` --remove-label "${params.removeLabel}"`;
+  if (params.clearLabels) command += ` --clear-labels`;
   if (params.acceptanceCriteria) command += ` --ac "${params.acceptanceCriteria}"`;
+  if (params.addAc) command += ` --add-ac "${params.addAc}"`;
+  if (params.removeAc) command += ` --remove-ac "${params.removeAc}"`;
+  if (params.clearAc) command += ` --clear-ac`;
   if (params.plan) command += ` --plan "${params.plan}"`;
   if (params.notes) command += ` --notes "${params.notes}"`;
   if (params.dependsOn) command += ` --dep "${params.dependsOn}"`;
+  if (params.addDep) command += ` --add-dep "${params.addDep}"`;
+  if (params.removeDep) command += ` --remove-dep "${params.removeDep}"`;
+  if (params.clearDep) command += ` --clear-dep`;
+  if (params.parent) command += ` --parent ${params.parent}`;
 
   return executeCommand({
     command,

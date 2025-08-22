@@ -27,7 +27,7 @@ const schema = {
   plain: z.boolean().optional().describe('View in plain mode for AI').default(true),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 const zSchema = z.object(schema);
 
 async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {

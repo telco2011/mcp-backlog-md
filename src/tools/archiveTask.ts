@@ -29,7 +29,6 @@ const schema = {
   ids: z.string().optional().describe('A comma-separated string of task IDs to archive'),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const zSchema = z.object(schema).refine((data) => data.id || data.ids, {
   message: 'Either id or ids must be provided',
 });
