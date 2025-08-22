@@ -11,9 +11,9 @@
  * Last Updated:
  * 2025-07-25 by Cline (Model: Cline, Task: Add missing file header)
  */
-import { ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { ZodRawShape } from 'zod';
 
+import { ToolCallback } from '@modelcontextprotocol/sdk/server/mcp.js';
 
 // Define a more specific type for our tools
 export interface McpTool {

@@ -13,10 +13,10 @@
  * Last Updated:
  * 2025-08-05 by Cline (Fixed `export_board` command to use `board export` syntax and updated documentation)
  */
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import * as changeCase from 'change-case';
 import { z } from 'zod';
 
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 import { executeCommand } from '../lib/commandExecutor.js';
 import { withProjectPath } from '../lib/schemas.js';
