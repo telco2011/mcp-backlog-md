@@ -9,22 +9,26 @@ The MCP Backlog.md Server implements multiple layers of security to protect agai
 ### ✅ **Implemented Security Measures**
 
 #### **Input Validation & Sanitization**
+
 - **Zod Schema Validation**: All tool parameters are validated using strict Zod schemas
 - **Input Sanitization**: User inputs are sanitized to prevent command injection attacks
 - **Parameter Whitelisting**: Only expected parameters are accepted and processed
 
-#### **Secure Command Execution**  
+#### **Secure Command Execution**
+
 - **execFile Over exec**: Uses `execFile` when possible to prevent shell injection
 - **Command Sanitization**: Arguments are sanitized before shell execution
 - **Path Validation**: File paths are validated to prevent directory traversal attacks
 - **Retry Logic**: Exponential backoff prevents resource exhaustion attacks
 
 #### **Error Handling**
+
 - **Information Disclosure Prevention**: Error messages don't expose sensitive system information
 - **Structured Error Handling**: Custom error classes provide context without security risks
 - **Logging Safety**: Sensitive data is never logged to console or files
 
 #### **Dependency Security**
+
 - **Automated Vulnerability Scanning**: Regular `npm audit` checks in CI/CD pipeline
 - **Dependency Updates**: Automated dependency updates for security patches
 - **Supply Chain Security**: Lockfile integrity verification
@@ -33,12 +37,12 @@ The MCP Backlog.md Server implements multiple layers of security to protect agai
 
 We provide security updates for the following versions:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.2.x   | ✅ **Current**     |
-| 1.1.x   | ✅ Security fixes  |
-| 1.0.x   | ❌ End of life     |
-| < 1.0   | ❌ Not supported   |
+| Version | Supported         |
+| ------- | ----------------- |
+| 1.2.x   | ✅ **Current**    |
+| 1.1.x   | ✅ Security fixes |
+| 1.0.x   | ❌ End of life    |
+| < 1.0   | ❌ Not supported  |
 
 ## 🚨 Reporting Security Vulnerabilities
 
@@ -57,18 +61,21 @@ Instead, please report security issues responsibly:
 Please include the following information:
 
 #### **Vulnerability Details**
+
 - **Type of issue**: Command injection, path traversal, etc.
 - **Affected component**: Specific tool or library module
 - **Impact assessment**: What could an attacker achieve?
 - **Affected versions**: Which versions are vulnerable?
 
 #### **Reproduction Information**
+
 - **Steps to reproduce**: Clear, step-by-step instructions
 - **Proof of concept**: Code or commands that demonstrate the issue
 - **Environment details**: Node.js version, OS, MCP client used
 - **Screenshots/logs**: If applicable and non-sensitive
 
 #### **Suggested Fix** _(Optional)_
+
 - **Proposed solution**: How you think it should be fixed
 - **Code suggestions**: Specific code changes if you have them
 
@@ -109,22 +116,26 @@ npm update mcp-backlog-md
 ### **Configuration Security**
 
 #### **Project Path Validation**
+
 ```json
 {
   "projectPath": "/absolute/path/to/project"
 }
 ```
+
 - ✅ **Use absolute paths** to prevent path traversal
 - ✅ **Validate project structure** before operations
 - ❌ **Avoid relative paths** like `../../../etc/passwd`
 
 #### **Parameter Sanitization**
+
 ```json
 {
   "title": "Clean task title",
   "description": "Safe description without shell metacharacters"
 }
 ```
+
 - ✅ **Alphanumeric characters** are safest
 - ✅ **Spaces and basic punctuation** are handled safely
 - ❌ **Avoid shell metacharacters**: `;`, `|`, `&`, `$`, `` ` ``, `(`, `)`
@@ -132,6 +143,7 @@ npm update mcp-backlog-md
 ### **Environment Security**
 
 #### **File System Permissions**
+
 ```bash
 # Restrict permissions on project directories
 chmod 755 /path/to/backlog/project
@@ -139,6 +151,7 @@ chmod 644 /path/to/backlog/project/config.yml
 ```
 
 #### **Network Security**
+
 - **Firewall rules**: Limit access to MCP server ports
 - **VPN usage**: Consider VPN for remote MCP connections
 - **TLS encryption**: Use encrypted connections when possible
@@ -148,6 +161,7 @@ chmod 644 /path/to/backlog/project/config.yml
 ### **Secure Development Guidelines**
 
 #### **Input Validation**
+
 ```typescript
 // ✅ Always validate with Zod schemas
 const schema = z.object({
@@ -160,6 +174,7 @@ const sanitizedInput = sanitizeInput(userInput);
 ```
 
 #### **Command Construction**
+
 ```typescript
 // ✅ Safe command building
 const command = `${backlogCommand} task create "${sanitizeArgument(title)}"`;
@@ -169,6 +184,7 @@ const unsafeCommand = `${backlogCommand} task create ${title}`;
 ```
 
 #### **Error Handling**
+
 ```typescript
 // ✅ Safe error messages
 throw new CliError(`Task operation failed: ${sanitizedError}`);
@@ -180,6 +196,7 @@ throw new Error(`Database password: ${dbPassword} - Connection failed`);
 ### **Security Testing**
 
 #### **Static Analysis**
+
 ```bash
 npm run lint          # ESLint security rules
 npm audit             # Dependency vulnerabilities
@@ -187,6 +204,7 @@ npm run typecheck     # Type safety verification
 ```
 
 #### **Dynamic Testing**
+
 ```bash
 # Test with malicious inputs
 npm run test -- --grep="security"
@@ -198,6 +216,7 @@ npm run inspector     # Manual security testing
 ### **Dependency Management**
 
 #### **Vulnerability Scanning**
+
 ```bash
 # Regular vulnerability checks
 npm audit --audit-level moderate
@@ -210,6 +229,7 @@ git diff package-lock.json
 ```
 
 #### **Supply Chain Security**
+
 ```bash
 # Verify package integrity
 npm ls --depth=0
@@ -223,12 +243,14 @@ npm ls --depth=1 | grep -E "(bin|scripts)"
 ### **If You Discover a Vulnerability**
 
 #### **Immediate Actions**
+
 1. **Document** the vulnerability with screenshots/logs
 2. **Isolate** affected systems if possible
 3. **Report** following our responsible disclosure process
 4. **Do not** exploit or share the vulnerability publicly
 
 #### **For Critical Vulnerabilities**
+
 - **Contact us immediately** via email
 - **Include "URGENT"** in the subject line
 - **Provide detailed impact assessment**
@@ -271,16 +293,19 @@ _No vulnerabilities reported yet - be the first to help us improve security!_
 ## 📚 Additional Security Resources
 
 ### **Security Guidelines**
+
 - [OWASP Node.js Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html)
 - [npm Security Best Practices](https://docs.npmjs.com/security)
 - [Node.js Security Working Group](https://github.com/nodejs/security-wg)
 
 ### **Tools and Scanners**
+
 - **Static Analysis**: ESLint security plugin, Semgrep
 - **Dependency Scanning**: npm audit, Snyk, WhiteSource
 - **Dynamic Testing**: OWASP ZAP, Burp Suite Community
 
 ### **Stay Updated**
+
 - **GitHub Security Advisories**: Watch this repository for security updates
 - **npm Security Bulletins**: Follow [@npmjs](https://twitter.com/npmjs) for security news
 - **Node.js Security**: Subscribe to [Node.js security updates](https://nodejs.org/en/security/)

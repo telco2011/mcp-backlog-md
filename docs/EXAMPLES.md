@@ -3,7 +3,8 @@
 This document provides practical examples of using the MCP backlog.md server in various scenarios.
 
 ## 📖 Related Documentation
-- [🏠 Back to README](../README.md) 
+
+- [🏠 Back to README](../README.md)
 - [📚 API Reference](API.md) - Complete tool documentation
 - [🚀 Developer Guide](../DEVELOPER_GUIDE.md) - Development and customization
 - [🤝 Contributing](../CONTRIBUTING.md) - Adding your own examples
@@ -31,7 +32,7 @@ This document provides practical examples of using the MCP backlog.md server in 
 ```json
 // Create a high-priority task
 {
-  "tool": "create_task", 
+  "tool": "create_task",
   "params": {
     "title": "Set up project structure",
     "description": "Initialize the basic project structure with folders and configuration files",
@@ -48,7 +49,7 @@ This document provides practical examples of using the MCP backlog.md server in 
   "tool": "create_task",
   "params": {
     "title": "Implement user authentication",
-    "description": "Add JWT-based authentication with login/logout functionality", 
+    "description": "Add JWT-based authentication with login/logout functionality",
     "priority": "high",
     "labels": "backend,security,authentication",
     "dependsOn": "task-1",
@@ -76,7 +77,7 @@ This document provides practical examples of using the MCP backlog.md server in 
 
 // Add implementation notes during development
 {
-  "tool": "edit_task", 
+  "tool": "edit_task",
   "params": {
     "id": "task-1",
     "notes": "Using TypeScript for better type safety. Added ESLint and Prettier for code quality.",
@@ -89,7 +90,7 @@ This document provides practical examples of using the MCP backlog.md server in 
 {
   "tool": "edit_task",
   "params": {
-    "id": "task-1", 
+    "id": "task-1",
     "status": "completed",
     "removeLabel": "active",
     "addLabel": "done",
@@ -109,7 +110,7 @@ This document provides practical examples of using the MCP backlog.md server in 
   "params": {
     "title": "Design user interface mockups",
     "description": "Create wireframes and mockups for the main user interface",
-    "assignee": "ui-designer", 
+    "assignee": "ui-designer",
     "priority": "medium",
     "labels": "design,frontend,ui",
     "acceptanceCriteria": "Wireframes created,Color scheme defined,Component library outlined",
@@ -166,7 +167,7 @@ This document provides practical examples of using the MCP backlog.md server in 
 {
   "tool": "create_doc",
   "params": {
-    "title": "REST API Documentation", 
+    "title": "REST API Documentation",
     "type": "api",
     "projectPath": "/home/user/projects/awesome-app"
   }
@@ -178,7 +179,7 @@ This document provides practical examples of using the MCP backlog.md server in 
   "params": {
     "title": "Deployment Guide",
     "type": "deployment",
-    "path": "docs/operations", 
+    "path": "docs/operations",
     "projectPath": "/home/user/projects/awesome-app"
   }
 }
@@ -247,7 +248,7 @@ This document provides practical examples of using the MCP backlog.md server in 
 ```json
 // Archive completed tasks
 {
-  "tool": "archive_task", 
+  "tool": "archive_task",
   "params": {
     "ids": "task-1,task-2,task-5",
     "projectPath": "/home/user/projects/awesome-app"
@@ -282,7 +283,7 @@ This document provides practical examples of using the MCP backlog.md server in 
 {
   "tool": "create_task",
   "params": {
-    "title": "Deploy to production", 
+    "title": "Deploy to production",
     "description": "Deploy the application to production environment",
     "dependsOn": "task-10,task-11,task-12",
     "priority": "high",
@@ -313,7 +314,7 @@ This document provides practical examples of using the MCP backlog.md server in 
     "id": "task-8",
     "status": "blocked",
     "addLabel": "blocked",
-    "removeLabel": "in-progress", 
+    "removeLabel": "in-progress",
     "notes": "Waiting for API design approval before proceeding",
     "addAc": "API design approved by architect",
     "projectPath": "/home/user/projects/awesome-app"
@@ -338,7 +339,7 @@ This document provides practical examples of using the MCP backlog.md server in 
 
 // List tasks by team member
 {
-  "tool": "list_tasks", 
+  "tool": "list_tasks",
   "params": {
     "assignee": "frontend-dev",
     "projectPath": "/home/user/projects/awesome-app"
@@ -397,7 +398,7 @@ This document provides practical examples of using the MCP backlog.md server in 
 
 // Update agent instructions for AI assistance
 {
-  "tool": "update_agent_instructions", 
+  "tool": "update_agent_instructions",
   "params": {
     "projectPath": "/home/user/projects/awesome-app"
   }
@@ -433,11 +434,13 @@ This document provides practical examples of using the MCP backlog.md server in 
 ## 📖 Next Steps
 
 ### Learn More
+
 - [📚 API Reference](API.md) - Deep dive into all available tools and parameters
 - [🚀 Developer Guide](../DEVELOPER_GUIDE.md) - Extend functionality with custom tools
 - [🤝 Contributing](../CONTRIBUTING.md) - Share your own examples and workflows
 
 ### Get Support
+
 - [GitHub Discussions](https://github.com/telco2011/mcp-backlog-md/discussions) - Community support
 - [GitHub Issues](https://github.com/telco2011/mcp-backlog-md/issues) - Bug reports and feature requests
 

@@ -13,10 +13,10 @@
  * Last Updated:
  * 2025-07-21 by Cline (Refactored to use centralized command executor)
  */
+import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 import * as changeCase from 'change-case';
 import { z } from 'zod';
 
-import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
 
 import { executeCommand } from '../lib/commandExecutor.js';
 import { withProjectPath } from '../lib/schemas.js';
@@ -32,9 +32,9 @@ const schema = {
   ...withProjectPath.shape,
 };
 
-const zSchema = z.object(schema);
+const _zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Creating draft', params);
   let command = `${backlogCommand} draft create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;

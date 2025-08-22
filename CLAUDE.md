@@ -20,18 +20,21 @@ This is an MCP (Model Context Protocol) server for the `backlog.md` CLI tool. It
 ## 🚀 Development Commands
 
 ### Essential Commands
+
 - **Build**: `npm run build` - Compiles TypeScript with executable permissions
 - **Quality Check**: `npm run check-all` - Runs format, lint, typecheck, and build
 - **Test**: `npm run test` - Runs Jest test suite with coverage
 - **MCP Inspector**: `npm run inspector` - Launches MCP inspector for manual testing
 
 ### Quality Assurance Commands
+
 - **Lint**: `npm run lint` / `npm run lint:fix` - ESLint with auto-fix
 - **Format**: `npm run format` / `npm run format:check` - Prettier formatting
 - **Type Check**: `npm run typecheck` - TypeScript type validation
 - **Test Coverage**: `npm run test:coverage` - Generate coverage reports
 
 ### Utility Commands
+
 - **Clean**: `npm run clean` - Remove build directory
 - **Start**: `npm run start` - Run the compiled server
 - **Development**: `npm run dev` - Watch mode for development
@@ -91,19 +94,22 @@ TypeScript compilation creates executable JavaScript in `build/` with proper she
 This project follows **enterprise-grade development practices**:
 
 ### Code Quality Requirements
-- **TypeScript Strict Mode**: No `any` types without justification  
+
+- **TypeScript Strict Mode**: No `any` types without justification
 - **ESLint + Prettier**: Automated code formatting and quality checks
 - **Test Coverage**: >70% coverage requirement with Jest
 - **Security**: Input validation, command injection prevention, vulnerability scanning
 - **Documentation**: Complete API docs, usage examples, security guidelines
 
 ### Development Workflow
+
 - **Git Flow**: Feature branches, conventional commits, automated PR validation
 - **CI/CD**: GitHub Actions for testing, security scanning, automated releases
 - **Code Review**: Required PR reviews, security review for sensitive changes
 - **Quality Gates**: All checks must pass before merge (`npm run check-all`)
 
-### Security Standards  
+### Security Standards
+
 - **Input Validation**: Zod schemas for all tool parameters
 - **Command Safety**: Secure execution with `execFile` and input sanitization
 - **Path Validation**: Prevent directory traversal attacks
@@ -120,7 +126,7 @@ This project follows global development standards defined in the Claude Code glo
 The following global rules are automatically applied:
 
 1. **General Rules** (`~/.claude/global-rules/general.md`): Universal workflow, Git Flow, commit standards, documentation requirements, and code quality practices
-2. **Backend Rules** (`~/.claude/global-rules/backend.md`): SOLID principles, Clean Architecture, testing requirements, error handling, database practices, and security standards  
+2. **Backend Rules** (`~/.claude/global-rules/backend.md`): SOLID principles, Clean Architecture, testing requirements, error handling, database practices, and security standards
 3. **Frontend Rules** (`~/.claude/global-rules/frontend.md`): Component architecture, state management, performance optimization, accessibility, and testing practices
 
 These global rules take precedence and are merged with project-specific requirements. All development work must adhere to these standards in addition to the project-specific guidelines above.
@@ -128,12 +134,14 @@ These global rules take precedence and are merged with project-specific requirem
 ## 🚨 Important Instructions for Claude Code
 
 ### File Management
+
 - **Prefer editing over creating**: Always edit existing files rather than creating new ones
 - **Documentation exceptions**: This project has comprehensive documentation that should be maintained and updated as needed
 - **Security first**: Always consider security implications when making code changes
 - **Testing required**: New functionality requires corresponding tests
 
 ### Code Changes
+
 - **Follow established patterns**: Use existing tool implementations as templates
 - **Validate inputs**: All user inputs must be validated with Zod schemas
 - **Secure execution**: Use `executeCommand` for all CLI interactions, never direct `exec`
@@ -141,12 +149,14 @@ These global rules take precedence and are merged with project-specific requirem
 - **Logging**: Include appropriate console logging for debugging
 
 ### Quality Standards
+
 - **Run checks**: Always run `npm run check-all` before considering changes complete
 - **Test coverage**: Maintain >70% test coverage for new code
 - **Documentation**: Update relevant documentation when adding features
 - **Security review**: Consider security implications of all changes
 
 ### Project-Specific Guidance
+
 - **Tool discovery**: New tools in `src/tools/` are automatically discovered
 - **MCP standards**: Follow MCP protocol standards for tool definitions
 - **Backlog.md CLI**: Understand that this server wraps the `backlog.md` CLI tool
@@ -155,8 +165,9 @@ These global rules take precedence and are merged with project-specific requirem
 ## 📚 Quick Reference Links
 
 When working on this project, frequently reference:
+
 - **[DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md)** - Comprehensive development guide
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution standards and processes  
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution standards and processes
 - **[SECURITY.md](SECURITY.md)** - Security requirements and best practices
 - **[docs/API.md](docs/API.md)** - Complete API documentation
 - **[docs/EXAMPLES.md](docs/EXAMPLES.md)** - Usage patterns and examples

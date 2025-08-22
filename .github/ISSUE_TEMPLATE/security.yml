@@ -1,7 +1,7 @@
 name: 🔒 Security Issue
 description: Report a security vulnerability (for non-critical issues only)
-title: "[SECURITY] "
-labels: ["security", "triage"]
+title: '[SECURITY] '
+labels: ['security', 'triage']
 assignees: []
 
 body:
@@ -9,13 +9,13 @@ body:
     attributes:
       value: |
         ## ⚠️ IMPORTANT SECURITY NOTICE
-        
+
         **For critical security vulnerabilities, please DO NOT use this public issue form.**
-        
+
         Instead, please report critical security issues privately by:
         - 📧 Emailing: `security@your-domain.com` (replace with actual email)
         - 🔐 Using our [Security Policy](../SECURITY.md) guidelines
-        
+
         Use this form only for:
         - 📚 Security documentation improvements
         - 🔍 Security enhancement suggestions
@@ -52,10 +52,10 @@ body:
       label: ⚡ Severity Assessment
       description: How would you rate the security impact?
       options:
-        - "🟢 Low - Informational or documentation issue"
-        - "🟡 Medium - Security hardening opportunity"
-        - "🟠 High - Should be addressed but not critical"
-        - "🔴 Critical - STOP! Use private reporting instead"
+        - '🟢 Low - Informational or documentation issue'
+        - '🟡 Medium - Security hardening opportunity'
+        - '🟠 High - Should be addressed but not critical'
+        - '🔴 Critical - STOP! Use private reporting instead'
       default: 0
     validations:
       required: true
@@ -134,16 +134,16 @@ body:
     attributes:
       value: |
         ---
-        
+
         ## 📚 Security Resources
-        
+
         - [🔒 Security Policy](../SECURITY.md) - Our complete security policy
         - [🚀 Developer Guide - Security](../DEVELOPER_GUIDE.md#-security-considerations) - Security development guidelines
         - [🤝 Contributing - Security](../CONTRIBUTING.md#-security-requirements) - Security contribution requirements
-        
+
         ## 🆘 Need Help?
-        
+
         - 💬 [GitHub Discussions](../../discussions) - Public security discussions
         - 📧 Private security reporting: Use our [Security Policy](../SECURITY.md)
-        
+
         Thank you for helping keep the MCP Backlog.md Server secure! 🙏

@@ -79,7 +79,7 @@ function parseCommand(command: string): { executable: string; args: string[] } {
   const parts = command.trim().split(/\s+/);
   const executable = parts[0];
   const args = parts.slice(1).map(sanitizeArgument);
-  
+
   return { executable, args };
 }
 
@@ -90,7 +90,7 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
   maxRetries: 3,
   baseDelay: 1000, // 1 second
   maxDelay: 10000, // 10 seconds
-  backoffFactor: 2
+  backoffFactor: 2,
 };
 
 /**
@@ -99,18 +99,10 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
  * @returns True if the error should trigger a retry
  */
 function isRetryableError(error: any): boolean {
-  const retryableMessages = [
-    'ECONNRESET',
-    'ECONNREFUSED', 
-    'ETIMEDOUT',
-    'ENOTFOUND',
-    'network',
-    'timeout',
-    'temporarily unavailable'
-  ];
-  
+  const retryableMessages = ['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'ENOTFOUND', 'network', 'timeout', 'temporarily unavailable'];
+
   const errorString = (error?.message || error?.stderr || '').toLowerCase();
-  return retryableMessages.some(msg => errorString.includes(msg));
+  return retryableMessages.some((msg) => errorString.includes(msg));
 }
 
 /**
@@ -119,13 +111,10 @@ function isRetryableError(error: any): boolean {
  * @param config Retry configuration
  */
 async function wait(attempt: number, config: RetryConfig): Promise<void> {
-  const delay = Math.min(
-    config.baseDelay * Math.pow(config.backoffFactor, attempt),
-    config.maxDelay
-  );
-  
+  const delay = Math.min(config.baseDelay * Math.pow(config.backoffFactor, attempt), config.maxDelay);
+
   console.info({ delay, attempt }, 'Waiting before retry');
-  return new Promise(resolve => setTimeout(resolve, delay));
+  return new Promise((resolve) => setTimeout(resolve, delay));
 }
 
 /**
@@ -134,16 +123,13 @@ async function wait(attempt: number, config: RetryConfig): Promise<void> {
  * @param config Retry configuration
  * @returns Promise resolving to command output
  */
-async function executeWithRetry(
-  options: ExecuteCommandOptions,
-  config: RetryConfig = DEFAULT_RETRY_CONFIG
-): Promise<{ stdout: string; stderr: string }> {
+async function executeWithRetry(options: ExecuteCommandOptions, config: RetryConfig = DEFAULT_RETRY_CONFIG): Promise<{ stdout: string; stderr: string }> {
   let lastError: any;
-  
+
   for (let attempt = 0; attempt <= config.maxRetries; attempt++) {
     try {
       let stdout: string, stderr: string;
-      
+
       // Try to use execFile for better security when possible
       if (options.command.includes('npx backlog') && !options.command.includes('|') && !options.command.includes(';')) {
         const { executable, args } = parseCommand(options.command);
@@ -158,21 +144,21 @@ async function executeWithRetry(
         stdout = result.stdout;
         stderr = result.stderr;
       }
-      
+
       return { stdout, stderr };
     } catch (error) {
       lastError = error;
       console.warn({ error, attempt }, 'Command execution failed');
-      
+
       // Don't retry if it's the last attempt or if error is not retryable
       if (attempt === config.maxRetries || !isRetryableError(error)) {
         break;
       }
-      
+
       await wait(attempt, config);
     }
   }
-  
+
   throw lastError;
 }
 
@@ -212,7 +198,7 @@ export async function executeCommand(options: ExecuteCommandOptions): Promise<Ca
     const retryConfig: RetryConfig = {
       ...DEFAULT_RETRY_CONFIG,
       maxRetries: options.retries ?? DEFAULT_RETRY_CONFIG.maxRetries,
-      baseDelay: options.retryDelay ?? DEFAULT_RETRY_CONFIG.baseDelay
+      baseDelay: options.retryDelay ?? DEFAULT_RETRY_CONFIG.baseDelay,
     };
 
     const { stdout, stderr } = await executeWithRetry(options, retryConfig);

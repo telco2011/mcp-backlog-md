@@ -3,6 +3,7 @@
 This document provides comprehensive documentation for all MCP tools available in the backlog.md server.
 
 ## 📖 Related Documentation
+
 - [🏠 Back to README](../README.md)
 - [🚀 Developer Guide](../DEVELOPER_GUIDE.md) - Development setup and guidelines
 - [📝 Usage Examples](EXAMPLES.md) - Practical examples and workflows
@@ -15,9 +16,11 @@ This document provides comprehensive documentation for all MCP tools available i
 ### Task Management
 
 #### `create_task`
+
 Creates a new task in the backlog.
 
 **Parameters:**
+
 - `title` (required): The title of the task
 - `description` (optional): Task description
 - `assignee` (optional): Person assigned to the task
@@ -33,6 +36,7 @@ Creates a new task in the backlog.
 - `projectPath` (required): Path to the project directory
 
 **Example:**
+
 ```json
 {
   "title": "Implement user authentication",
@@ -46,9 +50,11 @@ Creates a new task in the backlog.
 ```
 
 #### `edit_task`
+
 Edits an existing task in the backlog.
 
 **Parameters:**
+
 - `id` (required): Task ID to edit
 - `title` (optional): New task title
 - `description` (optional): New description
@@ -73,17 +79,21 @@ Edits an existing task in the backlog.
 - `projectPath` (required): Path to the project directory
 
 #### `view_task`
+
 Views details of a specific task.
 
 **Parameters:**
+
 - `id` (required): Task ID to view
 - `plain` (optional): View in plain mode for AI (default: true)
 - `projectPath` (required): Path to the project directory
 
 #### `list_tasks`
+
 Lists tasks with optional filtering.
 
 **Parameters:**
+
 - `assignee` (optional): Filter by assignee
 - `parent` (optional): Filter by parent task ID
 - `plain` (optional): View in plain mode for AI (default: true)
@@ -93,9 +103,11 @@ Lists tasks with optional filtering.
 - `projectPath` (required): Path to the project directory
 
 #### `archive_task`
+
 Archives one or more completed tasks.
 
 **Parameters:**
+
 - `id` (optional): Single task ID to archive
 - `ids` (optional): Comma-separated task IDs to archive
 - `projectPath` (required): Path to the project directory
@@ -105,9 +117,11 @@ Archives one or more completed tasks.
 ### Draft Management
 
 #### `create_draft`
+
 Creates a draft task.
 
 **Parameters:**
+
 - `title` (required): Draft title
 - `description` (optional): Draft description
 - `assignee` (optional): Assignee
@@ -116,50 +130,62 @@ Creates a draft task.
 - `projectPath` (required): Path to the project directory
 
 #### `promote_draft`
+
 Promotes a draft to an active task.
 
 **Parameters:**
+
 - `id` (required): Draft ID to promote
 - `projectPath` (required): Path to the project directory
 
 #### `demote_task`
+
 Demotes a task back to draft status.
 
 **Parameters:**
+
 - `id` (required): Task ID to demote
 - `projectPath` (required): Path to the project directory
 
 ### Documentation Management
 
 #### `create_doc`
+
 Creates a new documentation file.
 
 **Parameters:**
+
 - `title` (required): Document title
 - `path` (optional): Path to create document in
 - `type` (optional): Document type
 - `projectPath` (required): Path to the project directory
 
 #### `list_docs`
+
 Lists all documentation files.
 
 **Parameters:**
+
 - `plain` (optional): View in plain mode for AI (default: true)
 - `projectPath` (required): Path to the project directory
 
 #### `view_doc`
+
 Views content of a specific document.
 
 **Parameters:**
+
 - `id` (required): Document ID to view
 - `projectPath` (required): Path to the project directory
 
 ### Decision Management
 
 #### `create_decision`
+
 Creates a new decision record.
 
 **Parameters:**
+
 - `title` (required): Decision title
 - `status` (optional): Decision status
 - `projectPath` (required): Path to the project directory
@@ -167,29 +193,37 @@ Creates a new decision record.
 ### Project Management
 
 #### `config_list`
+
 Lists current project configuration.
 
 **Parameters:**
+
 - `projectPath` (required): Path to the project directory
 
 #### `config_set`
+
 Updates project configuration settings.
 
 **Parameters:**
+
 - `key` (required): Configuration key to set
 - `value` (required): Value to set for the key
 - `projectPath` (required): Path to the project directory
 
 #### `cleanup`
+
 Cleans up completed tasks.
 
 **Parameters:**
+
 - `projectPath` (required): Path to the project directory
 
 #### `export_board`
+
 Exports the Kanban board to a markdown file.
 
 **Parameters:**
+
 - `exportVersion` (optional): Version to include in export
 - `file` (optional): Output file path
 - `force` (optional): Force overwrite existing file (boolean)
@@ -197,22 +231,27 @@ Exports the Kanban board to a markdown file.
 - `projectPath` (required): Path to the project directory
 
 #### `browser`
+
 Launches the web UI for backlog management.
 
 **Parameters:**
+
 - `noOpen` (optional): Don't open browser automatically (default: true)
 - `port` (optional): Port for the web UI
 - `projectPath` (required): Path to the project directory
 
 #### `update_agent_instructions`
+
 Updates agent instruction files.
 
 **Parameters:**
+
 - `projectPath` (required): Path to the project directory
 
 ## Error Handling
 
 All tools implement robust error handling with:
+
 - Input validation using Zod schemas
 - Retry logic with exponential backoff for transient failures
 - Custom error types (`CliError`, `SystemError`) for better context
@@ -228,6 +267,7 @@ All tools implement robust error handling with:
 ## Response Format
 
 All tools return responses in the MCP standard format:
+
 ```json
 {
   "content": [
@@ -245,6 +285,7 @@ All tools return responses in the MCP standard format:
 ## Common Usage Patterns
 
 ### Creating and Managing Tasks
+
 ```json
 // Create a task
 {
@@ -271,6 +312,7 @@ All tools return responses in the MCP standard format:
 ```
 
 ### Working with Drafts
+
 ```json
 // Create draft
 {
@@ -287,6 +329,7 @@ All tools return responses in the MCP standard format:
 ```
 
 ### Documentation Workflow
+
 ```json
 // Create documentation
 {

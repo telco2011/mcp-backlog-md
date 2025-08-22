@@ -1,7 +1,7 @@
 name: ✨ Feature Request
 description: Suggest a new feature or enhancement
-title: "[FEATURE] "
-labels: ["enhancement", "triage"]
+title: '[FEATURE] '
+labels: ['enhancement', 'triage']
 assignees: []
 
 body:
@@ -9,7 +9,7 @@ body:
     attributes:
       value: |
         Thank you for suggesting a new feature! ✨
-        
+
         Please provide detailed information to help us understand your request.
 
   - type: checkboxes
@@ -49,15 +49,15 @@ body:
       label: 🔧 Feature Type
       description: What type of feature is this?
       options:
-        - "🛠️ New MCP Tool - Add a new tool for backlog operations"
-        - "⚡ Enhancement - Improve existing tool functionality"
-        - "🎨 User Experience - Improve usability or interface"
-        - "🔒 Security - Security-related improvement"
-        - "📈 Performance - Performance optimization"
-        - "📚 Documentation - Documentation improvement"
-        - "🔧 Developer Experience - Tools and workflow improvements"
-        - "🌐 Integration - New integrations or compatibility"
-        - "Other"
+        - '🛠️ New MCP Tool - Add a new tool for backlog operations'
+        - '⚡ Enhancement - Improve existing tool functionality'
+        - '🎨 User Experience - Improve usability or interface'
+        - '🔒 Security - Security-related improvement'
+        - '📈 Performance - Performance optimization'
+        - '📚 Documentation - Documentation improvement'
+        - '🔧 Developer Experience - Tools and workflow improvements'
+        - '🌐 Integration - New integrations or compatibility'
+        - 'Other'
     validations:
       required: true
 
@@ -83,7 +83,7 @@ body:
       value: |
         1. 
         2. 
-        3. 
+        3.
 
   - type: textarea
     id: api-design
@@ -120,10 +120,10 @@ body:
       label: ⭐ Priority Level
       description: How important is this feature to you?
       options:
-        - "🔴 Critical - Essential for my workflow"
-        - "🟠 High - Would significantly improve my workflow"
-        - "🟡 Medium - Would be a nice improvement"
-        - "🟢 Low - Would be nice to have eventually"
+        - '🔴 Critical - Essential for my workflow'
+        - '🟠 High - Would significantly improve my workflow'
+        - '🟡 Medium - Would be a nice improvement'
+        - '🟢 Low - Would be nice to have eventually'
     validations:
       required: true
 
@@ -175,13 +175,13 @@ body:
     attributes:
       value: |
         ---
-        
+
         ## 📚 Helpful Resources
-        
+
         - [🚀 Developer Guide](../DEVELOPER_GUIDE.md) - Learn about implementing new features
         - [🤝 Contributing](../CONTRIBUTING.md) - How to contribute to the project
         - [📚 API Documentation](../docs/API.md) - Current available tools
         - [📝 Examples](../docs/EXAMPLES.md) - See existing workflows
         - [💬 GitHub Discussions](../../discussions) - Discuss ideas with the community
-        
+
         Thank you for helping make the MCP Backlog.md Server better! 🎉

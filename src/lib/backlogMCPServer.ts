@@ -14,15 +14,16 @@
  * Last Updated:
  * 2025-07-25 by Cline (Model: Cline, Task: Add missing file header)
  */
-import * as changeCase from 'change-case';
 import { readdir } from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import * as changeCase from 'change-case';
 
 import pckJson from '../../package.json' with { type: 'json' };
+
 import { McpTool } from './types';
 
 export class BacklogMCPServer {

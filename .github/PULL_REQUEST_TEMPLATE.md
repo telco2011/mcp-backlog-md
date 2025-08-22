@@ -18,6 +18,7 @@
 ### 🔗 Related Issues
 
 <!-- Link to related issues using "Fixes #123" or "Closes #123" -->
+
 - Fixes #
 - Related to #
 
@@ -36,12 +37,14 @@
 <!-- Provide specific instructions for testing the changes -->
 
 1. **Setup:**
+
    ```bash
    npm install
    npm run build
    ```
 
 2. **Test the changes:**
+
    ```bash
    # Add specific test commands or MCP inspector steps
    ```
@@ -139,7 +142,7 @@ Please pay special attention to:
 - [📚 API Documentation](../docs/API.md)
 - [🔒 Security Policy](../SECURITY.md)
 
-<!-- 
+<!--
 Thank you for contributing to MCP Backlog.md Server! 🎉
 Your contributions help make this project better for the entire community.
 -->

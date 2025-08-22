@@ -8,20 +8,21 @@ This project provides a production-ready MCP (Model Context Protocol) server for
 
 ## 📚 Documentation Navigation
 
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| [📖 README.md](README.md) | Project overview and quick start | Everyone |
-| [🚀 DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | Comprehensive development guide | Contributors & Maintainers |
-| [📚 API Reference](docs/API.md) | Complete API documentation | Developers & Integrators |
-| [📝 Examples](docs/EXAMPLES.md) | Usage examples and workflows | Users & Developers |
-| [🤝 Contributing](CONTRIBUTING.md) | Contribution guidelines | Contributors |
-| [🔒 Security](SECURITY.md) | Security policy and reporting | Security Researchers |
+| Document                                    | Purpose                          | Audience                   |
+| ------------------------------------------- | -------------------------------- | -------------------------- |
+| [📖 README.md](README.md)                   | Project overview and quick start | Everyone                   |
+| [🚀 DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) | Comprehensive development guide  | Contributors & Maintainers |
+| [📚 API Reference](docs/API.md)             | Complete API documentation       | Developers & Integrators   |
+| [📝 Examples](docs/EXAMPLES.md)             | Usage examples and workflows     | Users & Developers         |
+| [🤝 Contributing](CONTRIBUTING.md)          | Contribution guidelines          | Contributors               |
+| [🔒 Security](SECURITY.md)                  | Security policy and reporting    | Security Researchers       |
 
 ## 🚀 Quick Start
 
 ### For End Users
 
 1. **Install the server:**
+
    ```bash
    npm install -g mcp-backlog-md
    # or use with npx (no installation required)
@@ -29,6 +30,7 @@ This project provides a production-ready MCP (Model Context Protocol) server for
    ```
 
 2. **Set up your backlog project:**
+
    ```bash
    npx backlog init
    ```
@@ -42,6 +44,7 @@ This project provides a production-ready MCP (Model Context Protocol) server for
 Ready to contribute? 🛠️
 
 1. **Quick setup:**
+
    ```bash
    git clone https://github.com/telco2011/mcp-backlog-md.git
    cd mcp-backlog-md
@@ -98,6 +101,7 @@ Ready to contribute? 🛠️
 This server provides comprehensive MCP tools that map directly to backlog.md CLI commands:
 
 #### Task Management
+
 - **createTask** - Create new tasks with full option support
 - **editTask** - Edit existing tasks with complete CLI parity
 - **viewTask** - View task details
@@ -105,21 +109,25 @@ This server provides comprehensive MCP tools that map directly to backlog.md CLI
 - **archiveTask** - Archive completed tasks (supports bulk operations)
 - **demoteTask** - Convert tasks back to drafts
 
-#### Draft Management  
+#### Draft Management
+
 - **createDraft** - Create draft tasks for future planning
 - **promoteDraft** - Promote drafts to active tasks
 
 #### Documentation & Decisions
+
 - **createDoc** - Create documentation files with type support
 - **listDocs** - List all project documentation
 - **viewDoc** - View document contents
 - **createDecision** - Create architectural decision records
 
 #### Board & Export
+
 - **exportBoard** - Export Kanban board to markdown files
 - **browser** - Launch web UI for visual backlog management
 
 #### Project Management
+
 - **configList** - List current project configuration
 - **configSet** - Update project settings and preferences
 - **cleanup** - Clean up completed tasks and maintain board hygiene
@@ -128,18 +136,21 @@ This server provides comprehensive MCP tools that map directly to backlog.md CLI
 ### Enhanced Features
 
 #### 🔒 **Security & Reliability**
+
 - **Command Injection Prevention**: Secure command execution with input sanitization
 - **Retry Logic**: Automatic retry with exponential backoff for transient failures
 - **Error Recovery**: Robust error handling with detailed context and recovery suggestions
 - **Path Validation**: Prevents directory traversal and validates project structure
 
 #### 🚀 **Performance & Quality**
+
 - **Optimized Execution**: Uses `execFile` when possible for better security and performance
 - **Comprehensive Logging**: Detailed logging for debugging and monitoring
 - **Type Safety**: Full TypeScript implementation with strict type checking
 - **Input Validation**: Zod schema validation for all tool parameters
 
 #### 🔧 **Developer Experience**
+
 - **CI/CD Integration**: GitHub Actions workflows for automated testing and deployment
 - **Code Quality**: ESLint, Prettier, and automated code formatting
 - **Testing Framework**: Jest configuration ready for comprehensive test coverage
@@ -194,6 +205,7 @@ npm run clean
 ### Architecture
 
 The server uses dynamic tool discovery - all `.ts` files in `src/tools/` are automatically loaded and registered. Each tool follows a standard pattern:
+
 - **Schema validation** using Zod
 - **Command execution** via centralized `commandExecutor.ts`
 - **Error handling** with structured responses
@@ -203,18 +215,21 @@ The server uses dynamic tool discovery - all `.ts` files in `src/tools/` are aut
 We welcome contributions from developers of all skill levels! This project follows enterprise-grade development practices with comprehensive testing, security, and quality standards.
 
 **Get Started:**
+
 1. 📖 Read our [Contributing Guide](CONTRIBUTING.md) for the complete process
 2. 🚀 Follow the [Developer Guide](DEVELOPER_GUIDE.md) for technical setup
 3. 🔒 Review our [Security Policy](SECURITY.md) for security-related contributions
 
 **What we're looking for:**
+
 - 🐛 Bug fixes and improvements
-- ✨ New MCP tool implementations  
+- ✨ New MCP tool implementations
 - 📚 Documentation enhancements
 - 🧪 Test coverage improvements
 - 🔒 Security enhancements
 
 **Development Standards:**
+
 - **Code Quality**: ESLint, Prettier, TypeScript strict mode
 - **Testing**: Jest with coverage requirements (>70%)
 - **Security**: Automated security auditing and vulnerability scanning
@@ -224,6 +239,7 @@ We welcome contributions from developers of all skill levels! This project follo
 ## Quality Assurance
 
 This project maintains high quality standards through:
+
 - **Automated Testing**: Comprehensive test suite with coverage reporting
 - **Code Quality**: ESLint, Prettier, and TypeScript strict mode
 - **Security**: Regular security audits and vulnerability scanning
@@ -239,23 +255,28 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📖 Documentation Index
 
 **Getting Started:**
+
 - [🚀 Quick Start](#-quick-start) - Get up and running fast
 - [⚙️ Installation](#installation) - Detailed setup instructions
 - [✨ Features](#features) - What this server can do
 
 **For Users:**
+
 - [📝 Usage Examples](docs/EXAMPLES.md) - Practical workflows and patterns
 - [📚 API Reference](docs/API.md) - Complete tool documentation
 
 **For Contributors:**
+
 - [🚀 Developer Guide](DEVELOPER_GUIDE.md) - Comprehensive development setup
 - [🤝 Contributing](CONTRIBUTING.md) - How to contribute to the project
 - [🔒 Security Policy](SECURITY.md) - Security guidelines and reporting
 
 **For Maintainers:**
+
 - [🏗️ Claude Instructions](CLAUDE.md) - AI assistant development guide
 
 ---
+
 <div align="center">
 <p>Built with ❤️ for the backlog.md community</p>
 <p><a href="https://github.com/MrLesk/Backlog.md">Original backlog.md CLI</a> | <a href="https://github.com/telco2011/mcp-backlog-md">This MCP Server</a></p>
