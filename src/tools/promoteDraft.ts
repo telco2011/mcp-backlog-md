@@ -27,10 +27,10 @@ const schema = {
   id: z.string().describe('The ID of the draft to promote'),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+const _zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Promoting draft', params);
   const command = `${backlogCommand} draft promote ${params.id}`;
   return executeCommand({

@@ -21,11 +21,13 @@ const name = 'createTask';
 const schema = {
   title: z.string().min(1, 'Title is required').describe('The title of the task.'),
   description: z.string().optional().describe('The description of the task.'),
+  desc: z.string().optional().describe('Alternative description field (alias for description).'),
+  ordinal: z.number().optional().describe('Task ordering position.'),
   assignee: z.string().optional().describe('The assignee of the task.'),
   status: z.string().optional().describe('The status of the task.'),
   labels: z.string().optional().describe('Comma-separated list of labels for the task.'),
   priority: z.string().optional().describe('The priority of the task (high, medium, low).'),
-  acceptanceCriteria: z.string().optional().describe('Comma-separated list of acceptance criteria.'),
+  acceptanceCriteria: z.string().optional().describe('Comma-separated list of acceptance criteria (creteria 1,criteria 2,criteria 3).'),
   plan: z.string().optional().describe('The implementation plan for the task.'),
   notes: z.string().optional().describe('Implementation notes for the task.'),
   draft: z.boolean().optional().describe('Create the task as a draft.'),
@@ -34,12 +36,14 @@ const schema = {
   ...withProjectPath.shape,
 };
 
-export const zSchema = z.object(schema);
+export const _zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Creating task', params);
   let command = `${backlogCommand} task create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;
+  if (params.desc) command += ` --desc "${params.desc}"`;
+  if (params.ordinal) command += ` --ordinal ${params.ordinal}`;
   if (params.assignee) command += ` --assignee "${params.assignee}"`;
   if (params.status) command += ` --status "${params.status}"`;
   // The CLI expects a comma-separated string for labels

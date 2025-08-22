@@ -28,10 +28,10 @@ const schema = {
   status: z.string().optional().describe('The status of the decision'),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+const _zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Creating decision', params);
   let command = `${backlogCommand} decision create "${params.title}"`;
   if (params.status) command += ` --status "${params.status}"`;

@@ -14,12 +14,13 @@
  * 2025-08-05 by Cline (Fixed `export_board` command to use `board export` syntax and updated documentation)
  */
 import * as changeCase from 'change-case';
+import { z } from 'zod';
 
 import { CallToolResult } from '@modelcontextprotocol/sdk/types.js';
-import { backlogCommand } from '../lib/utils.js';
+
 import { executeCommand } from '../lib/commandExecutor.js';
 import { withProjectPath } from '../lib/schemas.js';
-import { z } from 'zod';
+import { backlogCommand } from '../lib/utils.js';
 
 const name = 'exportBoard';
 const schema = {
@@ -29,10 +30,10 @@ const schema = {
   exportVersion: z.string().optional().describe('Version to include in the export'),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+const _zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Exporting board', params);
   let command = `${backlogCommand} board export`;
   if (params.file) command += ` --file ${params.file}`;

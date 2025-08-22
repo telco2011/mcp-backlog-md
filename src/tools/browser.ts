@@ -28,10 +28,10 @@ const schema = {
   noOpen: z.boolean().optional().describe("Don't open the browser automatically").default(true),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+const _zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Launching browser', params);
   let command = `${backlogCommand} browser`;
   if (params.port) command += ` --port ${params.port}`;

@@ -1,0 +1,149 @@
+name: 🔒 Security Issue
+description: Report a security vulnerability (for non-critical issues only)
+title: '[SECURITY] '
+labels: ['security', 'triage']
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚠️ IMPORTANT SECURITY NOTICE
+
+        **For critical security vulnerabilities, please DO NOT use this public issue form.**
+
+        Instead, please report critical security issues privately by:
+        - 📧 Emailing: `security@your-domain.com` (replace with actual email)
+        - 🔐 Using our [Security Policy](../SECURITY.md) guidelines
+
+        Use this form only for:
+        - 📚 Security documentation improvements
+        - 🔍 Security enhancement suggestions
+        - 🛡️ General security hardening ideas
+        - ❓ Security-related questions
+
+  - type: checkboxes
+    id: issue-type
+    attributes:
+      label: 🔒 Issue Type
+      description: What type of security issue is this? (Select all that apply)
+      options:
+        - label: 📚 Documentation improvement for security practices
+        - label: 🛡️ Security hardening suggestion
+        - label: 🔍 Security enhancement idea
+        - label: ❓ Security-related question
+        - label: 🏗️ Security architecture improvement
+        - label: 🧪 Security testing improvement
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: 📝 Description
+      description: Describe the security concern or improvement
+      placeholder: Please provide a clear description of the security issue or improvement...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: ⚡ Severity Assessment
+      description: How would you rate the security impact?
+      options:
+        - '🟢 Low - Informational or documentation issue'
+        - '🟡 Medium - Security hardening opportunity'
+        - '🟠 High - Should be addressed but not critical'
+        - '🔴 Critical - STOP! Use private reporting instead'
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: 🔍 Current Security Behavior
+      description: How does the current implementation handle security?
+      placeholder: Describe the current security implementation or behavior...
+
+  - type: textarea
+    id: proposed-improvement
+    attributes:
+      label: 💡 Proposed Security Improvement
+      description: What security improvement do you suggest?
+      placeholder: Describe your suggested security enhancement...
+
+  - type: textarea
+    id: impact-analysis
+    attributes:
+      label: 🎯 Impact Analysis
+      description: What would be the impact of this security improvement?
+      placeholder: |
+        - Who would benefit from this improvement?
+        - What risks would be mitigated?
+        - Are there any trade-offs to consider?
+
+  - type: textarea
+    id: implementation-notes
+    attributes:
+      label: 🛠️ Implementation Notes
+      description: Any thoughts on how this could be implemented?
+      placeholder: Technical suggestions, considerations, or references...
+
+  - type: checkboxes
+    id: security-areas
+    attributes:
+      label: 🔒 Security Areas Affected
+      description: Which security areas does this relate to? (Select all that apply)
+      options:
+        - label: Input validation and sanitization
+        - label: Command execution security
+        - label: File system access and path validation
+        - label: Error handling and information disclosure
+        - label: Dependency management and supply chain
+        - label: Authentication and authorization
+        - label: Data protection and privacy
+        - label: Network security
+        - label: Logging and monitoring
+        - label: Documentation and security awareness
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 📚 References
+      description: Any relevant security references, standards, or documentation
+      placeholder: |
+        - OWASP guidelines: 
+        - Security advisories: 
+        - Best practices documentation: 
+        - Related CVEs or security reports:
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: 🤝 Contribution
+      description: Would you be interested in contributing?
+      options:
+        - label: I'd be willing to help implement this security improvement
+        - label: I can help with security testing
+        - label: I can help with security documentation
+        - label: I can help review security-related code changes
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+        ## 📚 Security Resources
+
+        - [🔒 Security Policy](../SECURITY.md) - Our complete security policy
+        - [🚀 Developer Guide - Security](../DEVELOPER_GUIDE.md#-security-considerations) - Security development guidelines
+        - [🤝 Contributing - Security](../CONTRIBUTING.md#-security-requirements) - Security contribution requirements
+
+        ## 🆘 Need Help?
+
+        - 💬 [GitHub Discussions](../../discussions) - Public security discussions
+        - 📧 Private security reporting: Use our [Security Policy](../SECURITY.md)
+
+        Thank you for helping keep the MCP Backlog.md Server secure! 🙏

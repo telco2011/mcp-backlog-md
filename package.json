@@ -1,24 +1,7 @@
 {
   "name": "mcp-backlog-md",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "An MCP (Model Context Protocol) server for the backlog.md CLI tool.",
-  "type": "module",
-  "main": "build/src/server.js",
-  "bin": {
-    "mcp-backlog-md": "./build/src/server.js"
-  },
-  "scripts": {
-    "start": "node build/src/server.js",
-    "clean:all": "run-s clean clean:all:cmd",
-    "clean:all:cmd": "rimraf node_modules package-lock.json",
-    "clean": "rimraf build",
-    "build": "run-s clean build:cmd",
-    "build:cmd": "tsc && chmod 755 build/src/server.js",
-    "lint": "eslint . --ext .ts",
-    "format": "prettier --write .",
-    "check-all": "run-s format lint build",
-    "inspector": "npx @modelcontextprotocol/inspector build/src/server.js"
-  },
   "keywords": [
     "mcp",
     "backlog",
@@ -26,8 +9,35 @@
     "tasks",
     "automation"
   ],
-  "author": "telco2011 <davidlopez.david@gmail.com>",
   "license": "MIT",
+  "author": "telco2011 <davidlopez.david@gmail.com>",
+  "type": "module",
+  "main": "build/src/server.js",
+  "bin": {
+    "mcp-backlog-md": "./build/src/server.js"
+  },
+  "scripts": {
+    "build": "run-s clean build:cmd",
+    "build:cmd": "tsc && chmod 755 build/src/server.js",
+    "check-all": "run-s format lint:fix typecheck build",
+    "clean": "rimraf build",
+    "clean:all": "run-s clean clean:all:cmd",
+    "clean:all:cmd": "rimraf node_modules package-lock.json",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "inspector": "npx @modelcontextprotocol/inspector build/src/server.js",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "prepare": "husky install",
+    "start": "node build/src/server.js",
+    "test": "run-s clean test:cmd",
+    "test:cmd": "jest",
+    "test:coverage": "run-s clean test:coverage:cmd",
+    "test:coverage:cmd": "jest --coverage",
+    "test:watch": "run-s clean test:watch:cmd",
+    "test:watch:cmd": "jest --watch",
+    "typecheck": "tsc --noEmit"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.16.0",
     "change-case": "^5.4.4",
@@ -36,16 +46,29 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/jest": "^29.5.12",
     "@types/node": "^24.0.15",
     "@typescript-eslint/eslint-plugin": "^8.37.0",
     "@typescript-eslint/parser": "^8.37.0",
+    "audit-ci": "^7.0.1",
+    "bundlesize": "^0.18.2",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.3",
+    "globals": "^15.11.0",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
+    "ts-jest": "^29.1.2",
     "typescript": "^5.8.3"
-  }
+  },
+  "bundlesize": [
+    {
+      "path": "./build/src/**/*.js",
+      "maxSize": "500 kB"
+    }
+  ]
 }

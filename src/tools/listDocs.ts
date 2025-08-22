@@ -27,10 +27,10 @@ const schema = {
   plain: z.boolean().optional().describe('View in plain mode for AI').default(true),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+const _zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Listing documents');
   let command = `${backlogCommand} doc list`;
   if (params.plain) command += ' --plain';

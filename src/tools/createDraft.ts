@@ -31,10 +31,10 @@ const schema = {
   labels: z.string().optional().describe('Comma-separated list of labels for the draft.'),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+const _zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Creating draft', params);
   let command = `${backlogCommand} draft create "${params.title}"`;
   if (params.description) command += ` --description "${params.description}"`;

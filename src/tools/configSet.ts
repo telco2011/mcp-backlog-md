@@ -28,10 +28,10 @@ const schema = {
   value: z.string().describe('The value to set for the configuration key'),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zSchema = z.object(schema);
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+const _zSchema = z.object(schema);
+
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Setting configuration', params);
   const command = `${backlogCommand} config set ${params.key} ${params.value}`;
   return executeCommand({

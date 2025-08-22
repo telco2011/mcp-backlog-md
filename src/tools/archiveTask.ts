@@ -29,12 +29,11 @@ const schema = {
   ids: z.string().optional().describe('A comma-separated string of task IDs to archive'),
   ...withProjectPath.shape,
 };
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const zSchema = z.object(schema).refine((data) => data.id || data.ids, {
+const _zSchema = z.object(schema).refine((data) => data.id || data.ids, {
   message: 'Either id or ids must be provided',
 });
 
-async function execute(params: z.infer<typeof zSchema>): Promise<CallToolResult> {
+async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Archiving task(s)', params);
   if (!params.id && !params.ids) {
     throw new SystemError('Either "id" or "ids" must be provided to archive a task.', { cause: new Error('Invalid parameters') });
