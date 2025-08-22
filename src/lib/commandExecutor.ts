@@ -83,12 +83,12 @@ export function parseCommand(command: string): { executable: string; args: strin
   let inQuotes = false;
   let quoteChar = '';
   let currentWasQuoted = false;
-  
+
   const trimmedCommand = command.trim();
-  
+
   for (let i = 0; i < trimmedCommand.length; i++) {
     const char = trimmedCommand[i];
-    
+
     if (!inQuotes && (char === '"' || char === "'")) {
       // Start of quoted section
       inQuotes = true;
@@ -111,17 +111,17 @@ export function parseCommand(command: string): { executable: string; args: strin
       current += char;
     }
   }
-  
+
   // Add final argument if exists
   if (current !== '' || currentWasQuoted) {
     parts.push(current);
     wasQuoted.push(currentWasQuoted);
   }
-  
+
   if (parts.length === 0) {
     throw new Error('Empty command provided');
   }
-  
+
   const executable = parts[0];
   const args = parts.slice(1).map((arg, index) => {
     // Only sanitize unquoted arguments to preserve quoted strings

@@ -68,12 +68,7 @@ describe('viewBoard tool', () => {
     });
 
     it('should handle different project paths', async () => {
-      const testCases = [
-        '/path/to/project',
-        '/home/user/workspace/project',
-        '/tmp/test-project',
-        '/root/project-with-dashes',
-      ];
+      const testCases = ['/path/to/project', '/home/user/workspace/project', '/tmp/test-project', '/root/project-with-dashes'];
 
       for (const projectPath of testCases) {
         await viewBoard.execute({

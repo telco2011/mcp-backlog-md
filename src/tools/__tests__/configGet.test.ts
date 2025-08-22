@@ -42,14 +42,7 @@ describe('configGet tool', () => {
     });
 
     it('should handle different configuration keys', async () => {
-      const testCases = [
-        'board.columns',
-        'defaults.assignee',
-        'defaults.priority',
-        'board.title',
-        'github.token',
-        'export.format',
-      ];
+      const testCases = ['board.columns', 'defaults.assignee', 'defaults.priority', 'board.title', 'github.token', 'export.format'];
 
       for (const key of testCases) {
         await configGet.execute({
@@ -66,13 +59,7 @@ describe('configGet tool', () => {
     });
 
     it('should handle keys with special characters', async () => {
-      const testCases = [
-        'key-with-dashes',
-        'key_with_underscores',
-        'key.with.dots',
-        'key123',
-        'UPPERCASE_KEY',
-      ];
+      const testCases = ['key-with-dashes', 'key_with_underscores', 'key.with.dots', 'key123', 'UPPERCASE_KEY'];
 
       for (const key of testCases) {
         await configGet.execute({
@@ -89,12 +76,7 @@ describe('configGet tool', () => {
     });
 
     it('should handle different project paths', async () => {
-      const testCases = [
-        '/path/to/project',
-        '/home/user/workspace/project',
-        '/tmp/test-project',
-        '/root/project-with-dashes',
-      ];
+      const testCases = ['/path/to/project', '/home/user/workspace/project', '/tmp/test-project', '/root/project-with-dashes'];
 
       for (const projectPath of testCases) {
         await configGet.execute({

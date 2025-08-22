@@ -27,7 +27,7 @@ const schema = {
   status: z.string().optional().describe('The status of the task.'),
   labels: z.string().optional().describe('Comma-separated list of labels for the task.'),
   priority: z.string().optional().describe('The priority of the task (high, medium, low).'),
-  acceptanceCriteria: z.string().optional().describe('Comma-separated list of acceptance criteria.'),
+  acceptanceCriteria: z.string().optional().describe('Comma-separated list of acceptance criteria (creteria 1,criteria 2,criteria 3).'),
   plan: z.string().optional().describe('The implementation plan for the task.'),
   notes: z.string().optional().describe('Implementation notes for the task.'),
   draft: z.boolean().optional().describe('Create the task as a draft.'),

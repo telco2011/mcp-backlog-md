@@ -56,13 +56,7 @@ describe('viewDraft tool', () => {
     });
 
     it('should handle different draft IDs', async () => {
-      const testCases = [
-        'draft-123',
-        'epic-5',
-        'bug-fix-42',
-        'feature-xyz',
-        'draft-with-dashes_and_underscores.123',
-      ];
+      const testCases = ['draft-123', 'epic-5', 'bug-fix-42', 'feature-xyz', 'draft-with-dashes_and_underscores.123'];
 
       for (const draftId of testCases) {
         await viewDraft.execute({

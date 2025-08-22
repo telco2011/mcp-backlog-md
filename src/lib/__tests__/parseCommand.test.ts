@@ -108,16 +108,26 @@ describe('parseCommand', () => {
     });
 
     it('should handle complex task creation with all options', () => {
-      const result = parseCommand('npx backlog task create "Feature Implementation" --description "Detailed description here" --assignee developer --status "in-progress" --priority high --plan "Step 1: Design\nStep 2: Implement"');
+      const result = parseCommand(
+        'npx backlog task create "Feature Implementation" --description "Detailed description here" --assignee developer --status "in-progress" --priority high --plan "Step 1: Design\nStep 2: Implement"'
+      );
       expect(result).toEqual({
         executable: 'npx',
         args: [
-          'backlog', 'task', 'create', 'Feature Implementation',
-          '--description', 'Detailed description here',
-          '--assignee', 'developer',
-          '--status', 'in-progress',
-          '--priority', 'high',
-          '--plan', 'Step 1: Design\nStep 2: Implement'
+          'backlog',
+          'task',
+          'create',
+          'Feature Implementation',
+          '--description',
+          'Detailed description here',
+          '--assignee',
+          'developer',
+          '--status',
+          'in-progress',
+          '--priority',
+          'high',
+          '--plan',
+          'Step 1: Design\nStep 2: Implement',
         ],
       });
     });
@@ -160,7 +170,7 @@ describe('parseCommand', () => {
       expect(result.args).toContain('-rf'); // -rf contains - which is not removed
       expect(result.args).toContain('/'); // / by itself is not removed, only ../ patterns
       // Dangerous characters should be removed from unquoted args
-      expect(result.args.some(arg => arg.includes(';'))).toBe(false);
+      expect(result.args.some((arg) => arg.includes(';'))).toBe(false);
     });
 
     it('should preserve content in quoted arguments even with special characters', () => {
@@ -182,7 +192,7 @@ describe('parseCommand', () => {
       // Unquoted args should be sanitized, quoted ones preserved (minus directory traversal)
       expect(result.args).toContain('Valid Title');
       expect(result.args).toContain('Safe description');
-      expect(result.args.some(arg => arg.includes('&'))).toBe(false);
+      expect(result.args.some((arg) => arg.includes('&'))).toBe(false);
     });
   });
 });

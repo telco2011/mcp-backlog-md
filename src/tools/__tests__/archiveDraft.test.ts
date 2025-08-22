@@ -88,10 +88,12 @@ describe('archiveDraft tool', () => {
     it('should handle command execution errors', async () => {
       mockedExecuteCommand.mockRejectedValue(new Error('Archive failed'));
 
-      await expect(archiveDraft.execute({
-        ...baseParams,
-        id: 'draft-1',
-      })).rejects.toThrow('Archive failed');
+      await expect(
+        archiveDraft.execute({
+          ...baseParams,
+          id: 'draft-1',
+        })
+      ).rejects.toThrow('Archive failed');
 
       expect(mockedExecuteCommand).toHaveBeenCalledWith({
         command: 'npx backlog draft archive draft-1',

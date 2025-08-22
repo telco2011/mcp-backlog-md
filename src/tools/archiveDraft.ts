@@ -24,11 +24,11 @@ export const _zSchema = z.object(schema);
 
 async function execute(params: z.infer<typeof _zSchema>): Promise<CallToolResult> {
   console.info('Archiving draft(s)', params);
-  
+
   let command = `${backlogCommand} draft archive`;
   if (params.ids) {
     // Handle multiple draft IDs
-    const ids = params.ids.split(',').map(id => id.trim());
+    const ids = params.ids.split(',').map((id) => id.trim());
     command += ` ${ids.join(' ')}`;
   } else {
     // Handle single draft ID

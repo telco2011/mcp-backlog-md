@@ -118,7 +118,8 @@ describe('editTask tool', () => {
       await editTaskTool.execute(params);
 
       expect(mockedExecuteCommand).toHaveBeenCalledWith({
-        command: 'npx backlog task edit task-1 --title "New Title" --desc "New description" --ordinal 10 --assignee "john.doe" --status "in-progress" --priority high --check-ac 1',
+        command:
+          'npx backlog task edit task-1 --title "New Title" --desc "New description" --ordinal 10 --assignee "john.doe" --status "in-progress" --priority high --check-ac 1',
         successMessage: 'Task edited successfully',
         projectPath: '/test/project',
       });
@@ -144,7 +145,8 @@ describe('editTask tool', () => {
       await editTaskTool.execute(params);
 
       expect(mockedExecuteCommand).toHaveBeenCalledWith({
-        command: 'npx backlog task edit task-1 --description "Standard description" --assignee "jane.doe" --status "completed" --label "bug,critical" --priority high --add-label "urgent" --remove-label "draft" --ac "Must pass all tests" --ac "Must have documentation" --plan "Implementation strategy" --notes "Technical notes" --dep "task-2,task-3" --parent epic-42',
+        command:
+          'npx backlog task edit task-1 --description "Standard description" --assignee "jane.doe" --status "completed" --label "bug,critical" --priority high --add-label "urgent" --remove-label "draft" --ac "Must pass all tests" --ac "Must have documentation" --plan "Implementation strategy" --notes "Technical notes" --dep "task-2,task-3" --parent epic-42',
         successMessage: 'Task edited successfully',
         projectPath: '/test/project',
       });
@@ -159,7 +161,7 @@ describe('editTask tool', () => {
         projectPath: '/test/project',
       });
 
-      // Test assignee branch  
+      // Test assignee branch
       await editTaskTool.execute({ ...baseParams, assignee: 'user123' });
       expect(mockedExecuteCommand).toHaveBeenLastCalledWith({
         command: 'npx backlog task edit task-1 --assignee "user123"',
