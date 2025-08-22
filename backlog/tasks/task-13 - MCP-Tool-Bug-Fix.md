@@ -29,6 +29,11 @@ Fix the command parsing bug in commandExecutor.ts where quoted arguments aren't 
 
 The issue is in the parseCommand function in commandExecutor.ts. A partial fix was implemented but needs completion to properly handle quoted arguments. The current approach using simple string splitting doesn't respect quoted boundaries.
 
+### Considerations
+
+You can use the deepwiki mcp tool to review the MrLesk/Backlog.md repository documentation to see how backlog command works.
+After the changes are done and the build is done, you must reconnect the mcp-backlog-md-local mcp tool and you can use it to check if the changes work.
+
 ## Error Examples
 
 - `"error: too many arguments for 'create'. Expected 1 argument but got 19"` when creating tasks with multi-word titles
