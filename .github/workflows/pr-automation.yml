@@ -59,18 +59,53 @@ jobs:
       - name: Run PR validation
         run: |
           npm run check-all
-          npm test
+          npm run test:coverage
+
+      - name: Extract coverage stats
+        id: coverage
+        run: |
+          # Extract coverage percentages from Jest output
+          if [ -f coverage/coverage-summary.json ]; then
+            STATEMENTS=$(jq -r '.total.statements.pct' coverage/coverage-summary.json)
+            BRANCHES=$(jq -r '.total.branches.pct' coverage/coverage-summary.json)
+            FUNCTIONS=$(jq -r '.total.functions.pct' coverage/coverage-summary.json)
+            LINES=$(jq -r '.total.lines.pct' coverage/coverage-summary.json)
+          else
+            STATEMENTS="N/A"
+            BRANCHES="N/A"
+            FUNCTIONS="N/A"
+            LINES="N/A"
+          fi
+
+          echo "statements=${STATEMENTS}%" >> $GITHUB_OUTPUT
+          echo "branches=${BRANCHES}%" >> $GITHUB_OUTPUT  
+          echo "functions=${FUNCTIONS}%" >> $GITHUB_OUTPUT
+          echo "lines=${LINES}%" >> $GITHUB_OUTPUT
 
       - name: Comment PR
         if: success()
         uses: actions/github-script@v6
         with:
           script: |
+            const { statements, branches, functions, lines } = context.payload;
+            const coverageTable = `
+            ## 📊 Test Coverage Report
+
+            | Metric | Coverage |
+            |--------|----------|
+            | Statements | ${{ steps.coverage.outputs.statements }} |
+            | Branches | ${{ steps.coverage.outputs.branches }} |
+            | Functions | ${{ steps.coverage.outputs.functions }} |
+            | Lines | ${{ steps.coverage.outputs.lines }} |
+
+            ✅ **All checks passed!** This PR is ready for review.
+            `;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '✅ All checks passed! This PR is ready for review.'
+              body: coverageTable
             })
 
       - name: Comment PR on failure
@@ -78,9 +113,24 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const failureMessage = `
+            ## ❌ PR Validation Failed
+
+            Some checks failed during validation. Please check the following:
+
+            - **Linting**: Run \`npm run lint\` to check for code style issues
+            - **Type Checking**: Run \`npm run typecheck\` to verify TypeScript types
+            - **Build**: Run \`npm run build\` to ensure the project compiles
+            - **Tests**: Run \`npm run test:coverage\` to verify all tests pass
+
+            💡 **Quick fix**: Run \`npm run check-all\` to execute all checks locally.
+
+            View the [workflow logs](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) for detailed error information.
+            `;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: '❌ Some checks failed. Please review the workflow logs and fix any issues.'
+              body: failureMessage
             })

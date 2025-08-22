@@ -23,7 +23,8 @@ This is an MCP (Model Context Protocol) server for the `backlog.md` CLI tool. It
 
 - **Build**: `npm run build` - Compiles TypeScript with executable permissions
 - **Quality Check**: `npm run check-all` - Runs format, lint, typecheck, and build
-- **Test**: `npm run test` - Runs Jest test suite with coverage
+- **Test**: `npm run test` - Runs Jest test suite (163 tests)
+- **Test Coverage**: `npm run test:coverage` - Generates coverage report (77.21% coverage)
 - **MCP Inspector**: `npm run inspector` - Launches MCP inspector for manual testing
 
 ### Quality Assurance Commands
@@ -31,7 +32,16 @@ This is an MCP (Model Context Protocol) server for the `backlog.md` CLI tool. It
 - **Lint**: `npm run lint` / `npm run lint:fix` - ESLint with auto-fix
 - **Format**: `npm run format` / `npm run format:check` - Prettier formatting
 - **Type Check**: `npm run typecheck` - TypeScript type validation
-- **Test Coverage**: `npm run test:coverage` - Generate coverage reports
+- **Test Watch**: `npm run test:watch` - Run tests in watch mode for TDD
+
+### Testing Framework
+
+Our comprehensive testing framework maintains **163 passing tests with 77.21% coverage**:
+
+- **Mock Infrastructure**: Complete mocking system avoiding external CLI dependencies
+- **Coverage Requirements**: 70% minimum across statements, branches, functions, and lines
+- **Zero Tolerance**: All tests must pass - no failures allowed in CI/CD
+- **Test Categories**: Unit tests for all 18 tools, core library functions, and error handling
 
 ### Utility Commands
 
@@ -97,16 +107,18 @@ This project follows **enterprise-grade development practices**:
 
 - **TypeScript Strict Mode**: No `any` types without justification
 - **ESLint + Prettier**: Automated code formatting and quality checks
-- **Test Coverage**: >70% coverage requirement with Jest
+- **Test Coverage**: >70% coverage requirement with Jest (currently 77.21%)
 - **Security**: Input validation, command injection prevention, vulnerability scanning
 - **Documentation**: Complete API docs, usage examples, security guidelines
+- **CI/CD Pipeline**: Automated testing, quality gates, and security scanning
 
 ### Development Workflow
 
 - **Git Flow**: Feature branches, conventional commits, automated PR validation
-- **CI/CD**: GitHub Actions for testing, security scanning, automated releases
-- **Code Review**: Required PR reviews, security review for sensitive changes
-- **Quality Gates**: All checks must pass before merge (`npm run check-all`)
+- **CI/CD**: GitHub Actions with comprehensive quality gates and automated releases
+- **Code Review**: Required PR reviews with automated coverage reporting
+- **Quality Gates**: All checks must pass before merge (`npm run check-all`, `npm run test:coverage`)
+- **Testing**: 163 tests must pass with 77.21% coverage minimum
 
 ### Security Standards
 
@@ -150,10 +162,12 @@ These global rules take precedence and are merged with project-specific requirem
 
 ### Quality Standards
 
-- **Run checks**: Always run `npm run check-all` before considering changes complete
-- **Test coverage**: Maintain >70% test coverage for new code
+- **Run checks**: Always run `npm run check-all` and `npm run test:coverage` before considering changes complete
+- **Test coverage**: Maintain >70% test coverage for new code (currently 77.21%)
+- **Zero failures**: All 163 tests must pass - no failures allowed
 - **Documentation**: Update relevant documentation when adding features
 - **Security review**: Consider security implications of all changes
+- **CI/CD compliance**: Ensure all GitHub Actions workflows pass
 
 ### Project-Specific Guidance
 

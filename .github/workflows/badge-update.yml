@@ -1,0 +1,103 @@
+name: Update Badges
+
+on:
+  push:
+    branches: [main, develop]
+  workflow_run:
+    workflows: ['CI']
+    types:
+      - completed
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests and generate coverage
+        run: npm run test:coverage
+
+      - name: Create coverage badge
+        uses: jaywcjlove/coverage-badges-cli@v1.0.9
+        with:
+          source: coverage/coverage-summary.json
+          output: coverage/badges.svg
+
+      - name: Extract test stats
+        id: test-stats
+        run: |
+          # Extract test results from Jest output
+          TEST_OUTPUT=$(npm run test:coverage 2>&1)
+
+          # Extract total tests passed
+          TESTS_PASSED=$(echo "$TEST_OUTPUT" | grep -o "Tests:[[:space:]]*[0-9]*[[:space:]]*passed" | grep -o "[0-9]*" || echo "0")
+
+          # Extract coverage percentages
+          if [ -f coverage/coverage-summary.json ]; then
+            STATEMENTS=$(jq -r '.total.statements.pct' coverage/coverage-summary.json)
+            BRANCHES=$(jq -r '.total.branches.pct' coverage/coverage-summary.json)
+            FUNCTIONS=$(jq -r '.total.functions.pct' coverage/coverage-summary.json)
+            LINES=$(jq -r '.total.lines.pct' coverage/coverage-summary.json)
+          else
+            STATEMENTS="0"
+            BRANCHES="0"
+            FUNCTIONS="0"
+            LINES="0"
+          fi
+
+          echo "tests_passed=$TESTS_PASSED" >> $GITHUB_OUTPUT
+          echo "coverage_statements=$STATEMENTS" >> $GITHUB_OUTPUT
+          echo "coverage_branches=$BRANCHES" >> $GITHUB_OUTPUT
+          echo "coverage_functions=$FUNCTIONS" >> $GITHUB_OUTPUT
+          echo "coverage_lines=$LINES" >> $GITHUB_OUTPUT
+
+      - name: Create custom badges
+        run: |
+          # Create badges directory if it doesn't exist
+          mkdir -p .github/badges
+
+          # Generate test badge
+          curl -s "https://img.shields.io/badge/tests-${{ steps.test-stats.outputs.tests_passed }}%20passing-brightgreen" > .github/badges/tests.svg
+
+          # Generate coverage badge (using highest coverage metric)
+          COVERAGE=${{ steps.test-stats.outputs.coverage_lines }}
+          if (( $(echo "$COVERAGE >= 90" | bc -l) )); then
+            COLOR="brightgreen"
+          elif (( $(echo "$COVERAGE >= 75" | bc -l) )); then
+            COLOR="yellow"
+          elif (( $(echo "$COVERAGE >= 60" | bc -l) )); then
+            COLOR="orange"
+          else
+            COLOR="red"
+          fi
+
+          curl -s "https://img.shields.io/badge/coverage-${COVERAGE}%25-${COLOR}" > .github/badges/coverage.svg
+
+          # Generate build badge
+          curl -s "https://img.shields.io/badge/build-passing-brightgreen" > .github/badges/build.svg
+
+      - name: Commit and push badges
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          git add .github/badges/
+
+          if git diff --staged --quiet; then
+            echo "No badge changes to commit"
+          else
+            git commit -m "chore: update test and coverage badges [skip ci]"
+            git push
+          fi
