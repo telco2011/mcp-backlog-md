@@ -228,7 +228,7 @@ describe('Custom Error Classes', () => {
     });
 
     it('should handle null cause', () => {
-      const error = new SystemError('Test', { cause: null as any });
+      const error = new SystemError('Test', { cause: null as unknown as Error });
 
       expect(error.message).toBe('Test');
       expect(error.cause).toBe(null);

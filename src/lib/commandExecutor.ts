@@ -98,10 +98,10 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
  * @param error The error to check
  * @returns True if the error should trigger a retry
  */
-function isRetryableError(error: any): boolean {
+function isRetryableError(error: unknown): boolean {
   const retryableMessages = ['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'ENOTFOUND', 'network', 'timeout', 'temporarily unavailable'];
 
-  const errorString = (error?.message || error?.stderr || '').toLowerCase();
+  const errorString = ((error as Error)?.message || (error as { stderr?: string })?.stderr || '').toLowerCase();
   return retryableMessages.some((msg) => errorString.includes(msg));
 }
 
@@ -124,7 +124,7 @@ async function wait(attempt: number, config: RetryConfig): Promise<void> {
  * @returns Promise resolving to command output
  */
 async function executeWithRetry(options: ExecuteCommandOptions, config: RetryConfig = DEFAULT_RETRY_CONFIG): Promise<{ stdout: string; stderr: string }> {
-  let lastError: any;
+  let lastError: unknown;
 
   for (let attempt = 0; attempt <= config.maxRetries; attempt++) {
     try {
